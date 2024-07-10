@@ -1,6 +1,4 @@
-```markdown
-<h1>PROJECT_IPS</h1>
-```
+# <h1>PROJECT_IPS</h1>
 
 # Proceso de Creación de un Proyecto Django
 
