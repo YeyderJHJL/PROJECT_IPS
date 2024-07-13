@@ -1,5 +1,5 @@
-from django.shortcuts import redirect, render
-from .forms import EventoForm
+from django.shortcuts import get_object_or_404, redirect, render
+from .forms import *
 from .models import *
 
 # Create your views here.
@@ -7,12 +7,27 @@ from .models import *
 def index(request):
     return render(request, 'index.html')
 
-def servicios(request):
-    servicio= Servicio.objects.all()
-    data={
-        'servicio':servicio
-    }
-    return render (request, 'servicios.html', data)
+def servicios(request, codigo=None):
+    instancia_clase = None
+    servicio = Servicio.objects.all()
+
+    # Obtener todas las categorías
+    categorias = CategoariaServicio.objects.all()
+
+    if codigo:
+        instancia_clase = get_object_or_404(CategoariaServicio, catsercod=codigo)
+        servicio = Servicio.objects.filter(categoaria_servicio_catsercod=codigo)
+
+    if request.method == 'POST':
+        formulario = CategoriaServicioForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('servicios')
+    else:
+        formulario = CategoriaServicioForm(instance=instancia_clase)
+
+    return render(request, 'servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+
 
 def crear_evento(request):
     servicio_id = request.GET.get('servicio_id') 

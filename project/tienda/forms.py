@@ -32,3 +32,15 @@ class EventoForm(forms.ModelForm):
             'evefec': 'Fecha',
             'perdni': 'Personal Encargado',
         }
+
+
+class CategoriaServicioForm(forms.ModelForm):
+    catsernom = forms.ModelChoiceField(
+        queryset=CategoariaServicio.objects.all(),
+        label="Seleccione una categoría",
+        widget=forms.Select(attrs={'class': 'form-control', 'onchange': 'this.form.submit();'})
+    )
+
+    class Meta:
+        model = CategoariaServicio
+        fields = ['catsernom']
