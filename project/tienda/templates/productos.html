@@ -21,8 +21,8 @@
 
                     <div class="card-body d-flex flex-column">
                         <p class="card-text flex-grow-1">{{ p.pronom }}</p>
-                        <hr>
                         <p class="card-text"><strong>Precio unitario:</strong> {{ p.propreuni }}</p>
+                        <a href="{% url 'detalle_producto' p.procod %}" class="btn btn-primary">Más Info</a>
                     </div>
                 </div>
             </div>
