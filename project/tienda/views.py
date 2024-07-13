@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import *
 
@@ -28,7 +29,7 @@ def servicios(request, codigo=None):
 
     return render(request, 'servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
-
+@login_required
 def crear_evento(request):
     servicio_id = request.GET.get('servicio_id') 
 
