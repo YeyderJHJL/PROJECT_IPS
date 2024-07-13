@@ -107,11 +107,12 @@ class Producto(models.Model):
 
 class Servicio(models.Model):
     sercod = models.AutoField(db_column='SerCod', primary_key=True)
-    sernom = models.CharField(db_column='SerNom', unique=True, max_length=45)
-    serdes = models.CharField(db_column='SerDes', max_length=45, blank=True, null=True)
+    sernom = models.CharField(db_column='SerNom', unique=True, max_length=100)
+    serdes = models.CharField(db_column='SerDes', max_length=400, blank=True, null=True)
     serreqpre = models.CharField(db_column='SerReqPre', max_length=45, blank=True, null=True)
-    serdur = models.CharField(db_column='SerDur', max_length=45, blank=True, null=True)
+    serdur = models.CharField(db_column='SerDur', max_length=60, blank=True, null=True)
     sercos = models.CharField(db_column='SerCos', max_length=45)
+    serima = models.CharField(db_column='SerIma', max_length=400, default='')
     estado_registro_estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='ESTADO_REGISTRO_EstRegCod')
     categoaria_servicio_catsercod = models.ForeignKey(CategoariaServicio, models.PROTECT, db_column='CATEGOARIA_SERVICIO_CatSerCod')
 

@@ -15,13 +15,13 @@ def servicios(request):
     return render (request, 'servicios.html', data)
 
 def crear_evento(request):
-    servicio_id = request.GET.get('servicio_id')  # Obtener el ID del servicio desde la URL
+    servicio_id = request.GET.get('servicio_id') 
 
     if request.method == 'POST':
         form = EventoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')  # Redirigir a una página de confirmación o de lista
+            return redirect('index') 
     else:
         servicio = None
         if servicio_id:

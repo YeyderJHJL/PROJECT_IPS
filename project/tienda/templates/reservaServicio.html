@@ -1,73 +1,67 @@
 {% extends "base.html" %}
 
-{% block title %}Reserva Servicio{% endblock %}
+{% block title %}Reserva de Servicio{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4 mb-4">Reserva de Servicio</h1>
-
-    <hr>
-
-    <div class="row">
-        <div class="col-md-6">
-            <h5>Cliente</h5>
-            <!-- Información del cliente -->
-            <div class="card shadow-sm mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-primary shadow mb-4">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-5 fw-bold">Nombre:</div>
-                        <div class="col-7">{{ cliente.nombre }}</div>
+                    <h2 class="card-title text-center mb-4">Reserva de Servicio</h2>
+                    
+                    <div class="border rounded p-3 mb-3 bg-light">
+                        <h5 class="mb-2 fs-5">Datos del Cliente</h5>
+                        <div class="row">
+                            <div class="col-md-4 fw-bold">Nombre:</div>
+                            <div class="col-md-8">{{ cliente.nombre }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 fw-bold">DNI:</div>
+                            <div class="col-md-8">{{ cliente.dni }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 fw-bold">Ubicación:</div>
+                            <div class="col-md-8">{{ cliente.ubicacion }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 fw-bold">Teléfono:</div>
+                            <div class="col-md-8">{{ cliente.telefono }}</div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-5 fw-bold">DNI:</div>
-                        <div class="col-7">{{ cliente.dni }}</div>
+                    
+                    {% if servicio %}
+                    <div class="border rounded p-3 mb-3 bg-light">
+                        <h5 class="mb-2 fs-5">Detalles del Servicio</h5>
+                        <div class="row">
+                            <div class="col-md-4 fw-bold">Código:</div>
+                            <div class="col-md-8">{{ servicio.sercod }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 fw-bold">Nombre:</div>
+                            <div class="col-md-8">{{ servicio.sernom }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 fw-bold">Descripción:</div>
+                            <div class="col-md-8">{{ servicio.serdes }}</div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-5 fw-bold">Ubicación:</div>
-                        <div class="col-7">{{ cliente.ubicacion }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 fw-bold">Número de teléfono:</div>
-                        <div class="col-7">{{ cliente.telefono }}</div>
-                    </div>
+                    {% endif %}
+                    
+                    <h5 class="mb-2 fs-5">Formulario de Reserva</h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                        </div>
+                        <div class="text-start">
+                            <button type="submit" class="btn btn-primary btn-lg me-2">Reservar</button>
+                            <a href="{% url 'servicios' %}" class="btn btn-secondary btn-lg">Cancelar</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <hr>
-
-    {% if servicio %}
-    <div class="row">
-        <div class="col-md-6">
-            <h5>Servicio</h5>
-            <!-- Información del servicio -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-5 fw-bold">Código:</div>
-                        <div class="col-7">{{ servicio.sercod }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 fw-bold">Nombre:</div>
-                        <div class="col-7">{{ servicio.sernom }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 fw-bold">Descripción:</div>
-                        <div class="col-7">{{ servicio.serdes }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <hr>
-    {% endif %}
-
-    <h5 class="mb-4">Datos a llenar:</h5>
-    <form method="post" class="mb-4">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
 </div>
 {% endblock %}
