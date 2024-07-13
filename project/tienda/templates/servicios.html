@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Servicios{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mt-4 mb-4">Servicios</h1>
+
+        <div class="row">
+            {% for s in servicio %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <!-- Imagen con overlay para interactividad -->
+                    <div class="position-relative overflow-hidden" style="border-radius: 8px;">
+                        <div class="card-img-top" style="height: 200px; background-color: #f0f0f0; border-radius: 8px;"></div>
+                        <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.2); transition: background-color 0.3s;"></div>
+                        <div class="position-absolute bottom-0 start-0 p-3">
+                            <h5 class="text-white">{{ s.sernom }}</h5>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text flex-grow-1">{{ s.serdes }}</p>
+                        <hr>
+                        <p class="card-text"><strong>Costo:</strong> {{ s.sercos }}</p>
+                        <p class="card-text"><strong>Duración:</strong> {{ s.serdur }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-img-top {
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+
+        .overlay {
+            opacity: 0;
+        }
+
+        .card:hover .overlay {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+{% endblock %}
