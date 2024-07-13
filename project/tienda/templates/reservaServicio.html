@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Reserva Servicio{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 mb-4">Reserva de Servicio</h1>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Cliente</h5>
+            <!-- Información del cliente -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5 fw-bold">Nombre:</div>
+                        <div class="col-7">{{ cliente.nombre }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 fw-bold">DNI:</div>
+                        <div class="col-7">{{ cliente.dni }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 fw-bold">Ubicación:</div>
+                        <div class="col-7">{{ cliente.ubicacion }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 fw-bold">Número de teléfono:</div>
+                        <div class="col-7">{{ cliente.telefono }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    {% if servicio %}
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Servicio</h5>
+            <!-- Información del servicio -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5 fw-bold">Código:</div>
+                        <div class="col-7">{{ servicio.sercod }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 fw-bold">Nombre:</div>
+                        <div class="col-7">{{ servicio.sernom }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 fw-bold">Descripción:</div>
+                        <div class="col-7">{{ servicio.serdes }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% endif %}
+
+    <h5 class="mb-4">Datos a llenar:</h5>
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+{% endblock %}
