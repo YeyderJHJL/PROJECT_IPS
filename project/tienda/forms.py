@@ -82,18 +82,20 @@ class EstadoRegistroForm(forms.ModelForm):
 class TipoPersonalForm(forms.ModelForm):
     class Meta:
         model = TipoPersonal
-        fields = ['tippercod', 'tippernom']  # Incluye el campo 'tippercod'
+        fields = ['tippernom']  # Solo incluir campos editables
         widgets = {
-            'tippercod': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'tippernom': forms.TextInput(attrs={'class': 'form-control'}),
         }
         labels = {
-            'tippercod': 'Código',
             'tippernom': 'Nombre',
         }
 
     def __init__(self, *args, **kwargs):
         super(TipoPersonalForm, self).__init__(*args, **kwargs)
         if self.instance.pk:  # Solo para ediciones
-            self.fields['tippercod'].widget.attrs['readonly'] = True
+            self.fields['tippercod'] = forms.CharField(
+                initial=self.instance.tippercod,
+                widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+                label='Código'
+            )
             self.fields['tippercod'].required = False

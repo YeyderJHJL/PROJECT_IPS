@@ -67,8 +67,8 @@ class Cliente(models.Model):
         return f"{self.clinom} {self.cliape}"
 
 class TipoPersonal(models.Model):
-    tippercod = models.AutoField(primary_key=True) 
-    tippernom = models.CharField(max_length=100)
+    tippercod = models.CharField(db_column='TipPerCod', primary_key=True, max_length=10, editable=False)
+    tippernom = models.CharField(db_column='TipPerNom', max_length=100)
 
     class Meta:
         db_table = 'tipo_personal'
@@ -77,6 +77,16 @@ class TipoPersonal(models.Model):
 
     def __str__(self):
         return self.tippernom
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Solo al crear un nuevo registro
+            last_record = TipoPersonal.objects.order_by('tippercod').last()
+            if last_record:
+                last_code = int(last_record.tippercod)
+                self.tippercod = str(last_code + 1)  # Genera el siguiente código secuencial
+            else:
+                self.tippercod = '1'  # Empieza con 1 si es el primer registro
+        super().save(*args, **kwargs)
 
 class Personal(models.Model):
     perdni = models.CharField(db_column='PerDni', primary_key=True, max_length=8)
