@@ -25,7 +25,7 @@ class CategoariaServicio(models.Model):
         return self.catsernom
 
 class EstadoRegistro(models.Model):
-    estregcod = models.CharField(db_column='EstRegCod', primary_key=True, max_length=10)
+    estregcod = models.CharField(db_column='EstRegCod', primary_key=True, max_length=10, editable=False)
     estregnom = models.CharField(db_column='EstRegNom', max_length=100)
 
     class Meta:
@@ -35,6 +35,16 @@ class EstadoRegistro(models.Model):
 
     def __str__(self):
         return self.estregnom
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Solo al crear un nuevo registro
+            last_record = EstadoRegistro.objects.order_by('estregcod').last()
+            if last_record:
+                last_code = int(last_record.estregcod)
+                self.estregcod = str(last_code + 1)  # Genera el siguiente código secuencial
+            else:
+                self.estregcod = '1'  # Empieza con 1 si es el primer registro
+        super().save(*args, **kwargs)
 
 class Cliente(models.Model):
     clidni = models.CharField(db_column='CliDni', primary_key=True, max_length=8)

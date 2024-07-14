@@ -1,13 +1,14 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h2 class="mb-4">{{ form.instance.pk|yesno:"Modificar,Adicionar" }} Tipo de Personal</h2>
-<form method="post" class="needs-validation" novalidate>
+  <h2>{{ title }}</h2>
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Guardar</button>
-    <a class="btn btn-secondary" href="{% url 'tipo_personal_list' %}">Cancelar</a>
-</form>
+    <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}
 
 {% if form.errors %}
 <div class="alert alert-danger mt-4">
@@ -23,5 +24,3 @@
     </ul>
 </div>
 {% endif %}
-
-{% endblock %}

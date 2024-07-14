@@ -20,11 +20,11 @@ def estado_registro_add(request):
     if request.method == 'POST':
         form = EstadoRegistroForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('estado_registro_list')
+            estado = form.save()
+            return redirect('estado_registro_list')  # Redirigir a la lista de estados
     else:
         form = EstadoRegistroForm()
-    return render(request, 'estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Adicionar Estado de Registro'})
+    return render(request, 'estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Agregar Estado de Registro'})
 
 def estado_registro_edit(request, pk):
     estado = get_object_or_404(EstadoRegistro, pk=pk)
@@ -101,7 +101,7 @@ def tipo_personal_edit(request, pk):
         form = TipoPersonalForm(request.POST, instance=tipo_personal)
         if form.is_valid():
             form.save()
-            return redirect('tipo_personal_list')  # Cambia esto según la URL de tu lista
+            return redirect('tipo_personal_list')
     else:
         form = TipoPersonalForm(instance=tipo_personal)
     return render(request, 'tipo_personal_form.html', {'form': form, 'return_url': 'tipo_personal_list', 'title': 'Modificar Tipo de Personal'})
