@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import IntegrityError
-from .models import EstadoPersonal, Personal, TipoPersonal
-from .forms import PersonalForm, EstadoRegistroForm, TipoPersonalForm  # Asegúrate de que el nombre de la forma esté corregido
+from .models import EstadoRegistro, Personal, TipoPersonal
+from .forms import EstadoRegistroForm, PersonalForm, TipoPersonalForm  
 
 # Create your views here.
 
@@ -11,6 +11,40 @@ def index(request):
 def gestion_personal(request):
     return render(request, 'gestion_personal.html')
 
+# Estado Registro CRUD
+def estado_registro_list(request):
+    estados = EstadoRegistro.objects.all()
+    return render(request, 'estado_registro_list.html', {'estados': estados})
+
+def estado_registro_add(request):
+    if request.method == 'POST':
+        form = EstadoRegistroForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('estado_registro_list')
+    else:
+        form = EstadoRegistroForm()
+    return render(request, 'estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Adicionar Estado de Registro'})
+
+def estado_registro_edit(request, pk):
+    estado = get_object_or_404(EstadoRegistro, pk=pk)
+    if request.method == 'POST':
+        form = EstadoRegistroForm(request.POST, instance=estado)
+        if form.is_valid():
+            form.save()
+            return redirect('estado_registro_list')
+    else:
+        form = EstadoRegistroForm(instance=estado)
+    return render(request, 'estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Modificar Estado de Registro'})
+
+def estado_registro_delete(request, pk):
+    estado = get_object_or_404(EstadoRegistro, pk=pk)
+    if request.method == 'POST':
+        estado.delete()
+        return redirect('estado_registro_list')
+    return render(request, 'estado_registro_confirm_delete.html', {'estado': estado})
+
+# Personal CRUD
 def personal_list(request):
     personal = Personal.objects.all()
     return render(request, 'personal_list.html', {'personal': personal})
@@ -45,39 +79,6 @@ def personal_delete(request, pk):
         except IntegrityError:
             return render(request, 'personal_confirm_delete.html', {'personal': personal, 'error': "No se puede eliminar el personal porque tiene dependencias asociadas."})
     return render(request, 'personal_confirm_delete.html', {'personal': personal})
-
-# Estado Personal CRUD
-def estado_personal_list(request):
-    estados = EstadoPersonal.objects.all()
-    return render(request, 'estado_personal_list.html', {'estados': estados})
-
-def estado_personal_add(request):
-    if request.method == 'POST':
-        form = EstadoRegistroForm(request.POST)  # Asegúrate de que el nombre de la forma sea el correcto
-        if form.is_valid():
-            form.save()
-            return redirect('estado_personal_list')
-    else:
-        form = EstadoRegistroForm()
-    return render(request, 'form.html', {'form': form, 'return_url': 'estado_personal_list', 'title': 'Adicionar Estado Personal'})
-
-def estado_personal_edit(request, pk):
-    estado = get_object_or_404(EstadoPersonal, pk=pk)
-    if request.method == 'POST':
-        form = EstadoRegistroForm(request.POST, instance=estado)  # Asegúrate de que el nombre de la forma sea el correcto
-        if form.is_valid():
-            form.save()
-            return redirect('estado_personal_list')
-    else:
-        form = EstadoRegistroForm(instance=estado)
-    return render(request, 'form.html', {'form': form, 'return_url': 'estado_personal_list', 'title': 'Modificar Estado Personal'})
-
-def estado_personal_delete(request, pk):
-    estado = get_object_or_404(EstadoPersonal, pk=pk)
-    if request.method == 'POST':
-        estado.delete()
-        return redirect('estado_personal_list')
-    return render(request, 'estado_personal_confirm_delete.html', {'estado': estado})
 
 # Tipo Personal CRUD
 def tipo_personal_list(request):
@@ -114,8 +115,8 @@ def tipo_personal_delete(request, pk):
 
 def toggle_personal_status(request, pk):
     personal = get_object_or_404(Personal, pk=pk)
-    activo_estado = EstadoPersonal.objects.get(estregnom='Activo')
-    inactivo_estado = EstadoPersonal.objects.get(estregnom='Inactivo')
-    personal.estregcod = inactivo_estado if personal.estregcod == activo_estado else activo_estado  # Asegúrate de que el campo sea `estregcod`
+    activo_estado = EstadoRegistro.objects.get(estregnom='Activo')
+    inactivo_estado = EstadoRegistro.objects.get(estregnom='Inactivo')
+    personal.estregcod = inactivo_estado if personal.estregcod == activo_estado else activo_estado  
     personal.save()
     return redirect('personal_list')

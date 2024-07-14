@@ -3,8 +3,8 @@
 {% block content %}
 <h2 class="mb-4">Gestión de Personal</h2>
 <nav class="navigation mb-4">
+    <a class="btn btn-secondary {% if request.path == '/project/tienda/estado_registro/' %}active{% endif %}" href="{% url 'estado_registro_list' %}">Estados de Registro</a>
     <a class="btn btn-secondary {% if request.path == '/project/tienda/personal/list/' %}active{% endif %}" href="{% url 'personal_list' %}">Lista de Personal</a>
-    <a class="btn btn-secondary {% if request.path == '/project/tienda/estado_personal/' %}active{% endif %}" href="{% url 'estado_personal_list' %}">Estados de Personal</a>
     <a class="btn btn-secondary {% if request.path == '/project/tienda/tipo_personal/' %}active{% endif %}" href="{% url 'tipo_personal_list' %}">Tipos de Personal</a>
 </nav>
 <div class="centered-box">

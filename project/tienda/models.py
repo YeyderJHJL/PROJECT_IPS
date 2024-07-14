@@ -68,20 +68,6 @@ class TipoPersonal(models.Model):
     def __str__(self):
         return self.tippernom
 
-class EstadoPersonal(models.Model):
-    estpercod = models.CharField(max_length=10, primary_key=True)
-    estpernom = models.CharField(max_length=50)
-    estperestreg = models.ForeignKey(EstadoRegistro, on_delete=models.CASCADE, related_name='estados_personal')
-
-    class Meta:
-        db_table = 'estado_personal'
-        verbose_name = 'Estado de Personal'
-        verbose_name_plural = 'Estados de Personal'
-        managed = True
-
-    def __str__(self):
-        return self.estpernom
-
 class Personal(models.Model):
     perdni = models.CharField(db_column='PerDni', primary_key=True, max_length=8)
     pernom = models.CharField(db_column='PerNom', max_length=60)
