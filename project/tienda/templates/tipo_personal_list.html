@@ -1,6 +1,6 @@
-{% extends "gestion_clientes.html" %}
+{% extends "gestion_personal.html" %}
 
-{% block gestion_clientes_content %}
+{% block gestion_personal_content %}
 <h2 class="mb-4">Tipos de Personal</h2>
 <table class="table table-striped">
     <thead>
@@ -13,12 +13,12 @@
     <tbody>
         {% for tipo in tipos %}
         <tr>
-            <td>{{ tipo.TipPerCod }}</td>
-            <td>{{ tipo.TipPerNom }}</td>
+            <td>{{ tipo.tippercod }}</td>
+            <td>{{ tipo.tippernom }}</td>
             <td>
                 <div class="btn-group" role="group">
-                    <a class="btn btn-primary btn-sm" href="{% url 'tipo_personal_edit' tipo.TipPerCod %}">Modificar</a>
-                    <a class="btn btn-danger btn-sm" href="{% url 'tipo_personal_delete' tipo.TipPerCod %}">Eliminar</a>
+                    <a class="btn btn-primary btn-sm" href="{% url 'tipo_personal_edit' tipo.tippercod %}">Modificar</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'tipo_personal_delete' tipo.tippercod %}">Eliminar</a>
                 </div>
             </td>
         </tr>

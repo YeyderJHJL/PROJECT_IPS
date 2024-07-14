@@ -92,7 +92,7 @@ def tipo_personal_add(request):
             return redirect('tipo_personal_list')
     else:
         form = TipoPersonalForm()
-    return render(request, 'form.html', {'form': form, 'return_url': 'tipo_personal_list', 'title': 'Adicionar Tipo Personal'})
+    return render(request, 'tipo_personal_form.html', {'form': form, 'return_url': 'tipo_personal_list', 'title': 'Adicionar Tipo Personal'})
 
 def tipo_personal_edit(request, pk):
     tipo = get_object_or_404(TipoPersonal, pk=pk)
@@ -103,7 +103,7 @@ def tipo_personal_edit(request, pk):
             return redirect('tipo_personal_list')
     else:
         form = TipoPersonalForm(instance=tipo)
-    return render(request, 'form.html', {'form': form, 'return_url': 'tipo_personal_list', 'title': 'Modificar Tipo Personal'})
+    return render(request, 'tipo_personal_form.html', {'form': form, 'return_url': 'tipo_personal_list', 'title': 'Modificar Tipo Personal'})
 
 def tipo_personal_delete(request, pk):
     tipo = get_object_or_404(TipoPersonal, pk=pk)
