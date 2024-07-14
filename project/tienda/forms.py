@@ -70,28 +70,18 @@ class EstadoRegistroForm(forms.ModelForm):
             'estregcod': 'Código',
             'estregnom': 'Nombre',
         }
-        error_messages = {
-            'estregcod': {
-                'unique': "Ya existe un estado de registro con este código.",
-                'required': "El código del estado de registro es obligatorio."
-            },
-            'estregnom': {
-                'required': "El nombre del estado de registro es obligatorio."
-            },
-        }
-    
+
     def __init__(self, *args, **kwargs):
         super(EstadoRegistroForm, self).__init__(*args, **kwargs)
-        if not self.instance.pk:  # Solo para nuevos registros
-            # Configura valores iniciales si es necesario
-            pass
-        else:
+        if self.instance.pk:  # Solo para ediciones
             self.fields['estregcod'].widget.attrs['readonly'] = True
+            self.fields['estregcod'].required = False
+
 
 class TipoPersonalForm(forms.ModelForm):
     class Meta:
         model = TipoPersonal
-        fields = ['tippercod', 'tippernom']
+        fields = ['tippercod', 'tippernom']  # Incluye el campo 'tippercod'
         widgets = {
             'tippercod': forms.TextInput(attrs={'class': 'form-control'}),
             'tippernom': forms.TextInput(attrs={'class': 'form-control'}),
@@ -100,19 +90,9 @@ class TipoPersonalForm(forms.ModelForm):
             'tippercod': 'Código',
             'tippernom': 'Nombre',
         }
-        error_messages = {
-            'tippercod': {
-                'unique': "Ya existe un tipo de personal con este código.",
-                'required': "El código del tipo de personal es obligatorio."
-            },
-            'tippernom': {
-                'required': "El nombre del tipo de personal es obligatorio."
-            },
-        }
 
     def __init__(self, *args, **kwargs):
         super(TipoPersonalForm, self).__init__(*args, **kwargs)
-        if not self.instance.pk:  # Solo para nuevos registros
-            pass
-        else:
+        if self.instance.pk:  # Solo para ediciones
             self.fields['tippercod'].widget.attrs['readonly'] = True
+            self.fields['tippercod'].required = False

@@ -25,8 +25,8 @@ class CategoariaServicio(models.Model):
         return self.catsernom
 
 class EstadoRegistro(models.Model):
-    estregcod = models.AutoField(db_column='EstRegCod', primary_key=True)
-    estregnom = models.CharField(db_column='EstRegNom', max_length=60)
+    estregcod = models.CharField(db_column='EstRegCod', primary_key=True, max_length=10)
+    estregnom = models.CharField(db_column='EstRegNom', max_length=100)
 
     class Meta:
         db_table = 'estado_registro'
@@ -57,8 +57,8 @@ class Cliente(models.Model):
         return f"{self.clinom} {self.cliape}"
 
 class TipoPersonal(models.Model):
-    tippercod = models.AutoField(db_column='TipPerCod', primary_key=True)
-    tippernom = models.CharField(db_column='TipPerNom', max_length=60)
+    tippercod = models.AutoField(primary_key=True) 
+    tippernom = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'tipo_personal'

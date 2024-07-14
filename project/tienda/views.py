@@ -96,15 +96,15 @@ def tipo_personal_add(request):
     return render(request, 'tipo_personal_form.html', {'form': form, 'return_url': 'tipo_personal_list', 'title': 'Adicionar Tipo Personal'})
 
 def tipo_personal_edit(request, pk):
-    tipo = get_object_or_404(TipoPersonal, pk=pk)
+    tipo_personal = get_object_or_404(TipoPersonal, pk=pk)
     if request.method == 'POST':
-        form = TipoPersonalForm(request.POST, instance=tipo)
+        form = TipoPersonalForm(request.POST, instance=tipo_personal)
         if form.is_valid():
             form.save()
-            return redirect('tipo_personal_list')
+            return redirect('tipo_personal_list')  # Cambia esto según la URL de tu lista
     else:
-        form = TipoPersonalForm(instance=tipo)
-    return render(request, 'tipo_personal_form.html', {'form': form, 'return_url': 'tipo_personal_list', 'title': 'Modificar Tipo Personal'})
+        form = TipoPersonalForm(instance=tipo_personal)
+    return render(request, 'tipo_personal_form.html', {'form': form, 'return_url': 'tipo_personal_list', 'title': 'Modificar Tipo de Personal'})
 
 def tipo_personal_delete(request, pk):
     tipo = get_object_or_404(TipoPersonal, pk=pk)
