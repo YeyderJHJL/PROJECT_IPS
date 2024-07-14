@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario  </title>
+
+    {% extends "base.html" %}
+
+    {% block title %}Home{% endblock %}
+
+    {% block head %}
+    <link rel="stylesheet" href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css'>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
     <script>
-
-      document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth'
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth'
+            });
+            calendar.render();
         });
-        calendar.render();
-      });
-
     </script>
-    <title>FullCalendar Tutorial</title>
-
-
+    {% endblock %}
 </head>
 <body>
-    
+    {% block content %}
     <div style="max-width: 1000px; margin: auto" id='calendar'></div>
-    <script src="./calendar.js"></script>
+    {% endblock %}
 </body>
 </html>

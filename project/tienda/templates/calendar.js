@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-
     let request_calendar = "./events.json"
-
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
