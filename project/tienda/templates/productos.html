@@ -7,30 +7,51 @@
         <h1 class="mt-4 mb-4 texto-centrado">Productos</h1>
 
         <div class="row">
-            {% for p in producto %}
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <!-- Imagen con overlay para interactividad -->
-                    <div class="position-relative overflow-hidden" style="border-radius: 8px;">
-                        {% if p.proimg %}
-                            <img src="{{ p.proimg.url }}" class="card-img-top" style="height: 200px; object-fit: cover; border-radius: 8px;">
-                        {% else %}
-                            <div class="card-img-top" style="height: 200px; background-color: #f0f0f0; border-radius: 8px;"></div>
-                        {% endif %}
-                        <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.2); transition: background-color 0.3s;"></div>
-                        <div class="position-absolute bottom-0 start-0 p-3">
-                            <h5 class="text-white">{{ p.pronom }}</h5>
-                        </div>
-                    </div>
-
-                    <div class="card-body d-flex flex-column">
-                        <p class="card-text flex-grow-1 texto-centrado">{{ p.pronom }}</p>
-                        <p class="card-text texto-centrado"><strong>S/</strong> {{ p.propreuni }}</p>
-                        <a href="{% url 'detalle_producto' p.procod %} " class="btn btn-outline-primary btn-sm me-2"><i class="bi bi-info-circle-fill me-1"></i>Más Info</a>
+            <!-- Columna de categorías -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Categorías</h5>
+                        <ul class="list-group">
+                            {% for categoria in categorias %}
+                                <li class="list-group-item">
+                                    <a href="?categoria={{ categoria.catprocod }}">{{ categoria.catpronom }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
-            {% endfor %}
+
+            <!-- Columna de productos -->
+            <div class="col-lg-9">
+                <div class="row">
+                    {% for p in producto %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card shadow-sm border-0 h-100">
+                                <!-- Contenido del producto -->
+                                <div class="position-relative overflow-hidden" style="border-radius: 8px;">
+                                    {% if p.proimg %}
+                                        <img src="{{ p.proimg.url }}" class="card-img-top" style="height: 200px; object-fit: cover; border-radius: 8px;">
+                                    {% else %}
+                                        <div class="card-img-top" style="height: 200px; background-color: #f0f0f0; border-radius: 8px;"></div>
+                                    {% endif %}
+                                    <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.2); transition: background-color 0.3s;"></div>
+                                    <div class="position-absolute bottom-0 start-0 p-3">
+                                        <h5 class="text-white">{{ p.pronom }}</h5>
+                                    </div>
+                                </div>
+
+                                <div class="card-body d-flex flex-column">
+                                    <p class="card-text flex-grow-1 texto-centrado">{{ p.pronom }}</p>
+                                    <p class="card-text texto-centrado"><strong>S/</strong> {{ p.propreuni }}</p>
+                                    <a href="{% url 'detalle_producto' p.procod %} " class="btn btn-outline-primary btn-sm me-2"><i class="bi bi-info-circle-fill me-1"></i>Más Info</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 
