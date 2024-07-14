@@ -2,15 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db import IntegrityError
 from .models import EstadoRegistro, Personal, TipoPersonal
 from .forms import EstadoRegistroForm, LoginPersonalForm, PersonalForm, TipoPersonalForm  
-from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
 def index(request):
     return render(request, 'index.html')
-
-def gestion_personal(request):
-    return render(request, 'gestion_personal.html')
 
 # Estado Registro CRUD
 def estado_registro_list(request):
@@ -72,6 +68,10 @@ def inicio_vendedor(request):
 
 def inicio_administrador(request):
     return render(request, 'inicio_administrador.html')
+
+# Gestion Personal 
+def gestion_personal(request):
+    return render(request, 'gestion_personal.html')
 
 # Personal CRUD
 def personal_list(request):

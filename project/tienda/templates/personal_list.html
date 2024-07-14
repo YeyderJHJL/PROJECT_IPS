@@ -50,6 +50,14 @@
         </tbody>
     </table>
 </div>
-<a class="btn btn-success" href="{% url 'personal_add' %}">Adicionar</a>
+
+<div class="mb-3">
+    <a class="btn btn-success" href="{% url 'personal_add' %}">Adicionar</a>
+</div>
+
+<div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+    <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
+</div>
+
 {% endblock %}
 

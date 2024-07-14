@@ -1,8 +1,6 @@
 import datetime
 from django import forms
 from .models import Personal, EstadoRegistro, TipoPersonal
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate
 
 class LoginPersonalForm(forms.Form):
     username = forms.CharField(

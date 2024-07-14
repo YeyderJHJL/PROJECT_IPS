@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Bienvenido, Administrador</h1>
-    <p>Esta es la página de inicio para el personal administrador.</p>
+    <div class="container">
+        <h1>Bienvenido, Administrador</h1>
+        <p>Esta es la página de inicio para el personal administrador.</p>
+
+        <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+            <a class="btn btn-primary btn-lg" href="{% url 'gestion_personal' %}">Gestionar Personal</a>
+        </div>
+
+    </div>
 {% endblock %}
+
