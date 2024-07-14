@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container">
-        <h1 class="mt-4 mb-4">Productos</h1>
+        <h1 class="mt-4 mb-4 texto-centrado">Productos</h1>
 
         <div class="row">
             {% for p in producto %}
@@ -12,7 +12,11 @@
                 <div class="card shadow-sm border-0 h-100">
                     <!-- Imagen con overlay para interactividad -->
                     <div class="position-relative overflow-hidden" style="border-radius: 8px;">
-                        <div class="card-img-top" style="height: 200px; background-color: #f0f0f0; border-radius: 8px;"></div>
+                        {% if p.proimg %}
+                            <img src="{{ p.proimg.url }}" class="card-img-top" style="height: 200px; object-fit: cover; border-radius: 8px;">
+                        {% else %}
+                            <div class="card-img-top" style="height: 200px; background-color: #f0f0f0; border-radius: 8px;"></div>
+                        {% endif %}
                         <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.2); transition: background-color 0.3s;"></div>
                         <div class="position-absolute bottom-0 start-0 p-3">
                             <h5 class="text-white">{{ p.pronom }}</h5>
@@ -20,9 +24,9 @@
                     </div>
 
                     <div class="card-body d-flex flex-column">
-                        <p class="card-text flex-grow-1">{{ p.pronom }}</p>
-                        <p class="card-text"><strong>Precio unitario:</strong> {{ p.propreuni }}</p>
-                        <a href="{% url 'detalle_producto' p.procod %}" class="btn btn-primary">Más Info</a>
+                        <p class="card-text flex-grow-1 texto-centrado">{{ p.pronom }}</p>
+                        <p class="card-text texto-centrado"><strong>S/</strong> {{ p.propreuni }}</p>
+                        <a href="{% url 'detalle_producto' p.procod %} " class="btn btn-outline-primary btn-sm me-2"><i class="bi bi-info-circle-fill me-1"></i>Más Info</a>
                     </div>
                 </div>
             </div>

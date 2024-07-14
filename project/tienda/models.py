@@ -91,11 +91,13 @@ class Personal(models.Model):
 
 class Producto(models.Model):
     procod = models.AutoField(db_column='ProCod', primary_key=True)
-    pronom = models.CharField(db_column='ProNom', unique=True, max_length=60)
-    prodes = models.CharField(db_column='ProDes', max_length=300, blank=True, null=True)
+    pronom = models.CharField(db_column='ProNom', unique=True, max_length=100)
+    prodes = models.CharField(db_column='ProDes', max_length=500, blank=True, null=True)
+    procan = models.PositiveIntegerField(db_column='ProCan', default=0) 
     propreuni = models.DecimalField(db_column='ProPreUni', max_digits=10, decimal_places=2)
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')
     catprocod = models.ForeignKey(CategoariaProducto, models.PROTECT, db_column='CatProCod')
+    proimg = models.ImageField(upload_to='static/images/', blank=True, null=True, db_column='ProIma')
 
     class Meta:
         db_table = 'producto'
