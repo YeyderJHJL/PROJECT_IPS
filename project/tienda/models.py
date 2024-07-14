@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class CategoariaProducto(models.Model):
     catprocod = models.AutoField(db_column='CatProCod', primary_key=True)

@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import IntegrityError
 from .models import EstadoRegistro, Personal, TipoPersonal
-from .forms import EstadoRegistroForm, PersonalForm, TipoPersonalForm  
+from .forms import EstadoRegistroForm, LoginPersonalForm, PersonalForm, TipoPersonalForm  
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
@@ -43,6 +44,34 @@ def estado_registro_delete(request, pk):
         estado.delete()
         return redirect('estado_registro_list')
     return render(request, 'estado_registro_confirm_delete.html', {'estado': estado})
+
+# Login Personal
+def login_personal(request):
+    if request.method == 'POST':
+        form = LoginPersonalForm(request.POST)
+        if form.is_valid():
+            personal = form.get_personal()
+            tipo_personal = personal.tippercod.tippernom  # Suponiendo que el campo es tippernom en TipoPersonal
+            if tipo_personal == 'Técnico':
+                return redirect('inicio_tecnico')
+            elif tipo_personal == 'Vendedor':
+                return redirect('inicio_vendedor')
+            elif tipo_personal == 'Administrador':
+                return redirect('inicio_administrador')
+            else:
+                form.add_error(None, 'Tipo de personal no reconocido.')
+    else:
+        form = LoginPersonalForm()
+    return render(request, 'login_personal.html', {'form': form})
+
+def inicio_tecnico(request):
+    return render(request, 'inicio_tecnico.html')
+
+def inicio_vendedor(request):
+    return render(request, 'inicio_vendedor.html')
+
+def inicio_administrador(request):
+    return render(request, 'inicio_administrador.html')
 
 # Personal CRUD
 def personal_list(request):

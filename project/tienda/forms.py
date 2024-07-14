@@ -1,7 +1,35 @@
 import datetime
 from django import forms
 from .models import Personal, EstadoRegistro, TipoPersonal
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate
 
+class LoginPersonalForm(forms.Form):
+    username = forms.CharField(
+        label='Usuario',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+
+        if username and password:
+            try:
+                personal = Personal.objects.get(perusu=username, percon=password)
+                self.personal = personal
+            except Personal.DoesNotExist:
+                raise forms.ValidationError('Usuario o contraseña incorrectos.')
+        return cleaned_data
+
+    def get_personal(self):
+        return self.personal
+    
 class PersonalForm(forms.ModelForm):
     perfecreg = forms.DateField(widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}))
     

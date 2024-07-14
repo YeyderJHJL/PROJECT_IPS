@@ -8,6 +8,11 @@ urlpatterns = [
     path('estado_registro/edit/<str:pk>/', views.estado_registro_edit, name='estado_registro_edit'),
     path('estado_registro/delete/<str:pk>/', views.estado_registro_delete, name='estado_registro_delete'),
     
+    path('login_personal/', views.login_personal, name='login_personal'),
+    path('inicio_tecnico/', views.inicio_tecnico, name='inicio_tecnico'),
+    path('inicio_vendedor/', views.inicio_vendedor, name='inicio_vendedor'),
+    path('inicio_administrador/', views.inicio_administrador, name='inicio_administrador'),
+
     path('personal/', views.gestion_personal, name='gestion_personal'),
     path('personal/list/', views.personal_list, name='personal_list'),
     path('personal/add/', views.personal_add, name='personal_add'),
