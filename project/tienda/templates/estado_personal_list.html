@@ -1,0 +1,30 @@
+{% extends "gestion_clientes.html" %}
+
+{% block gestion_clientes_content %}
+<h2 class="mb-4">Estados de Personal</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for estado in estados %}
+        <tr>
+            <td>{{ estado.EstRegCod }}</td>
+            <td>{{ estado.EstRegNom }}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary btn-sm" href="{% url 'estado_personal_edit' estado.EstRegCod %}">Modificar</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'estado_personal_delete' estado.EstRegCod %}">Eliminar</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a class="btn btn-success" href="{% url 'estado_personal_add' %}">Adicionar</a>
+{% endblock %}
+

@@ -1,0 +1,118 @@
+import datetime
+from django import forms
+from .models import Personal, EstadoRegistro, TipoPersonal
+
+class PersonalForm(forms.ModelForm):
+    perfecreg = forms.DateField(widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}))
+    
+    class Meta:
+        model = Personal
+        fields = ['perdni', 'pernom', 'perape', 'pertel', 'perdir', 'perusu', 'percon', 'percor', 'perfecreg', 'estregcod', 'tippercod']
+        widgets = {
+            'perdni': forms.TextInput(attrs={'class': 'form-control'}),
+            'pernom': forms.TextInput(attrs={'class': 'form-control'}),
+            'perape': forms.TextInput(attrs={'class': 'form-control'}),
+            'pertel': forms.TextInput(attrs={'class': 'form-control'}),
+            'perdir': forms.TextInput(attrs={'class': 'form-control'}),
+            'perusu': forms.TextInput(attrs={'class': 'form-control'}),
+            'percon': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'percor': forms.EmailInput(attrs={'class': 'form-control'}),
+            'perfecreg': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'estregcod': forms.Select(attrs={'class': 'form-control'}),
+            'tippercod': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'perdni': 'DNI',
+            'pernom': 'Nombre',
+            'perape': 'Apellido',
+            'pertel': 'Teléfono',
+            'perdir': 'Dirección',
+            'perusu': 'Usuario',
+            'percon': 'Contraseña',
+            'percor': 'Correo',
+            'perfecreg': 'Fecha de Registro',
+            'estregcod': 'Estado de Registro',
+            'tippercod': 'Tipo de Personal',
+        }
+        error_messages = {
+            'perdni': {
+                'unique': "Ya existe un personal con este DNI.",
+                'required': "El DNI del personal es obligatorio."
+            },
+            'pernom': {
+                'required': "El nombre del personal es obligatorio."
+            },
+            'perape': {
+                'required': "El apellido del personal es obligatorio."
+            },
+            'perusu': {
+                'required': "El usuario del personal es obligatorio."
+            },
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super(PersonalForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:  # Solo para nuevos registros
+            self.fields['perfecreg'].initial = datetime.date.today()
+            self.fields['estregcod'].initial = EstadoRegistro.objects.get(estregnom='Activo')
+        else:
+            self.fields['perdni'].widget.attrs['readonly'] = True
+
+class EstadoRegistroForm(forms.ModelForm):
+    class Meta:
+        model = EstadoRegistro
+        fields = ['estregcod', 'estregnom']
+        widgets = {
+            'estregcod': forms.TextInput(attrs={'class': 'form-control'}),
+            'estregnom': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'estregcod': 'Código',
+            'estregnom': 'Nombre',
+        }
+        error_messages = {
+            'estregcod': {
+                'unique': "Ya existe un estado de registro con este código.",
+                'required': "El código del estado de registro es obligatorio."
+            },
+            'estregnom': {
+                'required': "El nombre del estado de registro es obligatorio."
+            },
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super(EstadoRegistroForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:  # Solo para nuevos registros
+            # Configura valores iniciales si es necesario
+            pass
+        else:
+            self.fields['estregcod'].widget.attrs['readonly'] = True
+
+class TipoPersonalForm(forms.ModelForm):
+    class Meta:
+        model = TipoPersonal
+        fields = ['tippercod', 'tippernom']
+        widgets = {
+            'tippercod': forms.TextInput(attrs={'class': 'form-control'}),
+            'tippernom': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'tippercod': 'Código',
+            'tippernom': 'Nombre',
+        }
+        error_messages = {
+            'tippercod': {
+                'unique': "Ya existe un tipo de personal con este código.",
+                'required': "El código del tipo de personal es obligatorio."
+            },
+            'tippernom': {
+                'required': "El nombre del tipo de personal es obligatorio."
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(TipoPersonalForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:  # Solo para nuevos registros
+            pass
+        else:
+            self.fields['tippercod'].widget.attrs['readonly'] = True

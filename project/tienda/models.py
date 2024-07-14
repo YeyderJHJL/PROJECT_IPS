@@ -68,6 +68,20 @@ class TipoPersonal(models.Model):
     def __str__(self):
         return self.tippernom
 
+class EstadoPersonal(models.Model):
+    estpercod = models.CharField(max_length=10, primary_key=True)
+    estpernom = models.CharField(max_length=50)
+    estperestreg = models.ForeignKey(EstadoRegistro, on_delete=models.CASCADE, related_name='estados_personal')
+
+    class Meta:
+        db_table = 'estado_personal'
+        verbose_name = 'Estado de Personal'
+        verbose_name_plural = 'Estados de Personal'
+        managed = True
+
+    def __str__(self):
+        return self.estpernom
+
 class Personal(models.Model):
     perdni = models.CharField(db_column='PerDni', primary_key=True, max_length=8)
     pernom = models.CharField(db_column='PerNom', max_length=60)
@@ -76,7 +90,7 @@ class Personal(models.Model):
     perdir = models.CharField(db_column='PerDir', max_length=150, blank=True, null=True)
     perusu = models.CharField(db_column='PerUsu', unique=True, max_length=60)
     percon = models.CharField(db_column='PerCon', max_length=60)
-    percor = models.CharField(db_column='PerCor', max_length=60, blank=True, null=True)
+    percor = models.EmailField(db_column='PerCor', blank=True, null=True)  # Cambiado a EmailField para correos
     perfecreg = models.DateField(db_column='PerFecReg')
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')
     tippercod = models.ForeignKey(TipoPersonal, models.PROTECT, db_column='TipPerCod')
