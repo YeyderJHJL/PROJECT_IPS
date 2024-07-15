@@ -14,16 +14,13 @@
                 <a class="nav-link" href="#">Categorias</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Productos</a>
+                <a class="nav-link" href="{% url 'productos' %}">Productos</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Pedidos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Pedidos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Servicios</a>
+                <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
