@@ -25,12 +25,24 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Servicios</a>
             </li>
+            {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="btn-book-a-table2" href="#">Registrarse</a>
+                <a class="nav-link" href="{% url 'actualizar_cliente' %}">actualizar</a>
             </li>
             <li class="nav-item">
-                <a class="btn-book-a-table2" href="#">Login</a>
+                <a class="nav-link" href="{% url 'cambiar_usuario' %}">cambio usuario</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'cambiar_contrasena' %}">cambio contraseña</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            {% endif %}
             <!-- Añade más enlaces aquí -->
         </ul>
     </div>
