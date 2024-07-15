@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import *
+from django.contrib import messages
 
 # Create your views here.
 
@@ -49,3 +50,21 @@ def crear_evento(request):
         form = EventoForm()
 
     return render(request, 'reservaServicio.html', {'form': form, 'servicio': servicio})
+
+def productos(request):
+    categorias = CategoariaProducto.objects.all()  
+    productos = Producto.objects.all()  
+    
+    categoria_id = request.GET.get('categoria')  
+    if categoria_id:
+        productos = productos.filter(catprocod=categoria_id)  
+    
+    context = {
+        'categorias': categorias,
+        'producto': productos,
+    }
+    return render(request, 'productos.html', context)
+
+def detalle_producto(request, procod):
+    producto = get_object_or_404(Producto, procod=procod)
+    return render(request, 'detalle_producto.html', {'producto': producto})

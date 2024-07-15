@@ -91,11 +91,13 @@ class Personal(models.Model):
 
 class Producto(models.Model):
     procod = models.AutoField(db_column='ProCod', primary_key=True)
-    pronom = models.CharField(db_column='ProNom', unique=True, max_length=60)
-    prodes = models.CharField(db_column='ProDes', max_length=300, blank=True, null=True)
+    pronom = models.CharField(db_column='ProNom', unique=True, max_length=100)
+    prodes = models.CharField(db_column='ProDes', max_length=500, blank=True, null=True)
     propreuni = models.DecimalField(db_column='ProPreUni', max_digits=10, decimal_places=2)
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')
     catprocod = models.ForeignKey(CategoariaProducto, models.PROTECT, db_column='CatProCod')
+    proima = models.CharField(db_column='ProImaUrl', max_length=400, default='')
+    proimg = models.ImageField(upload_to='static/images/', blank=True, null=True, db_column='ProImaPmg')
 
     class Meta:
         db_table = 'producto'
@@ -112,7 +114,8 @@ class Servicio(models.Model):
     serreqpre = models.CharField(db_column='SerReqPre', max_length=45, blank=True, null=True)
     serdur = models.CharField(db_column='SerDur', max_length=60, blank=True, null=True)
     sercos = models.CharField(db_column='SerCos', max_length=45)
-    serima = models.CharField(db_column='SerIma', max_length=400, default='')
+    serima = models.CharField(db_column='SerImaUrl', max_length=400, default='')
+    serimg = models.ImageField(upload_to='static/images/', blank=True, null=True, db_column='SerImaPng')
     estado_registro_estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='ESTADO_REGISTRO_EstRegCod')
     categoaria_servicio_catsercod = models.ForeignKey(CategoariaServicio, models.PROTECT, db_column='CATEGOARIA_SERVICIO_CatSerCod')
 
