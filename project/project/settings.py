@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 
 # Leer el archivo .env si está presente
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env()
 
 # Usar variables de entorno en la configuración
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env.str('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS', default=[]))
 
@@ -137,11 +137,7 @@ STATICFILES_DIRS = [
 
 # Directorio donde se almacenarán los archivos de medios (imágenes, archivos subidos, etc.)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'tienda' / 'media'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+MEDIA_ROOT = BASE_DIR / 'tienda' / 'static'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

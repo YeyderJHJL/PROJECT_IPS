@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Actualizar Perfil Personal</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    
+    <div class="form-group">
+      <label for="id_pernom">Nombre:</label>
+      <input type="text" id="id_pernom" class="form-control" value="{{ form.instance.pernom }}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="id_perape">Apellido:</label>
+      <input type="text" id="id_perape" class="form-control" value="{{ form.instance.perape }}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="id_pertel">Teléfono:</label>
+      {{ form.pertel }}
+    </div>
+    <div class="form-group">
+      <label for="id_perdir">Dirección:</label>
+      {{ form.perdir }}
+    </div>
+    <div class="form-group">
+      <label for="id_percor">Correo Electrónico:</label>
+      {{ form.percor }}
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+  </form>
+{% endblock %}

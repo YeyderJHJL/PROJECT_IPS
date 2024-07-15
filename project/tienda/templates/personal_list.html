@@ -1,0 +1,63 @@
+{% extends "gestion_personal.html" %}
+
+{% block gestion_personal_content %}
+<h2 class="mb-4">Personal</h2>
+<div class="scrollable-table-container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Fecha de Registro</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for personal in personal %}
+            <tr>
+                <td>{{ personal.perdni }}</td>
+                <td>{{ personal.pernom }}</td>
+                <td>{{ personal.perape }}</td>
+                <td>{{ personal.pertel }}</td>
+                <td>{{ personal.perdir }}</td>
+                <td>{{ personal.perusu }}</td>
+                <td>{{ personal.percor }}</td>
+                <td>{{ personal.perfecreg }}</td>
+                <td>{{ personal.tippercod.tippernom }}</td>
+                <td>{{ personal.estregcod.estregnom }}</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-primary btn-sm" href="{% url 'personal_edit' personal.perdni %}">Modificar</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'personal_delete' personal.perdni %}">Eliminar</a>
+                        <a class="btn btn-secondary btn-sm" href="{% url 'toggle_personal_status' personal.perdni %}">
+                            {% if personal.estregcod.estregnom == 'Activo' %}
+                                Inactivar
+                            {% else %}
+                                Activar
+                            {% endif %}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="mb-3">
+    <a class="btn btn-success" href="{% url 'personal_add' %}">Adicionar</a>
+</div>
+
+<div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+    <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,37 @@
+{% extends "gestion_personal.html" %}
+
+{% block gestion_personal_content %}
+<h2 class="mb-4">Estados de Registro</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for estado in estados %}
+        <tr>
+            <td>{{ estado.estregcod }}</td>
+            <td>{{ estado.estregnom }}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary btn-sm" href="{% url 'estado_registro_edit' estado.estregcod %}">Modificar</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'estado_registro_delete' estado.estregcod %}">Eliminar</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="mb-3">
+    <a class="btn btn-success" href="{% url 'estado_registro_add' %}">Adicionar</a>
+</div>
+
+<div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+    <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
+</div>
+
+{% endblock %}
