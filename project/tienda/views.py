@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db import IntegrityError
 from .models import EstadoRegistro, Personal, TipoPersonal
-from .forms import EstadoRegistroForm, LoginPersonalForm, PersonalForm, TipoPersonalForm  
+from .forms import ActualizarPerfilPersonalForm, EstadoRegistroForm, LoginPersonalForm, PersonalForm, TipoPersonalForm  
 
 # Create your views here.
 
@@ -68,6 +68,40 @@ def inicio_vendedor(request):
 
 def inicio_administrador(request):
     return render(request, 'inicio_administrador.html')
+
+# Actualizar Perfil del Personal
+from django.contrib.auth.decorators import login_required
+import logging
+
+logger = logging.getLogger(__name__)
+
+@login_required
+def actualizar_perfil_personal(request):
+    username = request.user.username
+    print(f"Username: {username}")
+    
+    try:
+        personal = Personal.objects.get(perusu=username)
+        print(f"Personal found: {personal}")
+    except Personal.DoesNotExist:
+        print("Personal does not exist")
+        return redirect('inicio_administrador')
+
+    if request.method == 'POST':
+        print("POST request received")
+        form = ActualizarPerfilPersonalForm(request.POST, instance=personal)
+        if form.is_valid():
+            print("Form is valid")
+            form.save()
+            return redirect('inicio_administrador')
+        else:
+            print("Form is not valid")
+            print(form.errors)
+    else:
+        form = ActualizarPerfilPersonalForm(instance=personal)
+        print("GET request received")
+
+    return render(request, 'actualizar_perfil_personal_form.html', {'form': form})
 
 # Gestion Personal 
 def gestion_personal(request):

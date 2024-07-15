@@ -6,9 +6,13 @@
         <p>Esta es la página de inicio para el personal administrador.</p>
 
         <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
-            <a class="btn btn-primary btn-lg" href="{% url 'gestion_personal' %}">Gestionar Personal</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'actualizar_perfil_personal' %}">Actualizar Perfil</a>
         </div>
 
+        <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+            <a class="btn btn-primary btn-lg" href="{% url 'gestion_personal' %}">Gestionar Personal</a>
+        </div>
+        
     </div>
 {% endblock %}
 

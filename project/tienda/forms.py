@@ -27,7 +27,17 @@ class LoginPersonalForm(forms.Form):
 
     def get_personal(self):
         return self.personal
-    
+
+class ActualizarPerfilPersonalForm(forms.ModelForm):
+    class Meta:
+        model = Personal
+        fields = ['pertel', 'perdir', 'percor']
+        widgets = {
+            'pertel': forms.TextInput(attrs={'class': 'form-control'}),
+            'perdir': forms.TextInput(attrs={'class': 'form-control'}),
+            'percor': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+
 class PersonalForm(forms.ModelForm):
     perfecreg = forms.DateField(widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}))
     
@@ -125,3 +135,29 @@ class TipoPersonalForm(forms.ModelForm):
                 label='Código'
             )
             self.fields['tippercod'].required = False
+
+class ActualizarPerfilPersonalForm(forms.ModelForm):
+    class Meta:
+        model = Personal
+        fields = ['pertel', 'perdir', 'percor']  # Solo los campos que se pueden actualizar
+        widgets = {
+            'pertel': forms.TextInput(attrs={'class': 'form-control'}),
+            'perdir': forms.TextInput(attrs={'class': 'form-control'}),
+            'percor': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'pertel': 'Teléfono',
+            'perdir': 'Dirección',
+            'percor': 'Correo',
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['perdni'].widget.attrs['readonly'] = True
+        self.fields['pernom'].widget.attrs['readonly'] = True
+        self.fields['perape'].widget.attrs['readonly'] = True
+        self.fields['perusu'].widget.attrs['readonly'] = True
+        self.fields['percon'].widget.attrs['readonly'] = True
+        self.fields['perfecreg'].widget.attrs['readonly'] = True
+        self.fields['estregcod'].widget.attrs['readonly'] = True
+        self.fields['tippercod'].widget.attrs['readonly'] = True

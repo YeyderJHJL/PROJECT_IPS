@@ -13,6 +13,8 @@ urlpatterns = [
     path('inicio_vendedor/', views.inicio_vendedor, name='inicio_vendedor'),
     path('inicio_administrador/', views.inicio_administrador, name='inicio_administrador'),
 
+    path('actualizar_perfil_personal/', views.actualizar_perfil_personal, name='actualizar_perfil_personal'),
+
     path('personal/', views.gestion_personal, name='gestion_personal'),
     path('personal/list/', views.personal_list, name='personal_list'),
     path('personal/add/', views.personal_add, name='personal_add'),
