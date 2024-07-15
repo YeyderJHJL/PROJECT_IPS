@@ -1,9 +1,12 @@
-from django.urls import path
+from django.contrib import admin
+from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+
+    path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     # Maria
     path('servicios', views.servicios, name='servicios'),
@@ -40,4 +43,10 @@ urlpatterns = [
     path('tipo_personal/add/', views.tipo_personal_add, name='tipo_personal_add'),
     path('tipo_personal/edit/<str:pk>/', views.tipo_personal_edit, name='tipo_personal_edit'),
     path('tipo_personal/delete/<str:pk>/', views.tipo_personal_delete, name='tipo_personal_delete'),
+
+    # Jhamil
+    path('login/', views.login_view, name='login'),
+    path('actualizar/', views.actualizar_cliente, name='actualizar_cliente'),
+    path('cambiar_usuario/', views.cambiar_usuario, name='cambiar_usuario'),
+    path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
