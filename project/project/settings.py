@@ -22,8 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Inicializar el entorno
 env = environ.Env()
 
-# Leer el archivo .env
-environ.Env.read_env()
+# Leer el archivo .env si está presente
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Usar variables de entorno en la configuración
 SECRET_KEY = env('SECRET_KEY')
@@ -139,6 +139,9 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'tienda' / 'media'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

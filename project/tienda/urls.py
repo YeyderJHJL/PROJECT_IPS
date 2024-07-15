@@ -12,4 +12,6 @@ urlpatterns = [
     # paths for categories
     path('productos', views.productos, name='productos'),
     path('producto/<int:procod>/', views.detalle_producto, name='detalle_producto'),
+    path('calendar/', views.calendar_view, name='calendar'),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
