@@ -1,7 +1,10 @@
+from django.contrib import admin
 from django.urls import path
-from . import views
+from tienda import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    # paths for categories
+   path('admin/', admin.site.urls),
+    path('', views.index, name='index'),  # Ruta para la vista index
+    path('contactForm/', views.contactForm, name='contactForm'),
+    path('InfoEmpresa/', views.contactForm, name='InfoEmpresa'),
 ]
