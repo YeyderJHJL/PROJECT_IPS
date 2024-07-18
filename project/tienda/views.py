@@ -34,6 +34,11 @@ def servicios(request, codigo=None):
 
     return render(request, 'servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
+def detalle_servicio(request, sercod):
+    servicio = get_object_or_404(Servicio, sercod=sercod)
+    personal = Personal.objects.filter(tippercod='2')
+    return render(request, 'detalle_servicio.html', {'servicio': servicio, 'personal':personal})
+
 @login_required
 def crear_evento(request):
     servicio_id = request.GET.get('servicio_id') 

@@ -12,6 +12,7 @@ urlpatterns = [
     # Maria
     path('servicios', views.servicios, name='servicios'),
     path('servicios/<str:codigo>/', views.servicios, name='servicios_codigo'),
+    path('servicios/detalle/<str:sercod>/', views.detalle_servicio, name='detalle_servicio'),
     path('crear_evento', views.crear_evento, name='crear_evento'),
 
     # Paola
