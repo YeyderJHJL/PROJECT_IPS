@@ -10,72 +10,10 @@ import logging
 
 # Create your views here.
 
+# GENERAL ################################################
+
 def index(request):
     return render(request, 'index.html')
-
-def servicios(request, codigo=None):
-    instancia_clase = None
-    servicio = Servicio.objects.all()
-
-    # Obtener todas las categorías
-    categorias = CategoariaServicio.objects.all()
-
-    if codigo:
-        instancia_clase = get_object_or_404(CategoariaServicio, catsercod=codigo)
-        servicio = Servicio.objects.filter(categoaria_servicio_catsercod=codigo)
-
-    if request.method == 'POST':
-        formulario = CategoriaServicioForm(request.POST, instance=instancia_clase)
-        if formulario.is_valid():
-            formulario.save()
-            return redirect('servicios')
-    else:
-        formulario = CategoriaServicioForm(instance=instancia_clase)
-
-    return render(request, 'servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
-
-@login_required
-def crear_evento(request):
-    servicio_id = request.GET.get('servicio_id') 
-
-    if request.method == 'POST':
-        form = EventoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('index') 
-    else:
-        servicio = None
-        if servicio_id:
-            try:
-                servicio = Servicio.objects.get(pk=servicio_id)
-            except Servicio.DoesNotExist:
-                servicio = None
-
-        form = EventoForm()
-
-    return render(request, 'reservaServicio.html', {'form': form, 'servicio': servicio})
-
-def productos(request):
-    categorias = CategoariaProducto.objects.all()  
-    productos = Producto.objects.all()  
-    
-    categoria_id = request.GET.get('categoria')  
-    if categoria_id:
-        productos = productos.filter(catprocod=categoria_id)  
-    
-    context = {
-        'categorias': categorias,
-        'producto': productos,
-    }
-    return render(request, 'productos.html', context)
-
-def detalle_producto(request, procod):
-    producto = get_object_or_404(Producto, procod=procod)
-    return render(request, 'detalle_producto.html', {'producto': producto})
-
-def calendar_view(request):
-    return render(request, 'calendar.html')
-
 # Estado Registro CRUD
 def estado_registro_list(request):
     estados = EstadoRegistro.objects.all()
@@ -109,6 +47,8 @@ def estado_registro_delete(request, pk):
         return redirect('estado_registro_list')
     return render(request, 'estado_registro_confirm_delete.html', {'estado': estado})
 
+# PERSONAL ################################################
+
 # Login Personal
 def login_personal(request):
     if request.method == 'POST':
@@ -136,6 +76,7 @@ def inicio_vendedor(request):
 
 def inicio_administrador(request):
     return render(request, 'inicio_administrador.html')
+
 
 # Actualizar Perfil del Personal
 logger = logging.getLogger(__name__)
@@ -248,7 +189,22 @@ def toggle_personal_status(request, pk):
     personal.estregcod = inactivo_estado if personal.estregcod == activo_estado else activo_estado  
     personal.save()
     return redirect('personal_list')
-##########
+
+# CLIENTE ################################################
+def register_view(request):
+    if request.method == 'POST':
+        form = ClienteRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('calendar')  # Cambia 'home' por el nombre de tu vista principal
+    else:
+        form = ClienteRegisterForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+@login_required
+def protected_view(request):
+    return render(request, 'protected.html')
+
 def login_view(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
@@ -267,7 +223,21 @@ def login_view(request):
         form = CustomAuthenticationForm()
     
     return render(request, 'registration/login.html', {'form': form})
-
+def user_login(request):
+    if request.method == 'POST':
+        form = ClienteLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                form.add_error(None, 'Usuario o contraseña incorrectos.')
+    else:
+        form = ClienteLoginForm()
+    return render(request, 'registration/login.html', {'form': form})
 @login_required
 def actualizar_cliente(request):
     cliente = get_object_or_404(Cliente, cliusu=request.user.username)
@@ -324,4 +294,72 @@ def cambiar_contrasena(request):
 
     return render(request, 'cliente/cambiar_contrasena.html', {'form': form})
 
-##########
+# PRODUCTO ################################################
+
+def productos(request):
+    categorias = CategoariaProducto.objects.all()  
+    productos = Producto.objects.all()  
+    
+    categoria_id = request.GET.get('categoria')  
+    if categoria_id:
+        productos = productos.filter(catprocod=categoria_id)  
+    
+    context = {
+        'categorias': categorias,
+        'producto': productos,
+    }
+    return render(request, 'productos.html', context)
+
+def detalle_producto(request, procod):
+    producto = get_object_or_404(Producto, procod=procod)
+    return render(request, 'detalle_producto.html', {'producto': producto})
+
+# SERVICIO ################################################
+
+def servicios(request, codigo=None):
+    instancia_clase = None
+    servicio = Servicio.objects.all()
+
+    # Obtener todas las categorías
+    categorias = CategoariaServicio.objects.all()
+
+    if codigo:
+        instancia_clase = get_object_or_404(CategoariaServicio, catsercod=codigo)
+        servicio = Servicio.objects.filter(categoaria_servicio_catsercod=codigo)
+
+    if request.method == 'POST':
+        formulario = CategoriaServicioForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('servicios')
+    else:
+        formulario = CategoriaServicioForm(instance=instancia_clase)
+
+    return render(request, 'servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+
+# EVENTO ################################################
+
+@login_required
+def crear_evento(request):
+    servicio_id = request.GET.get('servicio_id') 
+
+    if request.method == 'POST':
+        form = EventoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index') 
+    else:
+        servicio = None
+        if servicio_id:
+            try:
+                servicio = Servicio.objects.get(pk=servicio_id)
+            except Servicio.DoesNotExist:
+                servicio = None
+
+        form = EventoForm()
+
+    return render(request, 'reservaServicio.html', {'form': form, 'servicio': servicio})
+
+def calendar_view(request):
+    return render(request, 'calendar.html')
+

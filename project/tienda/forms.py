@@ -3,49 +3,30 @@ from .models import *
 import datetime
 from django.contrib.auth.forms import AuthenticationForm
 
-class EventoForm(forms.ModelForm):
-    evecod = forms.IntegerField(
-        label="Código",
-        disabled=True,
-        widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-        required=False
-    )
-    evedes = forms.CharField(
-        max_length=150, 
-        label="Descripción",
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
-    )
-    evefec = forms.DateField(
-        label="Fecha",
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
-    )
-    perdni = forms.ModelChoiceField(
-        queryset=Personal.objects.all(),
-        label="Personal Encargado",
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
+# GENERAL ################################################################
 
+class EstadoRegistroForm(forms.ModelForm):
     class Meta:
-        model = Evento
-        fields = ['evecod', 'evedes', 'evefec', 'perdni']
+        model = EstadoRegistro
+        fields = ['estregnom']  # Solo incluir campos editables
+        widgets = {
+            'estregnom': forms.TextInput(attrs={'class': 'form-control'}),
+        }
         labels = {
-            'evecod': 'Número de Servicio',
-            'evedes': 'Agregar Otros datos',
-            'evefec': 'Fecha',
-            'perdni': 'Personal Encargado',
+            'estregnom': 'Nombre',
         }
 
+    def __init__(self, *args, **kwargs):
+        super(EstadoRegistroForm, self).__init__(*args, **kwargs)
+        if self.instance.pk:  # Solo para ediciones
+            self.fields['estregcod'] = forms.CharField(
+                initial=self.instance.estregcod,
+                widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+                label='Código'
+            )
+            self.fields['estregcod'].required = False
 
-class CategoriaServicioForm(forms.ModelForm):
-    catsernom = forms.ModelChoiceField(
-        queryset=CategoariaServicio.objects.all(),
-        label="Seleccione una categoría",
-        widget=forms.Select(attrs={'class': 'form-control', 'onchange': 'this.form.submit();'})
-    )
-
-    class Meta:
-        model = CategoariaServicio
-        fields = ['catsernom']
+# PERSONAL ################################################################
 
 class LoginPersonalForm(forms.Form):
     username = forms.CharField(
@@ -139,27 +120,6 @@ class PersonalForm(forms.ModelForm):
         else:
             self.fields['perdni'].widget.attrs['readonly'] = True
 
-class EstadoRegistroForm(forms.ModelForm):
-    class Meta:
-        model = EstadoRegistro
-        fields = ['estregnom']  # Solo incluir campos editables
-        widgets = {
-            'estregnom': forms.TextInput(attrs={'class': 'form-control'}),
-        }
-        labels = {
-            'estregnom': 'Nombre',
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(EstadoRegistroForm, self).__init__(*args, **kwargs)
-        if self.instance.pk:  # Solo para ediciones
-            self.fields['estregcod'] = forms.CharField(
-                initial=self.instance.estregcod,
-                widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
-                label='Código'
-            )
-            self.fields['estregcod'].required = False
-
 class TipoPersonalForm(forms.ModelForm):
     class Meta:
         model = TipoPersonal
@@ -207,6 +167,8 @@ class ActualizarPerfilPersonalForm(forms.ModelForm):
         self.fields['estregcod'].widget.attrs['readonly'] = True
         self.fields['tippercod'].widget.attrs['readonly'] = True
 
+# CLIENTE ################################################################
+
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}))
@@ -243,3 +205,111 @@ class ContrasenaUpdateForm(forms.Form):
 
         if new_password != confirm_password:
             raise forms.ValidationError("Las contraseñas no coinciden.")
+
+class ClienteRegisterForm(forms.ModelForm):
+    password2 = forms.CharField(
+        label='Confirmar Contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = Cliente
+        fields = ['clidni', 'clinom', 'cliape', 'clitel', 'clidir', 'cliusu', 'clicon', 'clicor', 'clifecreg', 'estregcod']
+        labels = {
+            'clidni': 'DNI',
+            'clinom': 'Nombre',
+            'cliape': 'Apellido',
+            'clitel': 'Teléfono',
+            'clidir': 'Dirección',
+            'cliusu': 'Usuario',
+            'clicon': 'Contraseña',
+            'clicor': 'Correo',
+            'clifecreg': 'Fecha de Registro',
+            'estregcod': 'Estado de Registro',
+        }
+        widgets = {
+            'clicon': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'clifecreg': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'estregcod': forms.HiddenInput(),
+        }
+        error_messages = {
+            'clidni': {
+                'unique': "Este DNI ya está registrado.",
+            },
+            'cliusu': {
+                'unique': "Este usuario ya está en uso.",
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ClienteRegisterForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['estregcod'].initial = 1  # Asumiendo que 1 es 'activo'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("clicon")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+    
+class ClienteLoginForm(forms.Form):
+    username = forms.CharField(
+        label='Usuario',
+        max_length=60,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+# PRODUCTO ################################################################
+
+# SERVICIO ################################################################
+
+class CategoriaServicioForm(forms.ModelForm):
+    catsernom = forms.ModelChoiceField(
+        queryset=CategoariaServicio.objects.all(),
+        label="Seleccione una categoría",
+        widget=forms.Select(attrs={'class': 'form-control', 'onchange': 'this.form.submit();'})
+    )
+
+    class Meta:
+        model = CategoariaServicio
+        fields = ['catsernom']
+
+# EVENTO ################################################################
+
+class EventoForm(forms.ModelForm):
+    evecod = forms.IntegerField(
+        label="Código",
+        disabled=True,
+        widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+        required=False
+    )
+    evedes = forms.CharField(
+        max_length=150, 
+        label="Descripción",
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+    )
+    evefec = forms.DateField(
+        label="Fecha",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
+    perdni = forms.ModelChoiceField(
+        queryset=Personal.objects.all(),
+        label="Personal Encargado",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = Evento
+        fields = ['evecod', 'evedes', 'evefec', 'perdni']
+        labels = {
+            'evecod': 'Número de Servicio',
+            'evedes': 'Agregar Otros datos',
+            'evefec': 'Fecha',
+            'perdni': 'Personal Encargado',
+        }

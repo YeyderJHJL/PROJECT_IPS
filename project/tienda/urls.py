@@ -5,8 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-
-    path('admin/', admin.site.urls),
+    # General
     path('', views.index, name='index'),
     # Maria
     path('servicios', views.servicios, name='servicios'),
@@ -45,7 +44,9 @@ urlpatterns = [
     path('tipo_personal/delete/<str:pk>/', views.tipo_personal_delete, name='tipo_personal_delete'),
 
     # Jhamil
-    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('protected/', views.protected_view, name='protected'),
+    path('login/', views.user_login, name='user_login'),
     path('actualizar/', views.actualizar_cliente, name='actualizar_cliente'),
     path('cambiar_usuario/', views.cambiar_usuario, name='cambiar_usuario'),
     path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
