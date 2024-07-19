@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Gestión de Cliente</h2>
+
+<nav class="navigation mb-4">
+    <a class="btn btn-secondary {% if request.path == '/project/tienda/cliente/list/' %}active{% endif %}" href="{% url 'cliente_list' %}">Lista de Clientes</a>
+</nav>
+
+<div class="centered-box">
+    {% block gestion_cliente_content %}
+    <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+        <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+
+<form method="post" action="{% if form.instance.pk %}{% url 'cliente_edit' form.instance.clidni %}{% else %}{% url 'cliente_add' %}{% endif %}">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.clidni.label_tag }}
+        {{ form.clidni }}
+        {{ form.clidni.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.clinom.label_tag }}
+        {{ form.clinom }}
+        {{ form.clinom.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.cliape.label_tag }}
+        {{ form.cliape }}
+        {{ form.cliape.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.cliusu.label_tag }}
+        {{ form.cliusu }}
+        {{ form.cliusu.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.clicon.label_tag }}
+        {{ form.clicon }}
+        {{ form.clicon.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.estregcod.label_tag }}
+        {{ form.estregcod }}
+        {{ form.estregcod.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.clifecreg.label_tag }}
+        {{ form.clifecreg }}
+        {{ form.clifecreg.errors }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

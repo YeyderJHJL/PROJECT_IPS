@@ -10,9 +10,16 @@
         </div>
 
         <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+            <a class="btn btn-primary btn-lg" href="{% url 'estado_registro_list' %}">Gestionar Estados de Registro</a>
+        </div>
+
+        <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
             <a class="btn btn-primary btn-lg" href="{% url 'gestion_personal' %}">Gestionar Personal</a>
         </div>
         
+        <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+            <a class="btn btn-primary btn-lg" href="{% url 'gestion_cliente' %}">Gestionar Clientes</a>
+        </div>
     </div>
 {% endblock %}
 

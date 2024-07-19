@@ -44,6 +44,13 @@ urlpatterns = [
     path('tipo_personal/edit/<str:pk>/', views.tipo_personal_edit, name='tipo_personal_edit'),
     path('tipo_personal/delete/<str:pk>/', views.tipo_personal_delete, name='tipo_personal_delete'),
 
+    path('cliente/', views.gestion_cliente, name='gestion_cliente'),
+    path('cliente/list/', views.cliente_list, name='cliente_list'),
+    path('cliente/add/', views.cliente_add, name='cliente_add'),
+    path('cliente/edit/<int:pk>/', views.cliente_edit, name='cliente_edit'),
+    path('cliente/delete/<int:pk>/', views.cliente_delete, name='cliente_delete'),
+    path('cliente/toggle_status/<int:pk>/', views.toggle_cliente_status, name='toggle_cliente_status'),
+
     # Jhamil
     path('login/', views.login_view, name='login'),
     path('actualizar/', views.actualizar_cliente, name='actualizar_cliente'),
