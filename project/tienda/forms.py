@@ -36,16 +36,16 @@ class EventoForm(forms.ModelForm):
         }
 
 class ServicioForm(forms.ModelForm):
-    sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly'}), required=False)
-    sernom=forms.CharField(label="Nombre")
-    serdes=forms.CharField(label="Descripcion")
-    serreqpre=forms.CharField(label="Prerequisitos")
-    serdur=forms.CharField(label="Duración")
-    sercos=forms.FloatField(label= "Costo",widget=forms.NumberInput(attrs={'min': 0}), initial=0)
-    serima=forms.CharField(label="URL de imagen", required=False)
+    sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}), required=False)
+    sernom=forms.CharField(label="Nombre", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    serdes=forms.CharField(label="Descripcion", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+    serreqpre=forms.CharField(label="Prerequisitos", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+    serdur=forms.CharField(label="Duración", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    sercos=forms.FloatField(label= "Costo",widget=forms.NumberInput(attrs={'min': 0, 'class': 'form-control'}), initial=0)
+    serima=forms.CharField(label="URL de imagen", required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
     serimg=forms.CharField(label="Directorio de Imagen", required=False)
-    estado_registro_estregcod = forms.ModelChoiceField(queryset=EstadoRegistro.objects.all(), label="Estado de Registro")
-    categoaria_servicio_catsercod=forms.ModelChoiceField(queryset=CategoariaServicio.objects.order_by('catsernom'), label="Categoria")
+    estado_registro_estregcod = forms.ModelChoiceField(queryset=EstadoRegistro.objects.all(), label="Estado de Registro", widget=forms.Select(attrs={'class': 'form-control'}))
+    categoaria_servicio_catsercod=forms.ModelChoiceField(queryset=CategoariaServicio.objects.order_by('catsernom'), label="Categoria", widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model=Servicio
