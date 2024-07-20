@@ -145,6 +145,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #login
 AUTHENTICATION_BACKENDS = [
+    'tienda.backends.ClienteBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

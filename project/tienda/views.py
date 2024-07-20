@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.db import IntegrityError
@@ -195,7 +196,10 @@ def register_view(request):
     if request.method == 'POST':
         form = ClienteRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            cliente = form.save(commit=False)
+            cliente.clicon = make_password(cliente.clicon)  # Hashea la contraseña
+            cliente.save()
+            messages.success(request, 'Registro exitoso')
             return redirect('calendar')  # Cambia 'home' por el nombre de tu vista principal
     else:
         form = ClienteRegisterForm()
@@ -223,21 +227,32 @@ def login_view(request):
         form = CustomAuthenticationForm()
     
     return render(request, 'registration/login.html', {'form': form})
-def user_login(request):
+
+def cliente_login(request):
     if request.method == 'POST':
         form = ClienteLoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('index')
-            else:
-                form.add_error(None, 'Usuario o contraseña incorrectos.')
+            try:
+                cliente = Cliente.objects.get(cliusu=username)
+                if check_password(password, cliente.clicon):
+                    request.session['cliente_id'] = cliente.clidni
+                    return redirect('calendar')  # Cambia 'home' por la URL de redirección deseada
+                else:
+                    messages.error(request, 'Contraseña incorrecta')
+            except Cliente.DoesNotExist:
+                messages.error(request, 'Usuario no encontrado')
     else:
         form = ClienteLoginForm()
     return render(request, 'registration/login.html', {'form': form})
+
+def cliente_logout(request):
+    try:
+        del request.session['cliente_id']
+    except KeyError:
+        pass
+    return redirect('index') 
 @login_required
 def actualizar_cliente(request):
     cliente = get_object_or_404(Cliente, cliusu=request.user.username)

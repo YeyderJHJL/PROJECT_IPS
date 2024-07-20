@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Iniciar Sesión{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Iniciar Sesión</h2>
+<div class="container mt-5">
+    <h2>Login Cliente</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit">Login</button>
     </form>
     {% if messages %}
-        <ul class="messages">
+        <ul>
             {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> {{ message }}</li>
+                <li>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
+    <a class="" href="{% url 'register' %}">registrar cuenta</a>
 </div>
 {% endblock %}
+

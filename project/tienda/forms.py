@@ -241,6 +241,13 @@ class ClienteRegisterForm(forms.ModelForm):
             },
         }
 
+    def save(self, commit=True):
+        cliente = super().save(commit=False)
+        cliente.clicon = make_password(self.cleaned_data['clicon'])  # Hashea la contraseña
+        if commit:
+            cliente.save()
+        return cliente
+    
     def __init__(self, *args, **kwargs):
         super(ClienteRegisterForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():

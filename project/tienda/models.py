@@ -51,7 +51,7 @@ class Personal(models.Model):
         return f"{self.pernom} {self.perape}"
 
 # CLIENTE ################################################
-
+from django.contrib.auth.hashers import make_password
 class Cliente(models.Model):
     clidni = models.CharField(db_column='CliDni', primary_key=True, max_length=8)
     clinom = models.CharField(db_column='CliNom', max_length=60)
@@ -59,7 +59,7 @@ class Cliente(models.Model):
     clitel = models.CharField(db_column='CliTel', max_length=9, blank=True, null=True)
     clidir = models.CharField(db_column='CliDir', max_length=150, blank=True, null=True)
     cliusu = models.CharField(db_column='CliUsu', unique=True, max_length=60)
-    clicon = models.CharField(db_column='CliCon', max_length=60)
+    clicon = models.CharField(db_column='CliCon', max_length=255)
     clicor = models.CharField(db_column='CliCor', max_length=60, blank=True, null=True)
     clifecreg = models.DateField(db_column='CliFecReg', blank=True, null=True)
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')
@@ -68,6 +68,11 @@ class Cliente(models.Model):
         db_table = 'cliente'
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
+
+    def save(self, *args, **kwargs):
+        if not self.pk or self.clicon in kwargs:  # Hashea la contraseña solo si es un nuevo cliente o si se actualiza
+            self.clicon = make_password(self.clicon)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.clinom} {self.cliape}"
