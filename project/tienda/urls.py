@@ -14,6 +14,10 @@ urlpatterns = [
     path('servicios/<str:codigo>/', views.servicios, name='servicios_codigo'),
     path('servicios/detalle/<str:sercod>/', views.detalle_servicio, name='detalle_servicio'),
     path('crear_evento', views.crear_evento, name='crear_evento'),
+    path('gestionar_servicios', views.gestionar_servicios, name='gestionar_servicios'),
+    path('agregar_servicio/', views.agregar_servicio, name='agregar_servicio'),
+    path('modificar_servicio/<str:sercod>/', views.modificar_servicio, name='modificar_servicio'),
+    path('eliminar_servicio/<str:sercod>/', views.eliminar_servicio, name='eliminar_servicio'),
 
     # Paola
     path('productos', views.productos, name='productos'),

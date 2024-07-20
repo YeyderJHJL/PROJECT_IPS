@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -16,8 +17,6 @@ def index(request):
 def servicios(request, codigo=None):
     instancia_clase = None
     servicio = Servicio.objects.all()
-
-    # Obtener todas las categorías
     categorias = CategoariaServicio.objects.all()
 
     if codigo:
@@ -39,14 +38,69 @@ def detalle_servicio(request, sercod):
     personal = Personal.objects.filter(tippercod='2')
     return render(request, 'detalle_servicio.html', {'servicio': servicio, 'personal':personal})
 
+
+def gestionar_servicios(request, codigo=None):
+    instancia_clase = None
+    servicio = Servicio.objects.all()
+    categorias = CategoariaServicio.objects.all()
+
+    if codigo:
+        instancia_clase = get_object_or_404(CategoariaServicio, catsercod=codigo)
+        servicio = Servicio.objects.filter(categoaria_servicio_catsercod=codigo)
+
+    if request.method == 'POST':
+        formulario = CategoriaServicioForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('gestionar_servicios')
+    else:
+        formulario = CategoriaServicioForm(instance=instancia_clase)
+
+    return render(request, 'gestionarServicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+
+def agregar_servicio(request):
+    if request.method == 'POST':
+        form = ServicioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionar_servicios')  
+    else:
+        form = ServicioForm()
+    
+    return render(request, 'agregarServicios.html', {'form': form})
+
+def modificar_servicio(request, sercod):
+    servicio = get_object_or_404(Servicio, sercod=sercod) 
+    if request.method == 'POST':
+        form = ServicioForm(request.POST, instance=servicio)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionar_servicios')  # Redirigir a la vista de listado de servicios
+    else:
+        form = ServicioForm(instance=servicio)
+    
+    return render(request, 'modificarServicios.html', {'form': form, 'servicio': servicio})
+
+def eliminar_servicio(request, sercod):
+    servicio = get_object_or_404(Servicio, sercod=sercod)
+    if request.method == 'POST':
+        servicio.delete()
+        messages.success(request, 'Servicio eliminado correctamente.')
+        return redirect('gestionar_servicios')
+
+    return redirect('gestionar_servicios')
+
 @login_required
 def crear_evento(request):
     servicio_id = request.GET.get('servicio_id') 
+    cliente = request.user  # Obtener el usuario autenticado como cliente
 
     if request.method == 'POST':
         form = EventoForm(request.POST)
         if form.is_valid():
-            form.save()
+            evento = form.save(commit=False)
+            evento.cliente = cliente  # Asignar el cliente al evento
+            evento.save()
             return redirect('index') 
     else:
         servicio = None
@@ -58,7 +112,11 @@ def crear_evento(request):
 
         form = EventoForm()
 
-    return render(request, 'reservaServicio.html', {'form': form, 'servicio': servicio})
+    return render(request, 'reservaServicio.html', {
+        'form': form,
+        'servicio': servicio,
+        'cliente': cliente,  # Pasar el cliente al contexto de la plantilla
+    })
 
 def productos(request):
     categorias = CategoariaProducto.objects.all()  

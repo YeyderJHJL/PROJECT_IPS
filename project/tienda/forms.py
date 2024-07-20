@@ -35,6 +35,32 @@ class EventoForm(forms.ModelForm):
             'perdni': 'Personal Encargado',
         }
 
+class ServicioForm(forms.ModelForm):
+    sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly'}), required=False)
+    sernom=forms.CharField(label="Nombre")
+    serdes=forms.CharField(label="Descripcion")
+    serreqpre=forms.CharField(label="Prerequisitos")
+    serdur=forms.CharField(label="Duración")
+    sercos=forms.FloatField(label= "Costo",widget=forms.NumberInput(attrs={'min': 0}), initial=0)
+    serima=forms.CharField(label="URL de imagen", required=False)
+    serimg=forms.CharField(label="Directorio de Imagen", required=False)
+    estado_registro_estregcod = forms.ModelChoiceField(queryset=EstadoRegistro.objects.all(), label="Estado de Registro")
+    categoaria_servicio_catsercod=forms.ModelChoiceField(queryset=CategoariaServicio.objects.order_by('catsernom'), label="Categoria")
+
+    class Meta:
+        model=Servicio
+        fields = ['sercod', 'sernom', 'serdes', 'serreqpre', 'serdur', 'sercos', 'serima', 'serimg', 'estado_registro_estregcod', 'categoaria_servicio_catsercod']
+        labels={
+            'sernom' : 'Nombre de Servicio',
+            'serdes' : 'Descripción',
+            'serreqpre' : 'Prerequisitos',
+            'serdur' : 'Duración',
+            'sercos' : 'Costo',
+            'serima' : 'Imagen URL',
+            'serimg' : 'Imagen directorio',
+            'estado_registro_estregcod' : 'Estado registro',
+            'categoaria_servicio_catsercod' : 'Categoria', 
+        }
 
 class CategoriaServicioForm(forms.ModelForm):
     catsernom = forms.ModelChoiceField(
@@ -210,6 +236,27 @@ class ActualizarPerfilPersonalForm(forms.ModelForm):
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}))
+
+    class Meta:
+        model = Cliente
+        fields = ['cliusu', 'clicon']  # Los campos que utilizarás para el inicio de sesión
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+
+        if username and password:
+            user = authenticate(username=username, password=password) # type: ignore
+            if not user:
+                raise forms.ValidationError("Nombre de usuario o contraseña incorrectos.")
+        
+        return cleaned_data
+
+
+
+
+
     
 class ClienteUpdateForm(forms.ModelForm):
     class Meta:
