@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Reserva{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 mb-4 text-center">Detalle de Reserva</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">{{ reserva.producto.pronom }}</h5>
+                    <p class="card-text"><strong>Código de Producto:</strong> {{ reserva.producto.procod }}</p>
+                    <p class="card-text"><strong>Descripción:</strong> {{ reserva.producto.prodes }}</p>
+                    <p class="card-text"><strong>Cantidad Reservada:</strong> {{ reserva.cantidad }}</p>
+                    <p class="card-text"><strong>Fecha de Reserva:</strong> {{ reserva.fecha_reserva }}</p>
+                    <p class="card-text"><strong>Día de Recojo:</strong> {{ reserva.dia_recojo }}</p>
+
+                    <hr>
+
+                    <!-- Formulario para modificar el día de recojo -->
+                    <form action="{% url 'modificar_dia_recojo' reserva.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="nuevo_dia_recojo" class="form-label">Modificar Día de Recojo</label>
+                            <input type="date" class="form-control" id="nuevo_dia_recojo" name="nuevo_dia_recojo" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Modificar</button>
+                    </form>
+
+                    <hr>
+
+                    <!-- Botón para cancelar la reserva -->
+                    <form action="{% url 'cancelar_reserva' reserva.id %}" method="post" onsubmit="return confirm('¿Estás seguro de que deseas cancelar esta reserva?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Cancelar Reserva</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-body .btn {
+        width: 100%; /* Asegura que los botones ocupen todo el ancho disponible */
+    }
+</style>
+
+{% endblock %}

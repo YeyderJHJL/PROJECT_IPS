@@ -68,11 +68,11 @@ def productos(request):
         'categorias': categorias,
         'producto': productos,
     }
-    return render(request, 'productos.html', context)
+    return render(request, 'productos/productos.html', context)
 
 def detalle_producto(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
-    return render(request, 'detalle_producto.html', {'producto': producto})
+    return render(request, 'productos/detalle_producto.html', {'producto': producto})
 
 def reserva_producto(request, procod):
     cliente = Cliente.objects.first()
@@ -119,7 +119,7 @@ def reserva_producto(request, procod):
         'form': form
     }
 
-    return render(request, 'reservaProducto.html', context)
+    return render(request, 'productos/reservaProducto.html', context)
 
 
 ####################################################
