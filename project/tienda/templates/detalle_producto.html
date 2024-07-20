@@ -19,8 +19,8 @@
                         <p class="card-text">{{ producto.prodes }}</p>
                         <p class="card-text"><strong>Precio unitario: S/</strong> {{ producto.propreuni }}</p>
                         <!-- <p class="card-text"><strong>Cantidad disponible:</strong> </p> -->
-                        <div class="d-flex justify-content-center"> <!-- Agregado para centrar el botón -->
-                            <a href="#" class="btn btn-outline-primary btn-sm"><i class="bi bi-cart-plus-fill me-1"></i>Reservar</a>
+                        <div class="d-flex justify-content-center">
+                            <a href="{% url 'reserva_producto' procod=producto.procod %}" class="btn btn-dark btn-sm"> <i class="bi bi-calendar-plus-fill me-1"></i> Reservar Producto</a>
                         </div>
                     </div>
                 </div>

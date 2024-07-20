@@ -202,3 +202,21 @@ class Venta(models.Model):
 
     def __str__(self):
         return f"Venta {self.vencod} - {self.venfecres}"
+    
+    ##
+class EventoProducto(models.Model):
+    evecod = models.AutoField(primary_key=True)
+    evedes = models.CharField(max_length=150, blank=True, null=True)
+    evefec = models.DateField()
+    procod = models.ForeignKey(Producto, models.PROTECT, db_column='ProCod')
+    cantidad = models.PositiveIntegerField()
+    cliente = models.ForeignKey('Cliente', models.CASCADE, db_column='CliDni', null=True)  
+    notas = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'evento_producto'
+        verbose_name = 'Evento de Producto'
+        verbose_name_plural = 'Eventos de Productos'
+
+    def __str__(self):
+        return f"Evento {self.evecod} - {self.evefec}"

@@ -16,7 +16,7 @@ urlpatterns = [
     # Paola
     path('productos', views.productos, name='productos'),
     path('producto/<int:procod>/', views.detalle_producto, name='detalle_producto'),
-    
+    path('reserva/<int:procod>/', views.reserva_producto, name='reserva_producto'),
     # Daniel
     path('calendar/', views.calendar_view, name='calendar'),
 

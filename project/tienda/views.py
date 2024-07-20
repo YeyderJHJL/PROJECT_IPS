@@ -55,6 +55,7 @@ def crear_evento(request):
 
     return render(request, 'reservaServicio.html', {'form': form, 'servicio': servicio})
 
+###### PRODUCTOS ####################################################################################
 def productos(request):
     categorias = CategoariaProducto.objects.all()  
     productos = Producto.objects.all()  
@@ -73,6 +74,55 @@ def detalle_producto(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
     return render(request, 'detalle_producto.html', {'producto': producto})
 
+def reserva_producto(request, procod):
+    cliente = Cliente.objects.first()
+    producto = get_object_or_404(Producto, procod=procod)
+    inventario = Inventario.objects.filter(procod=producto).first()
+    cantidad_disponible = inventario.invcan if inventario else 0
+
+    if request.method == 'POST':
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            cantidad = form.cleaned_data['cantidad']
+            fecha_reserva = form.cleaned_data['fecha_reserva']
+            notas = form.cleaned_data['notas']
+            forma_pago = form.cleaned_data['forma_pago']
+            confirmacion = form.cleaned_data['confirmacion']
+
+            if cantidad > cantidad_disponible:
+                form.add_error('cantidad', 'La cantidad solicitada excede la disponible.')
+            else:
+                EventoProducto.objects.create(
+                    evedes=f'Reserva de {cantidad} unidades del producto {producto.pronom}',
+                    evefec=fecha_reserva,
+                    procod=producto,
+                    cantidad=cantidad,
+                    cliente=cliente,
+                    notas=notas
+                )                
+                # Actualizar inventario
+                inventario.invcan -= cantidad
+                inventario.save()
+                messages.success(request, 'Reserva realizada con éxito.')
+                return redirect('index')
+        else:
+            form.add_error(None, 'Por favor corrige los errores en el formulario.')
+    else:
+        form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario     
+    
+    form.fields['cantidad'].max_value = cantidad_disponible
+
+    context = {
+        'cliente': cliente,
+        'producto': producto,
+        'cantidad_disponible': cantidad_disponible,
+        'form': form
+    }
+
+    return render(request, 'reservaProducto.html', context)
+
+
+####################################################
 def calendar_view(request):
     return render(request, 'calendar.html')
 
