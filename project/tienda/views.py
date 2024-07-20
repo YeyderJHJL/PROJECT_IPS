@@ -121,6 +121,53 @@ def reserva_producto(request, procod):
 
     return render(request, 'productos/reservaProducto.html', context)
 
+def detalle_reserva(request, evecod):
+    reserva = get_object_or_404(EventoProducto, evecod=evecod)  
+    return render(request, 'productos/detalle_reserva.html', {'reserva': reserva})
+
+def editar_reserva(request, evecod):
+    reserva = get_object_or_404(EventoProducto, evecod=evecod)
+    cantidad_anterior = reserva.cantidad
+    if request.method == 'POST':
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            cantidad = form.cleaned_data['cantidad']
+            fecha_reserva = form.cleaned_data['fecha_reserva']
+            notas = form.cleaned_data['notas']
+            # Actualiza el inventario según la diferencia en la cantidad
+            producto = reserva.procod
+            inventario = Inventario.objects.filter(procod=producto).first()
+            if inventario:
+                inventario.invcan += cantidad_anterior - cantidad
+                inventario.save()            
+            # Actualizar la reserva
+            reserva.cantidad = cantidad
+            reserva.evefec = fecha_reserva
+            reserva.notas = notas
+            reserva.save()
+            messages.success(request, 'Reserva actualizada con éxito.')
+            return redirect('detalle_reserva', evecod=reserva.evecod)
+    else:
+        initial_data = {
+            'cantidad': reserva.cantidad,
+            'fecha_reserva': reserva.evefec,
+            'notas': reserva.notas,
+        }
+        form = ReservaForm(initial=initial_data)
+    return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
+
+def eliminar_reserva(request, reserva_id):
+    reserva = get_object_or_404(EventoProducto, evecod=reserva_id)
+    cantidad = reserva.cantidad
+    producto = reserva.procod
+    inventario = Inventario.objects.filter(procod=producto).first()
+    if inventario:
+        # Ajustar el inventario sumando la cantidad de la reserva eliminada
+        inventario.invcan += cantidad
+        inventario.save()
+    reserva.delete()
+    messages.success(request, 'Reserva eliminada con éxito.')
+    return redirect('index')
 
 ####################################################
 def calendar_view(request):
