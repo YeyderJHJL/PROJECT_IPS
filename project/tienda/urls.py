@@ -44,9 +44,10 @@ urlpatterns = [
     path('tipo_personal/delete/<str:pk>/', views.tipo_personal_delete, name='tipo_personal_delete'),
 
     # Jhamil
-    path('register/', views.register_view, name='register'),
+    path('register/', views.register_view, name='cliente_register'),
     path('protected/', views.protected_view, name='protected'),
     path('login/', views.cliente_login, name='cliente_login'),
+    path('logout/', views.cliente_logout, name='cliente_logout'),
     path('actualizar/', views.actualizar_cliente, name='actualizar_cliente'),
     path('cambiar_usuario/', views.cambiar_usuario, name='cambiar_usuario'),
     path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),

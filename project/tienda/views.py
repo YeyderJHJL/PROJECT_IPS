@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -209,25 +208,6 @@ def register_view(request):
 def protected_view(request):
     return render(request, 'protected.html')
 
-def login_view(request):
-    if request.method == 'POST':
-        form = CustomAuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('index')  # Redirige a la página de inicio u otra página después del login exitoso
-            else:
-                messages.error(request, 'Nombre de usuario o contraseña incorrectos.')
-        else:
-            messages.error(request, 'Formulario no válido.')
-    else:
-        form = CustomAuthenticationForm()
-    
-    return render(request, 'registration/login.html', {'form': form})
-
 def cliente_login(request):
     if request.method == 'POST':
         form = ClienteLoginForm(request.POST)
@@ -253,6 +233,56 @@ def cliente_logout(request):
     except KeyError:
         pass
     return redirect('index') 
+
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Cliente
+from .forms import ClienteUpdateForm, ClienteDeleteForm
+from django.core.mail import send_mail
+from django.conf import settings
+
+def cliente_detail(request):
+    cliente = request.cliente
+    return render(request, 'cliente_detail.html', {'cliente': cliente})
+
+def cliente_update(request):
+    cliente = request.cliente
+    if request.method == 'POST':
+        form = ClienteUpdateForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Perfil actualizado exitosamente')
+            return redirect('cliente_detail')
+    else:
+        form = ClienteUpdateForm(instance=cliente)
+    return render(request, 'cliente_update.html', {'form': form})
+
+def cliente_delete(request):
+    cliente = request.cliente
+    if request.method == 'POST':
+        form = ClienteDeleteForm(request.POST)
+        if form.is_valid():
+            cliente.delete()
+            messages.success(request, 'Cuenta eliminada exitosamente')
+            return redirect('home')
+    else:
+        form = ClienteDeleteForm()
+    return render(request, 'cliente_delete.html', {'form': form})
+
+def send_confirmation_email(request, cliente, new_value, field):
+    token = generate_token(cliente)
+    confirmation_url = request.build_absolute_uri(f'/confirm_change/{token}/')
+    send_mail(
+        'Confirmación de cambio de cuenta',
+        f'Hola {cliente.cliusu},\n\nPor favor confirma el cambio de tu {field} haciendo clic en el siguiente enlace:\n{confirmation_url}\n\nGracias.',
+        settings.DEFAULT_FROM_EMAIL,
+        [cliente.clicor],
+        fail_silently=False,
+    )
+
+
 @login_required
 def actualizar_cliente(request):
     cliente = get_object_or_404(Cliente, cliusu=request.user.username)
