@@ -23,8 +23,8 @@
                 <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
             </li>
             {% if request.cliente %}
-            <li class="dropdown">
-                <a href="javascript:void(0)" class="dropbtn">Cliente</a>
+            <li class="dropdown nav-item">
+                <a href="javascript:void(0)" class="dropbtn nav-link">Cliente</a>
                 <div class="dropdown-content">
                     <a href="{% url 'cliente_detail' %}">Ver Perfil</a>
                     <a href="{% url 'cliente_update' %}">Editar Perfil</a>

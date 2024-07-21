@@ -274,7 +274,7 @@ def cliente_delete(request):
     cliente_id = request.session.get('cliente_id')
     if not cliente_id:
         messages.error(request, 'No está autorizado para realizar esta acción.')
-        return redirect('login') 
+        return redirect('cliente_login') 
 
     cliente = get_object_or_404(Cliente, clidni=cliente_id)
 
@@ -284,7 +284,7 @@ def cliente_delete(request):
             cliente.delete()
             request.session.flush()
             messages.success(request, 'Cuenta eliminada exitosamente.')
-            return redirect('login') 
+            return redirect('cliente_login') 
     else:
         form = ClienteDeleteForm()
 

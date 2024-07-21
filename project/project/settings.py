@@ -152,3 +152,11 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_REDIRECT_URL = 'calendar'
 LOGOUT_REDIRECT_URL = 'login'
+
+# Configuración de correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'jturpoan@unsa.edu.pe'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jhamilturpo2@gmail.com'
+EMAIL_HOST_PASSWORD = '71928829JHAMIL'
