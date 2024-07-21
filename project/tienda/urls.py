@@ -64,8 +64,17 @@ urlpatterns = [
     path('detail/', views.cliente_detail, name='cliente_detail'),
     path('update/', views.cliente_update, name='cliente_update'),
     path('delete/', views.cliente_delete, name='cliente_delete'),
+    # path('change_username/', views.change_username, name='change_username'),
+    # path('confirm_username/<uidb64>/<token>/', views.confirm_username, name='confirm_username'),
+    path('solicitar-cambio-password/', views.solicitar_cambio_password, name='solicitar_cambio_password'),
+    path('cambiar-password/<token>/', views.cambiar_password, name='cambiar_password'),
     # path('cambiar_usuario/', views.cambiar_usuario, name='cambiar_usuario'),
     # path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
+
+    path('ventas/', views.venta_list, name='venta_list'),
+    path('venta/<int:pk>/', views.venta_detail, name='venta_detail'),
+    path('venta/<int:pk>/edit/', views.venta_edit, name='venta_edit'),
+    path('venta/<int:pk>/delete/', views.venta_delete, name='venta_delete'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

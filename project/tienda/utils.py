@@ -1,5 +1,3 @@
-# utils.py
-
 from itsdangerous import URLSafeTimedSerializer
 from django.conf import settings
 

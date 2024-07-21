@@ -230,9 +230,13 @@ class ClienteUpdateForm(forms.ModelForm):
 class ClienteDeleteForm(forms.Form):
     confirm = forms.BooleanField(label="Confirmo que deseo eliminar mi cuenta")
 
-class UsuarioUpdateForm(forms.Form):
-    cliusu = forms.CharField(max_length=60)
 
+class UsuarioUpdateForm(forms.Form):
+    cliusu = forms.CharField(
+        label='Nuevo Nombre de Usuario',
+        max_length=60,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
     def clean_cliusu(self):
         cliusu = self.cleaned_data.get('cliusu')
         if Cliente.objects.filter(cliusu=cliusu).exists():
@@ -287,6 +291,16 @@ class ClienteRegisterForm(forms.ModelForm):
             },
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("clicon")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+        
+        return cleaned_data
+
     def save(self, commit=True):
         cliente = super().save(commit=False)
         cliente.clicon = make_password(self.cleaned_data['clicon'])  # Hashea la contraseña
@@ -299,14 +313,6 @@ class ClienteRegisterForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
         self.fields['estregcod'].initial = 1  # Asumiendo que 1 es 'activo'
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get("clicon")
-        password2 = cleaned_data.get("password2")
-
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Las contraseñas no coinciden.")
     
 class ClienteLoginForm(forms.Form):
     username = forms.CharField(
@@ -352,6 +358,13 @@ class ReservaForm(forms.Form):
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
 
+class VentaForm(forms.ModelForm):
+    class Meta:
+        model = Venta
+        fields = ['vencan', 'venprotot', 'venfecres', 'venclicod', 'veninvcod']
+        widgets = {
+            'venfecres': forms.DateInput(attrs={'type': 'date'}),
+        }
 # SERVICIO ################################################################
 
 class CategoriaServicioForm(forms.ModelForm):
