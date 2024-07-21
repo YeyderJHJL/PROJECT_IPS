@@ -169,10 +169,6 @@ class ActualizarPerfilPersonalForm(forms.ModelForm):
 
 # CLIENTE ################################################################
 
-class CustomAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}))
-    
 class ClienteUpdateForm(forms.ModelForm):
     class Meta:
         model = Cliente
@@ -183,6 +179,9 @@ class ClienteUpdateForm(forms.ModelForm):
         if Cliente.objects.filter(clicor=clicor).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("Este correo electrónico ya está en uso.")
         return clicor
+
+class ClienteDeleteForm(forms.Form):
+    confirm = forms.BooleanField(label="Confirmo que deseo eliminar mi cuenta")
 
 class UsuarioUpdateForm(forms.Form):
     cliusu = forms.CharField(max_length=60)
@@ -272,6 +271,7 @@ class ClienteLoginForm(forms.Form):
         label='Contraseña',
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
+
 # PRODUCTO ################################################################
 
 # SERVICIO ################################################################

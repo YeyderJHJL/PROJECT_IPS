@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -7,6 +8,8 @@ from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login
 import logging
+from .utils import *
+from django.conf import settings
 
 # Create your views here.
 
@@ -214,10 +217,13 @@ def cliente_login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            print(f"Username ingresado: {username}")
+            print(f"Password ingresado: {password}") 
             try:
                 cliente = Cliente.objects.get(cliusu=username)
                 if check_password(password, cliente.clicon):
                     request.session['cliente_id'] = cliente.clidni
+                    messages.success(request, 'Inicio de sesión exitoso.')
                     return redirect('calendar')  # Cambia 'home' por la URL de redirección deseada
                 else:
                     messages.error(request, 'Contraseña incorrecta')
@@ -234,18 +240,9 @@ def cliente_logout(request):
         pass
     return redirect('index') 
 
-# views.py
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .models import Cliente
-from .forms import ClienteUpdateForm, ClienteDeleteForm
-from django.core.mail import send_mail
-from django.conf import settings
-
 def cliente_detail(request):
     cliente = request.cliente
-    return render(request, 'cliente_detail.html', {'cliente': cliente})
+    return render(request, 'cliente/cliente_detail.html', {'cliente': cliente})
 
 def cliente_update(request):
     cliente = request.cliente
@@ -257,7 +254,7 @@ def cliente_update(request):
             return redirect('cliente_detail')
     else:
         form = ClienteUpdateForm(instance=cliente)
-    return render(request, 'cliente_update.html', {'form': form})
+    return render(request, 'cliente/cliente_update.html', {'form': form})
 
 def cliente_delete(request):
     cliente = request.cliente
@@ -269,7 +266,7 @@ def cliente_delete(request):
             return redirect('home')
     else:
         form = ClienteDeleteForm()
-    return render(request, 'cliente_delete.html', {'form': form})
+    return render(request, 'cliente/cliente_delete.html', {'form': form})
 
 def send_confirmation_email(request, cliente, new_value, field):
     token = generate_token(cliente)
@@ -282,6 +279,35 @@ def send_confirmation_email(request, cliente, new_value, field):
         fail_silently=False,
     )
 
+def confirm_change(request, token):
+    clidni = confirm_token(token)
+    if not clidni:
+        messages.error(request, 'El enlace de confirmación es inválido o ha expirado.')
+        return redirect('index')
+    
+    cliente = get_object_or_404(Cliente, clidni=clidni)
+    # Aquí puedes realizar las operaciones necesarias, por ejemplo, cambiar contraseña
+    # Verifica si el cliente está logeado antes de hacer cualquier cambio
+    
+    if 'cliente_id' in request.session and request.session['cliente_id'] == cliente.clidni:
+        # Realiza el cambio (por ejemplo, actualiza la contraseña o el usuario)
+        messages.success(request, 'Cambio confirmado exitosamente.')
+    else:
+        messages.error(request, 'No estás autorizado para realizar este cambio.')
+
+    messages.success(request, 'Cambio confirmado exitosamente.')
+    return redirect('index')
+
+def send_confirmation_email(request, cliente, new_value, field):
+    token = generate_token(cliente)
+    confirmation_url = request.build_absolute_uri(f'/confirm_change/{token}/')
+    send_mail(
+        'Confirmación de cambio de cuenta',
+        f'Hola {cliente.cliusu},\n\nPor favor confirma el cambio de tu {field} haciendo clic en el siguiente enlace:\n{confirmation_url}\n\nGracias.',
+        settings.DEFAULT_FROM_EMAIL,
+        [cliente.clicor],
+        fail_silently=False,
+    )
 
 @login_required
 def actualizar_cliente(request):
