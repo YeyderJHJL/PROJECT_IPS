@@ -10,3 +10,6 @@ def contactForm(request):
 
 def empresa(request):
     return render(request, 'empresa.html')
+
+def login(request):
+    return render(request, 'login.html')
