@@ -4,12 +4,6 @@ import datetime
 from django.contrib.auth.forms import AuthenticationForm
 
 class EventoForm(forms.ModelForm):
-    evecod = forms.IntegerField(
-        label="Código",
-        disabled=True,
-        widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-        required=False
-    )
     evedes = forms.CharField(
         max_length=150, 
         label="Descripción",
@@ -27,9 +21,8 @@ class EventoForm(forms.ModelForm):
 
     class Meta:
         model = Evento
-        fields = ['evecod', 'evedes', 'evefec', 'perdni']
+        fields = ['evedes', 'evefec', 'perdni']
         labels = {
-            'evecod': 'Número de Servicio',
             'evedes': 'Agregar Otros datos',
             'evefec': 'Fecha',
             'perdni': 'Personal Encargado',
