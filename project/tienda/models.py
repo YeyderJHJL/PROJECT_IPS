@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class CategoariaProducto(models.Model):
     catprocod = models.AutoField(db_column='CatProCod', primary_key=True)
@@ -26,7 +27,7 @@ class CategoariaServicio(models.Model):
 
 class EstadoRegistro(models.Model):
     estregcod = models.AutoField(db_column='EstRegCod', primary_key=True)
-    estregnom = models.CharField(db_column='EstRegNom', max_length=60)
+    estregnom = models.CharField(db_column='EstRegNom', max_length=100)
 
     class Meta:
         db_table = 'estado_registro'
@@ -58,7 +59,7 @@ class Cliente(models.Model):
 
 class TipoPersonal(models.Model):
     tippercod = models.AutoField(db_column='TipPerCod', primary_key=True)
-    tippernom = models.CharField(db_column='TipPerNom', max_length=60)
+    tippernom = models.CharField(db_column='TipPerNom', max_length=100)
 
     class Meta:
         db_table = 'tipo_personal'
@@ -76,7 +77,7 @@ class Personal(models.Model):
     perdir = models.CharField(db_column='PerDir', max_length=150, blank=True, null=True)
     perusu = models.CharField(db_column='PerUsu', unique=True, max_length=60)
     percon = models.CharField(db_column='PerCon', max_length=60)
-    percor = models.CharField(db_column='PerCor', max_length=60, blank=True, null=True)
+    percor = models.EmailField(db_column='PerCor', blank=True, null=True)  # Cambiado a EmailField para correos
     perfecreg = models.DateField(db_column='PerFecReg')
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')
     tippercod = models.ForeignKey(TipoPersonal, models.PROTECT, db_column='TipPerCod')
@@ -91,11 +92,13 @@ class Personal(models.Model):
 
 class Producto(models.Model):
     procod = models.AutoField(db_column='ProCod', primary_key=True)
-    pronom = models.CharField(db_column='ProNom', unique=True, max_length=60)
-    prodes = models.CharField(db_column='ProDes', max_length=300, blank=True, null=True)
+    pronom = models.CharField(db_column='ProNom', unique=True, max_length=100)
+    prodes = models.CharField(db_column='ProDes', max_length=500, blank=True, null=True)
     propreuni = models.DecimalField(db_column='ProPreUni', max_digits=10, decimal_places=2)
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')
     catprocod = models.ForeignKey(CategoariaProducto, models.PROTECT, db_column='CatProCod')
+    proima = models.CharField(db_column='ProImaUrl', max_length=400, default='')
+    proimg = models.ImageField(upload_to='static/images/', blank=True, null=True, db_column='ProImaPmg')
 
     class Meta:
         db_table = 'producto'
@@ -107,11 +110,13 @@ class Producto(models.Model):
 
 class Servicio(models.Model):
     sercod = models.AutoField(db_column='SerCod', primary_key=True)
-    sernom = models.CharField(db_column='SerNom', unique=True, max_length=45)
-    serdes = models.CharField(db_column='SerDes', max_length=45, blank=True, null=True)
+    sernom = models.CharField(db_column='SerNom', unique=True, max_length=100)
+    serdes = models.CharField(db_column='SerDes', max_length=400, blank=True, null=True)
     serreqpre = models.CharField(db_column='SerReqPre', max_length=45, blank=True, null=True)
-    serdur = models.CharField(db_column='SerDur', max_length=45, blank=True, null=True)
+    serdur = models.CharField(db_column='SerDur', max_length=60, blank=True, null=True)
     sercos = models.CharField(db_column='SerCos', max_length=45)
+    serima = models.CharField(db_column='SerImaUrl', max_length=400, default='')
+    serimg = models.ImageField(upload_to='static/images/', blank=True, null=True, db_column='SerImaPng')
     estado_registro_estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='ESTADO_REGISTRO_EstRegCod')
     categoaria_servicio_catsercod = models.ForeignKey(CategoariaServicio, models.PROTECT, db_column='CATEGOARIA_SERVICIO_CatSerCod')
 

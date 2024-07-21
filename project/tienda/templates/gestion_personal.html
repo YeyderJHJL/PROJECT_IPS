@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Gestión de Personal</h2>
+<nav class="navigation mb-4">
+    <a class="btn btn-secondary {% if request.path == '/project/tienda/estado_registro/' %}active{% endif %}" href="{% url 'estado_registro_list' %}">Estados de Registro</a>
+    <a class="btn btn-secondary {% if request.path == '/project/tienda/personal/list/' %}active{% endif %}" href="{% url 'personal_list' %}">Lista de Personal</a>
+    <a class="btn btn-secondary {% if request.path == '/project/tienda/tipo_personal/' %}active{% endif %}" href="{% url 'tipo_personal_list' %}">Tipos de Personal</a>
+</nav>
+<div class="centered-box">
+    {% block gestion_personal_content %}
+    <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
+        <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}
+
