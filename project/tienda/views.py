@@ -605,7 +605,7 @@ def crear_evento(request):
 
         form = EventoForm()
 
-    return render(request, 'reservaServicio.html', {
+    return render(request, 'servicios/reservaServicio.html', {
         'form': form,
         'servicio': servicio,
         'cliente': cliente,
@@ -639,27 +639,6 @@ def eliminar_reservaS(request, evecod):
     return redirect('index')
 
 # EVENTO ################################################
-
-@login_required
-def crear_evento(request):
-    servicio_id = request.GET.get('servicio_id') 
-
-    if request.method == 'POST':
-        form = EventoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('index') 
-    else:
-        servicio = None
-        if servicio_id:
-            try:
-                servicio = Servicio.objects.get(pk=servicio_id)
-            except Servicio.DoesNotExist:
-                servicio = None
-
-        form = EventoForm()
-
-    return render(request, 'reservaServicio.html', {'form': form, 'servicio': servicio})
 
 def calendar_view(request):
     return render(request, 'calendar.html')
