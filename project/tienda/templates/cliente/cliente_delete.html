@@ -5,10 +5,11 @@
 {% block content %}
 <div class="container">
     <h2>Eliminar Cuenta</h2>
-    <form method="POST">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Eliminar</button>
-    </form>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary">Cancelar</a>
+      </form>
 </div>
 {% endblock %}
