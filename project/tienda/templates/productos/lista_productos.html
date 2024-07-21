@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Productos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 mb-4 text-center">Gestionar Productos</h1>
+
+ <!-- Categorías -->
+ <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-8">
+        <div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">                        
+            <a href="{% url 'lista_productos' %}" class="btn btn-secondary me-2">Todos</a>
+            {% for categoria in categorias %}
+                <a href="?categoria={{ categoria.catprocod }}" class="btn btn-secondary me-2">{{ categoria.catpronom }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">
+            <a href="{% url 'agregar_producto' %}" class="btn btn-secondary me-2">+ Agregar producto</a>
+        </div>
+    </div>
+</div>
+    <hr>
+
+    <!-- Productos -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+        {% for p in productos %}
+        <div class="col mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <!-- Imagen con overlay para interactividad -->
+                <div class="position-relative overflow-hidden" style="border-radius: 12px; height: 300px;">
+                    {% if p.proimg %}
+                        <img src="{{ p.proimg.url }}" class="card-img-top img-fluid" alt="{{ p.pronom }}">
+                    {% elif p.proima %}
+                        <img src="{{ p.proima }}" class="card-img-top img-fluid" alt="{{ p.pronom }}">
+                    {% else %}
+                        <div class="card-img-top" style="height: 200px; background-color: #f0f0f0; border-radius: 12px;"></div>
+                    {% endif %}
+                    <div class="card-img-top" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 12px;"></div>
+                    <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.3); transition: background-color 0.3s;"></div>
+                    <div class="position-absolute bottom-0 start-0 p-3">
+                        <h5 class="text-white">{{ p.pronom }}</h5>
+                    </div>
+                </div>
+                <div class="card-body d-flex flex-column p-3">
+                    <h5 class="text">{{ p.pronom }}</h5>
+                    <hr class="my-2" style="border-top: none;">
+                    <p class="card-text mb-1"><strong>Precio:  </strong> {{ p.propreuni }}</p>
+                    <p class="card-text mb-1"><strong>Cantidad:  </strong> {{ p.procan }}</p>
+                    
+                    <br>
+                    <hr style="margin-top: 0;">
+                    <br>
+                    <div class="mt-auto d-flex justify-content-center">
+                        <a href="{% url 'modificar_producto' procod=p.procod %}" class="btn btn-outline-dark btn-sm me-2">Modificar</a>
+                        <form action="{% url 'eliminar_producto' procod=p.procod %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-dark btn-sm">Eliminar</button>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    .btn-group .btn {
+        border-radius: 25px;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-group .btn:hover {
+        background-color: #495057;
+    }
+
+    .btn-group .btn:focus {
+        outline: none;
+    }
+
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img-top {
+        transform: scale(1.1);
+    }
+
+    .overlay {
+        opacity: 0;
+    }
+
+    .card:hover .overlay {
+        opacity: 1;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .card-body hr {
+        margin: 0; /* Asegura que no haya espacio entre los hr en el cuerpo de la tarjeta */
+    }
+
+    .card-body .btn {
+        width: 100%; /* Asegura que los botones ocupen todo el ancho disponible */
+    }
+
+    .modal-content {
+        padding: 20px; /* Ajusta el relleno dentro del modal */
+    }
+
+    .modal-body {
+        padding-bottom: 20px; /* Espacio adicional en la parte inferior del cuerpo del modal */
+    }
+
+    .modal-body .col-md-6 {
+        padding: 0 15px; /* Espacio lateral entre las columnas */
+    }
+
+    .modal-title {
+        font-size: 2.5rem; /* Tamaño del título del modal */
+    }
+
+    .modal-body {
+        font-size: 1.2rem; /* Tamaño del texto del cuerpo del modal */
+    }
+
+    .modal-body p {
+        margin-bottom: 1rem; /* Espacio entre los párrafos del modal */
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.2.3/js/bootstrap.min.js"></script>
+{% endblock %}

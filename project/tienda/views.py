@@ -169,6 +169,39 @@ def eliminar_reserva(request, evecod):
     messages.success(request, 'Reserva eliminada con éxito.')
     return redirect('index')
 
+##gestion de los productos
+def lista_productos(request):
+    productos = Producto.objects.all() 
+    return render(request, 'productos/lista_productos.html', {'productos': productos})
+
+def agregar_producto(request):
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_productos')
+    else:
+        form = ProductoForm()
+    return render(request, 'productos/form_producto.html', {'form': form, 'titulo': 'Agregar Producto'})
+
+def modificar_producto(request, procod):
+    producto = get_object_or_404(Producto, procod=procod)
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_productos')
+    else:
+        form = ProductoForm(instance=producto)
+    return render(request, 'productos/form_producto.html', {'form': form, 'titulo': 'Modificar Producto'})
+
+def eliminar_producto(request, procod):
+    producto = get_object_or_404(Producto, procod=procod)
+    if request.method == 'POST':
+        producto.delete()
+        return redirect('lista_productos')    
+    return render(request, 'productos/eliminar_producto.html', {'producto': producto})
+
 ####################################################
 def calendar_view(request):
     return render(request, 'calendar.html')

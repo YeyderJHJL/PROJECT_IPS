@@ -276,3 +276,23 @@ class ReservaForm(forms.Form):
         label='Acepto las condiciones de la reserva.',
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['pronom', 'prodes', 'propreuni', 'proimg', 'proima', 'estregcod', 'catprocod']
+        widgets = {
+            'proimg': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'estregcod': forms.Select(attrs={'class': 'form-control'}),
+            'catprocod': forms.Select(attrs={'class': 'form-control'}),
+            'proima': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'pronom': 'Nombre del Producto',
+            'prodes': 'Descripción del Producto',
+            'propreuni': 'Precio Unitario',
+            'proimg': 'Imagen del Producto',
+            'proima': 'URL de la Imagen',
+            'estregcod': 'Estado del Registro',
+            'catprocod': 'Categoría del Producto',
+        }
