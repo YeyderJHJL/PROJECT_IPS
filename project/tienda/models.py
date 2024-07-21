@@ -177,7 +177,7 @@ class Servicio(models.Model):
     serreqpre = models.CharField(db_column='SerReqPre', max_length=45, blank=True, null=True)
     serdur = models.CharField(db_column='SerDur', max_length=60, blank=True, null=True)
     sercos = models.CharField(db_column='SerCos', max_length=45)
-    serima = models.CharField(db_column='SerImaUrl', max_length=400, default='')
+    serima = models.CharField(db_column='SerImaUrl', max_length=400, default='', null=True)
     serimg = models.ImageField(upload_to='static/images/', blank=True, null=True, db_column='SerImaPng')
     estado_registro_estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='ESTADO_REGISTRO_EstRegCod')
     categoaria_servicio_catsercod = models.ForeignKey(CategoariaServicio, models.PROTECT, db_column='CATEGOARIA_SERVICIO_CatSerCod')

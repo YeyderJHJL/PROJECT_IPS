@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+
 from pathlib import Path
 import environ, os
 
@@ -21,14 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Inicializar el entorno
 env = environ.Env()
+# Lee el archivo .env si está presente
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Leer el archivo .env si está presente
-environ.Env.read_env()
-
-# Usar variables de entorno en la configuración
-SECRET_KEY = env.str('SECRET_KEY')
+# Variables de entorno
+SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
-ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS', default=[]))
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = 'django-insecure-+a62mtrhb(0tq!(3nuzqo3fqo@ck8^*$xnf&rkzheoj1&fdhlt'

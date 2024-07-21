@@ -7,10 +7,19 @@ from django.conf.urls.static import static
 urlpatterns = [
     # General
     path('', views.index, name='index'),
+
     # Maria
     path('servicios', views.servicios, name='servicios'),
     path('servicios/<str:codigo>/', views.servicios, name='servicios_codigo'),
+    path('servicios/detalle/<str:sercod>/', views.detalle_servicio, name='detalle_servicio'),
     path('crear_evento', views.crear_evento, name='crear_evento'),
+    path('gestionar_servicios', views.gestionar_servicios, name='gestionar_servicios'),
+    path('agregar_servicio/', views.agregar_servicio, name='agregar_servicio'),
+    path('modificar_servicio/<str:sercod>/', views.modificar_servicio, name='modificar_servicio'),
+    path('eliminar_servicio/<str:sercod>/', views.eliminar_servicio, name='eliminar_servicio'),
+    path('reservaServicio/detalle/<int:evecod>/', views.detalle_reservaS, name='detalle_reservaS'),
+    path('reservaServicio/editar/<int:evecod>/', views.editar_reservaS, name='editar_reservaS'),
+    path('reservaServicio/eliminar/<int:evecod>/', views.eliminar_reservaS, name='eliminar_reservaS'),
 
     # Paola
     path('productos', views.productos, name='productos'),

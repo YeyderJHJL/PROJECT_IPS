@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
@@ -487,8 +488,6 @@ def eliminar_reserva(request, evecod):
 def servicios(request, codigo=None):
     instancia_clase = None
     servicio = Servicio.objects.all()
-
-    # Obtener todas las categorías
     categorias = CategoariaServicio.objects.all()
 
     if codigo:
@@ -503,7 +502,141 @@ def servicios(request, codigo=None):
     else:
         formulario = CategoriaServicioForm(instance=instancia_clase)
 
-    return render(request, 'servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+    return render(request, 'servicios/servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+
+def detalle_servicio(request, sercod):
+    servicio = get_object_or_404(Servicio, sercod=sercod)
+    personal = Personal.objects.filter(tippercod='2')
+    return render(request, 'servicios/detalle_servicio.html', {'servicio': servicio, 'personal':personal})
+
+
+def gestionar_servicios(request, codigo=None):
+    instancia_clase = None
+    servicio = Servicio.objects.all()
+    categorias = CategoariaServicio.objects.all()
+
+    if codigo:
+        instancia_clase = get_object_or_404(CategoariaServicio, catsercod=codigo)
+        servicio = Servicio.objects.filter(categoaria_servicio_catsercod=codigo)
+
+    if request.method == 'POST':
+        formulario = CategoriaServicioForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('gestionar_servicios')
+    else:
+        formulario = CategoriaServicioForm(instance=instancia_clase)
+
+    return render(request, 'servicios/gestionarServicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+
+def agregar_servicio(request):
+    if request.method == 'POST':
+        form = ServicioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionar_servicios')  
+    else:
+        form = ServicioForm()
+    
+    return render(request, 'servicios/agregarServicios.html', {'form': form})
+
+def modificar_servicio(request, sercod):
+    servicio = get_object_or_404(Servicio, sercod=sercod) 
+    if request.method == 'POST':
+        form = ServicioForm(request.POST, instance=servicio)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionar_servicios')  # Redirigir a la vista de listado de servicios
+    else:
+        form = ServicioForm(instance=servicio)
+    
+    return render(request, 'servicios/modificarServicios.html', {'form': form, 'servicio': servicio})
+
+def eliminar_servicio(request, sercod):
+    servicio = get_object_or_404(Servicio, sercod=sercod)
+    if request.method == 'POST':
+        servicio.delete()
+        messages.success(request, 'Servicio eliminado correctamente.')
+        return redirect('gestionar_servicios')
+
+    return redirect('gestionar_servicios')
+
+@login_required
+def crear_evento(request):
+    servicio_id = request.GET.get('servicio_id')
+    cliente = Cliente.objects.first()  # Obtener el cliente autenticado o el cliente deseado
+
+    if request.method == 'POST':
+        form = EventoForm(request.POST)
+        if form.is_valid():
+            evento = form.save(commit=False)
+            if cliente:
+                evento.clidni = cliente  # Asignar el cliente al evento
+
+            if servicio_id:
+                try:
+                    servicio = Servicio.objects.get(pk=servicio_id)
+                    evento.sercod = servicio  # Asignar la instancia del objeto Servicio
+                except Servicio.DoesNotExist:
+                    form.add_error(None, 'El servicio seleccionado no existe.')
+                    return render(request, 'reservaServicio.html', {
+                        'form': form,
+                        'servicio': None,
+                        'cliente': cliente,
+                    })
+            else:
+                form.add_error(None, 'No se ha proporcionado un servicio válido.')
+                return render(request, 'reservaServicio.html', {
+                    'form': form,
+                    'servicio': None,
+                    'cliente': cliente,
+                })
+
+            evento.save()
+            return redirect('index')
+    else:
+        if servicio_id:
+            try:
+                servicio = Servicio.objects.get(pk=servicio_id)
+            except Servicio.DoesNotExist:
+                servicio = None
+        else:
+            servicio = None
+
+        form = EventoForm()
+
+    return render(request, 'reservaServicio.html', {
+        'form': form,
+        'servicio': servicio,
+        'cliente': cliente,
+    })
+
+def detalle_reservaS(request, evecod):
+    reserva = get_object_or_404(Evento, evecod=evecod)  
+    return render(request, 'servicios/detalle_reservaS.html', {'reserva': reserva})
+
+def editar_reservaS(request, evecod):
+    reserva = get_object_or_404(Evento, evecod=evecod)
+    if request.method == 'POST':
+        form = EventoForm(request.POST, instance=reserva)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Reserva actualizada con éxito.')
+            return redirect('servicios/detalle_reservaS', evecod=reserva.evecod)
+    else:
+        form = EventoForm(instance=reserva)
+    
+    return render(request, 'servicios/editar_reservaS.html', {'form': form, 'reserva': reserva})
+
+def eliminar_reservaS(request, evecod):
+    reserva = get_object_or_404(Evento, evecod=evecod)
+    
+    if request.method == 'POST':
+        reserva.delete()
+        messages.success(request, 'Reserva eliminada correctamente.')
+        return redirect('index')
+    
+    return redirect('index')
 
 # EVENTO ################################################
 

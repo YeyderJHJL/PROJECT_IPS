@@ -1,9 +1,22 @@
 from django import forms
 from .models import *
 import datetime
-from django.contrib.auth.forms import AuthenticationForm
 
-# GENERAL ################################################################
+class EventoForm(forms.ModelForm):
+    evedes = forms.CharField(
+        max_length=150, 
+        label="Descripción",
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+    )
+    evefec = forms.DateField(
+        label="Fecha",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
+    perdni = forms.ModelChoiceField(
+        queryset=Personal.objects.all(),
+        label="Personal Encargado",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
 class EstadoRegistroForm(forms.ModelForm):
     class Meta:
@@ -25,6 +38,40 @@ class EstadoRegistroForm(forms.ModelForm):
                 label='Código'
             )
             self.fields['estregcod'].required = False
+        model = Evento
+        fields = ['evedes', 'evefec', 'perdni']
+        labels = {
+            'evedes': 'Agregar Otros datos',
+            'evefec': 'Fecha',
+            'perdni': 'Personal Encargado',
+        }
+
+class ServicioForm(forms.ModelForm):
+    sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}), required=False)
+    sernom=forms.CharField(label="Nombre", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    serdes=forms.CharField(label="Descripcion", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+    serreqpre=forms.CharField(label="Prerequisitos", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+    serdur=forms.CharField(label="Duración", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    sercos=forms.FloatField(label= "Costo",widget=forms.NumberInput(attrs={'min': 0, 'class': 'form-control'}), initial=0)
+    serima=forms.CharField(label="URL de imagen", required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    serimg=forms.CharField(label="Directorio de Imagen", required=False)
+    estado_registro_estregcod = forms.ModelChoiceField(queryset=EstadoRegistro.objects.all(), label="Estado de Registro", widget=forms.Select(attrs={'class': 'form-control'}))
+    categoaria_servicio_catsercod=forms.ModelChoiceField(queryset=CategoariaServicio.objects.order_by('catsernom'), label="Categoria", widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model=Servicio
+        fields = ['sercod', 'sernom', 'serdes', 'serreqpre', 'serdur', 'sercos', 'serima', 'serimg', 'estado_registro_estregcod', 'categoaria_servicio_catsercod']
+        labels={
+            'sernom' : 'Nombre de Servicio',
+            'serdes' : 'Descripción',
+            'serreqpre' : 'Prerequisitos',
+            'serdur' : 'Duración',
+            'sercos' : 'Costo',
+            'serima' : 'Imagen URL',
+            'serimg' : 'Imagen directorio',
+            'estado_registro_estregcod' : 'Estado registro',
+            'categoaria_servicio_catsercod' : 'Categoria', 
+        }
 
 # PERSONAL ################################################################
 
