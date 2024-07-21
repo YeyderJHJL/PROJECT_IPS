@@ -75,6 +75,60 @@ class ServicioForm(forms.ModelForm):
 
 # PERSONAL ################################################################
 
+class ClienteForm(forms.ModelForm):
+    clifecreg = forms.DateField(widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}), required=False)
+    
+    class Meta:
+        model = Cliente
+        fields = ['clidni', 'clinom', 'cliape', 'clitel', 'clidir', 'cliusu', 'clicon', 'clicor', 'clifecreg', 'estregcod']
+        widgets = {
+            'clidni': forms.TextInput(attrs={'class': 'form-control'}),
+            'clinom': forms.TextInput(attrs={'class': 'form-control'}),
+            'cliape': forms.TextInput(attrs={'class': 'form-control'}),
+            'clitel': forms.TextInput(attrs={'class': 'form-control'}),
+            'clidir': forms.TextInput(attrs={'class': 'form-control'}),
+            'cliusu': forms.TextInput(attrs={'class': 'form-control'}),
+            'clicon': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'clicor': forms.EmailInput(attrs={'class': 'form-control'}),
+            'clifecreg': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'estregcod': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'clidni': 'DNI',
+            'clinom': 'Nombre',
+            'cliape': 'Apellido',
+            'clitel': 'Teléfono',
+            'clidir': 'Dirección',
+            'cliusu': 'Usuario',
+            'clicon': 'Contraseña',
+            'clicor': 'Correo',
+            'clifecreg': 'Fecha de Registro',
+            'estregcod': 'Estado de Registro',
+        }
+        error_messages = {
+            'clidni': {
+                'unique': "Ya existe un cliente con este DNI.",
+                'required': "El DNI del cliente es obligatorio."
+            },
+            'clinom': {
+                'required': "El nombre del cliente es obligatorio."
+            },
+            'cliape': {
+                'required': "El apellido del cliente es obligatorio."
+            },
+            'cliusu': {
+                'required': "El usuario del cliente es obligatorio."
+            },
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super(ClienteForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:  # Solo para nuevos registros
+            self.fields['clifecreg'].initial = datetime.date.today()
+            self.fields['estregcod'].initial = EstadoRegistro.objects.get(estregnom='Activo')
+        else:
+            self.fields['clidni'].widget.attrs['readonly'] = True
+
 class LoginPersonalForm(forms.Form):
     username = forms.CharField(
         label='Usuario',
