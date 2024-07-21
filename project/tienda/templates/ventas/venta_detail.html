@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Venta - {{ venta.vencod }}{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-body">
+                <h2 class="card-title mb-3">Venta {{ venta.vencod }}</h2>
+                <p><strong>Fecha:</strong> {{ venta.venfecres }}</p>
+                <p><strong>Cliente:</strong> {{ venta.venclicod }}</p>
+                <p><strong>Producto:</strong> {{ venta.veninvcod }}</p>
+                <p><strong>Cantidad:</strong> {{ venta.vencan }}</p>
+                <p><strong>Precio Total:</strong> S/ {{ venta.venprotot }}</p>
+                <a href="{% url 'venta_edit' pk=venta.pk %}" class="btn btn-warning">Editar</a>
+                <a href="{% url 'venta_delete' pk=venta.pk %}" class="btn btn-danger">Eliminar</a>
+                <a href="{% url 'venta_list' %}" class="btn btn-secondary">Volver</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
