@@ -68,12 +68,7 @@ class Cliente(models.Model):
         db_table = 'cliente'
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
-
-    def save(self, *args, **kwargs):
-        if not self.pk or self.clicon in kwargs:  # Hashea la contraseña solo si es un nuevo cliente o si se actualiza
-            self.clicon = make_password(self.clicon)
-        super().save(*args, **kwargs)
-
+    
     def __str__(self):
         return f"{self.clinom} {self.cliape}"
 

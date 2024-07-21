@@ -240,6 +240,16 @@ class ClienteRegisterForm(forms.ModelForm):
             },
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("clicon")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+        
+        return cleaned_data
+
     def save(self, commit=True):
         cliente = super().save(commit=False)
         cliente.clicon = make_password(self.cleaned_data['clicon'])  # Hashea la contraseña
@@ -252,14 +262,6 @@ class ClienteRegisterForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
         self.fields['estregcod'].initial = 1  # Asumiendo que 1 es 'activo'
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get("clicon")
-        password2 = cleaned_data.get("password2")
-
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Las contraseñas no coinciden.")
     
 class ClienteLoginForm(forms.Form):
     username = forms.CharField(

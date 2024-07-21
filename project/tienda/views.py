@@ -194,15 +194,14 @@ def toggle_personal_status(request, pk):
     return redirect('personal_list')
 
 # CLIENTE ################################################
+
 def register_view(request):
     if request.method == 'POST':
         form = ClienteRegisterForm(request.POST)
         if form.is_valid():
-            cliente = form.save(commit=False)
-            cliente.clicon = make_password(cliente.clicon)  # Hashea la contraseña
-            cliente.save()
+            form.save()
             messages.success(request, 'Registro exitoso')
-            return redirect('calendar')  # Cambia 'home' por el nombre de tu vista principal
+            return redirect('cliente_login')  # Cambia 'home' por el nombre de tu vista principal
     else:
         form = ClienteRegisterForm()
     return render(request, 'registration/register.html', {'form': form})
@@ -255,18 +254,26 @@ def cliente_update(request):
     else:
         form = ClienteUpdateForm(instance=cliente)
     return render(request, 'cliente/cliente_update.html', {'form': form})
-
 def cliente_delete(request):
-    cliente = request.cliente
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login')  # Redirige al login si no hay cliente_id en la sesión
+
+    cliente = get_object_or_404(Cliente, clidni=cliente_id)
+
     if request.method == 'POST':
         form = ClienteDeleteForm(request.POST)
         if form.is_valid():
             cliente.delete()
-            messages.success(request, 'Cuenta eliminada exitosamente')
-            return redirect('home')
+            request.session.flush()  # Limpiar la sesión
+            messages.success(request, 'Cuenta eliminada exitosamente.')
+            return redirect('index')  # Redirige al login después de eliminar la cuenta
     else:
         form = ClienteDeleteForm()
+
     return render(request, 'cliente/cliente_delete.html', {'form': form})
+
 
 def send_confirmation_email(request, cliente, new_value, field):
     token = generate_token(cliente)
