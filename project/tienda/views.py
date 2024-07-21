@@ -156,8 +156,8 @@ def editar_reserva(request, evecod):
         form = ReservaForm(initial=initial_data)
     return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
 
-def eliminar_reserva(request, reserva_id):
-    reserva = get_object_or_404(EventoProducto, evecod=reserva_id)
+def eliminar_reserva(request, evecod):
+    reserva = get_object_or_404(EventoProducto, evecod=evecod)
     cantidad = reserva.cantidad
     producto = reserva.procod
     inventario = Inventario.objects.filter(procod=producto).first()

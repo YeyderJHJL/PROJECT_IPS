@@ -98,7 +98,7 @@ class Producto(models.Model):
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')
     catprocod = models.ForeignKey(CategoariaProducto, models.PROTECT, db_column='CatProCod')
     proima = models.CharField(db_column='ProImaUrl', max_length=400, default='')
-    proimg = models.ImageField(upload_to='static/images/', blank=True, null=True, db_column='ProImaPmg')
+    proimg = models.ImageField(upload_to='images/', blank=True, null=True, db_column='ProImaPmg')
 
     class Meta:
         db_table = 'producto'

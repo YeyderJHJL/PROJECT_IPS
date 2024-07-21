@@ -53,4 +53,8 @@ urlpatterns = [
     path('actualizar/', views.actualizar_cliente, name='actualizar_cliente'),
     path('cambiar_usuario/', views.cambiar_usuario, name='cambiar_usuario'),
     path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
