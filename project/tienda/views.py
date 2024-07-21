@@ -51,122 +51,6 @@ def estado_registro_delete(request, pk):
         return redirect('estado_registro_list')
     return render(request, 'estado_registro_confirm_delete.html', {'estado': estado})
 
-###### PRODUCTOS ####################################################################################
-def productos(request):
-    categorias = CategoariaProducto.objects.all()  
-    productos = Producto.objects.all()  
-    
-    categoria_id = request.GET.get('categoria')  
-    if categoria_id:
-        productos = productos.filter(catprocod=categoria_id)  
-    
-    context = {
-        'categorias': categorias,
-        'producto': productos,
-    }
-    return render(request, 'productos/productos.html', context)
-
-def detalle_producto(request, procod):
-    producto = get_object_or_404(Producto, procod=procod)
-    return render(request, 'productos/detalle_producto.html', {'producto': producto})
-
-def reserva_producto(request, procod):
-    cliente = Cliente.objects.first()
-    producto = get_object_or_404(Producto, procod=procod)
-    inventario = Inventario.objects.filter(procod=producto).first()
-    cantidad_disponible = inventario.invcan if inventario else 0
-
-    if request.method == 'POST':
-        form = ReservaForm(request.POST)
-        if form.is_valid():
-            cantidad = form.cleaned_data['cantidad']
-            fecha_reserva = form.cleaned_data['fecha_reserva']
-            notas = form.cleaned_data['notas']
-            forma_pago = form.cleaned_data['forma_pago']
-            confirmacion = form.cleaned_data['confirmacion']
-
-            if cantidad > cantidad_disponible:
-                form.add_error('cantidad', 'La cantidad solicitada excede la disponible.')
-            else:
-                EventoProducto.objects.create(
-                    evedes=f'Reserva de {cantidad} unidades del producto {producto.pronom}',
-                    evefec=fecha_reserva,
-                    procod=producto,
-                    cantidad=cantidad,
-                    cliente=cliente,
-                    notas=notas
-                )                
-                # Actualizar inventario
-                inventario.invcan -= cantidad
-                inventario.save()
-                messages.success(request, 'Reserva realizada con éxito.')
-                return redirect('index')
-        else:
-            form.add_error(None, 'Por favor corrige los errores en el formulario.')
-    else:
-        form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario     
-    
-    form.fields['cantidad'].max_value = cantidad_disponible
-
-    context = {
-        'cliente': cliente,
-        'producto': producto,
-        'cantidad_disponible': cantidad_disponible,
-        'form': form
-    }
-
-    return render(request, 'productos/reservaProducto.html', context)
-
-def detalle_reserva(request, evecod):
-    reserva = get_object_or_404(EventoProducto, evecod=evecod)  
-    return render(request, 'productos/detalle_reserva.html', {'reserva': reserva})
-
-def editar_reserva(request, evecod):
-    reserva = get_object_or_404(EventoProducto, evecod=evecod)
-    cantidad_anterior = reserva.cantidad
-    if request.method == 'POST':
-        form = ReservaForm(request.POST)
-        if form.is_valid():
-            cantidad = form.cleaned_data['cantidad']
-            fecha_reserva = form.cleaned_data['fecha_reserva']
-            notas = form.cleaned_data['notas']
-            # Actualiza el inventario según la diferencia en la cantidad
-            producto = reserva.procod
-            inventario = Inventario.objects.filter(procod=producto).first()
-            if inventario:
-                inventario.invcan += cantidad_anterior - cantidad
-                inventario.save()            
-            # Actualizar la reserva
-            reserva.cantidad = cantidad
-            reserva.evefec = fecha_reserva
-            reserva.notas = notas
-            reserva.save()
-            messages.success(request, 'Reserva actualizada con éxito.')
-            return redirect('detalle_reserva', evecod=reserva.evecod)
-    else:
-        initial_data = {
-            'cantidad': reserva.cantidad,
-            'fecha_reserva': reserva.evefec,
-            'notas': reserva.notas,
-        }
-        form = ReservaForm(initial=initial_data)
-    return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
-
-def eliminar_reserva(request, evecod):
-    reserva = get_object_or_404(EventoProducto, evecod=evecod)
-    cantidad = reserva.cantidad
-    producto = reserva.procod
-    inventario = Inventario.objects.filter(procod=producto).first()
-    if inventario:
-        # Ajustar el inventario sumando la cantidad de la reserva eliminada
-        inventario.invcan += cantidad
-        inventario.save()
-    reserva.delete()
-    messages.success(request, 'Reserva eliminada con éxito.')
-    return redirect('index')
-
-
-
 # PERSONAL ################################################
 
 # Login Personal
@@ -376,11 +260,11 @@ def cliente_update(request):
 def cliente_delete(request):
     cliente = request.cliente
     if request.method == 'POST':
-        form = ClienteDeleteForm(request.POST)
+        form = ClienteDeleteForm(request.PsOST)
         if form.is_valid():
             cliente.delete()
             messages.success(request, 'Cuenta eliminada exitosamente')
-            return redirect('home')
+            return redirect('index')
     else:
         form = ClienteDeleteForm()
     return render(request, 'cliente/cliente_delete.html', {'form': form})
@@ -496,11 +380,107 @@ def productos(request):
         'categorias': categorias,
         'producto': productos,
     }
-    return render(request, 'productos.html', context)
+    return render(request, 'productos/productos.html', context)
 
 def detalle_producto(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
-    return render(request, 'detalle_producto.html', {'producto': producto})
+    return render(request, 'productos/detalle_producto.html', {'producto': producto})
+
+def reserva_producto(request, procod):
+    cliente = Cliente.objects.first()
+    producto = get_object_or_404(Producto, procod=procod)
+    inventario = Inventario.objects.filter(procod=producto).first()
+    cantidad_disponible = inventario.invcan if inventario else 0
+
+    if request.method == 'POST':
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            cantidad = form.cleaned_data['cantidad']
+            fecha_reserva = form.cleaned_data['fecha_reserva']
+            notas = form.cleaned_data['notas']
+            forma_pago = form.cleaned_data['forma_pago']
+            confirmacion = form.cleaned_data['confirmacion']
+
+            if cantidad > cantidad_disponible:
+                form.add_error('cantidad', 'La cantidad solicitada excede la disponible.')
+            else:
+                EventoProducto.objects.create(
+                    evedes=f'Reserva de {cantidad} unidades del producto {producto.pronom}',
+                    evefec=fecha_reserva,
+                    procod=producto,
+                    cantidad=cantidad,
+                    cliente=cliente,
+                    notas=notas
+                )                
+                # Actualizar inventario
+                inventario.invcan -= cantidad
+                inventario.save()
+                messages.success(request, 'Reserva realizada con éxito.')
+                return redirect('index')
+        else:
+            form.add_error(None, 'Por favor corrige los errores en el formulario.')
+    else:
+        form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario     
+    
+    form.fields['cantidad'].max_value = cantidad_disponible
+
+    context = {
+        'cliente': cliente,
+        'producto': producto,
+        'cantidad_disponible': cantidad_disponible,
+        'form': form
+    }
+
+    return render(request, 'productos/reservaProducto.html', context)
+
+def detalle_reserva(request, evecod):
+    reserva = get_object_or_404(EventoProducto, evecod=evecod)  
+    return render(request, 'productos/detalle_reserva.html', {'reserva': reserva})
+
+def editar_reserva(request, evecod):
+    reserva = get_object_or_404(EventoProducto, evecod=evecod)
+    cantidad_anterior = reserva.cantidad
+    if request.method == 'POST':
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            cantidad = form.cleaned_data['cantidad']
+            fecha_reserva = form.cleaned_data['fecha_reserva']
+            notas = form.cleaned_data['notas']
+            # Actualiza el inventario según la diferencia en la cantidad
+            producto = reserva.procod
+            inventario = Inventario.objects.filter(procod=producto).first()
+            if inventario:
+                inventario.invcan += cantidad_anterior - cantidad
+                inventario.save()            
+            # Actualizar la reserva
+            reserva.cantidad = cantidad
+            reserva.evefec = fecha_reserva
+            reserva.notas = notas
+            reserva.save()
+            messages.success(request, 'Reserva actualizada con éxito.')
+            return redirect('detalle_reserva', evecod=reserva.evecod)
+    else:
+        initial_data = {
+            'cantidad': reserva.cantidad,
+            'fecha_reserva': reserva.evefec,
+            'notas': reserva.notas,
+        }
+        form = ReservaForm(initial=initial_data)
+    return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
+
+def eliminar_reserva(request, evecod):
+    reserva = get_object_or_404(EventoProducto, evecod=evecod)
+    cantidad = reserva.cantidad
+    producto = reserva.procod
+    inventario = Inventario.objects.filter(procod=producto).first()
+    if inventario:
+        # Ajustar el inventario sumando la cantidad de la reserva eliminada
+        inventario.invcan += cantidad
+        inventario.save()
+    reserva.delete()
+    messages.success(request, 'Reserva eliminada con éxito.')
+    return redirect('index')
+
 
 # SERVICIO ################################################
 
