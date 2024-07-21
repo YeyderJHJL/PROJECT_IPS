@@ -233,6 +233,11 @@ def cliente_login(request):
     return render(request, 'registration/login.html', {'form': form})
 
 def cliente_logout(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login') 
+    
     try:
         del request.session['cliente_id']
     except KeyError:
@@ -240,10 +245,20 @@ def cliente_logout(request):
     return redirect('index') 
 
 def cliente_detail(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login') 
+    
     cliente = request.cliente
     return render(request, 'cliente/cliente_detail.html', {'cliente': cliente})
 
 def cliente_update(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login') 
+    
     cliente = request.cliente
     if request.method == 'POST':
         form = ClienteUpdateForm(request.POST, instance=cliente)
@@ -254,11 +269,12 @@ def cliente_update(request):
     else:
         form = ClienteUpdateForm(instance=cliente)
     return render(request, 'cliente/cliente_update.html', {'form': form})
+
 def cliente_delete(request):
     cliente_id = request.session.get('cliente_id')
     if not cliente_id:
         messages.error(request, 'No está autorizado para realizar esta acción.')
-        return redirect('login')  # Redirige al login si no hay cliente_id en la sesión
+        return redirect('login') 
 
     cliente = get_object_or_404(Cliente, clidni=cliente_id)
 
@@ -266,9 +282,9 @@ def cliente_delete(request):
         form = ClienteDeleteForm(request.POST)
         if form.is_valid():
             cliente.delete()
-            request.session.flush()  # Limpiar la sesión
+            request.session.flush()
             messages.success(request, 'Cuenta eliminada exitosamente.')
-            return redirect('index')  # Redirige al login después de eliminar la cuenta
+            return redirect('login') 
     else:
         form = ClienteDeleteForm()
 

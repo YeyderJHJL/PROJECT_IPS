@@ -10,3 +10,4 @@ function confirmDelete(event) {
         window.location.href = event.target.href;
     }
 }
+

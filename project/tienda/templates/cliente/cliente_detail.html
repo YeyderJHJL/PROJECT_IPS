@@ -9,6 +9,6 @@
     <p><strong>Dirección:</strong> {{ cliente.clidir }}</p>
     <p><strong>Email:</strong> {{ cliente.clicor }}</p>
     <a href="{% url 'cliente_update' %}">Editar Perfil</a>
-    <a href="{% url 'cliente_delete' %}" onclick="confirmDelete(event)">Eliminar Cuenta</a>
+    <a href="{% url 'cliente_delete' %}">Eliminar Cuenta</a>
 </div>
 {% endblock %}

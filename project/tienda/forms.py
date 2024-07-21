@@ -183,6 +183,13 @@ class ClienteUpdateForm(forms.ModelForm):
 class ClienteDeleteForm(forms.Form):
     confirm = forms.BooleanField(label="Confirmo que deseo eliminar mi cuenta")
 
+class UsernameUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username']
+        labels = {
+            'username': 'Nuevo Nombre de Usuario',
+        }
 class UsuarioUpdateForm(forms.Form):
     cliusu = forms.CharField(max_length=60)
 
