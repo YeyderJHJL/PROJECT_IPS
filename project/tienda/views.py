@@ -124,18 +124,27 @@ def detalle_reserva(request, evecod):
 def editar_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)
     cantidad_anterior = reserva.cantidad
+    producto = reserva.procod
+    inventario = Inventario.objects.filter(procod=producto).first()
+    cantidad_disponible = inventario.invcan if inventario else 0
     if request.method == 'POST':
         form = ReservaForm(request.POST)
         if form.is_valid():
             cantidad = form.cleaned_data['cantidad']
             fecha_reserva = form.cleaned_data['fecha_reserva']
             notas = form.cleaned_data['notas']
-            # Actualiza el inventario según la diferencia en la cantidad
-            producto = reserva.procod
-            inventario = Inventario.objects.filter(procod=producto).first()
+            # Validaciones adicionales
+            if cantidad > cantidad_disponible:
+                form.add_error('cantidad', 'La cantidad solicitada excede la disponible.')
+            if fecha_reserva < timezone.now().date():
+                form.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')            
+            # Actualiza el inventario según la diferencia en la cantidad            
             if inventario:
                 inventario.invcan += cantidad_anterior - cantidad
-                inventario.save()            
+                inventario.save()     
+            else:
+                messages.error(request, 'No se encontró el producto en el inventario.')
+                return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})       
             # Actualizar la reserva
             reserva.cantidad = cantidad
             reserva.evefec = fecha_reserva
@@ -150,6 +159,12 @@ def editar_reserva(request, evecod):
             'notas': reserva.notas,
         }
         form = ReservaForm(initial=initial_data)
+    form.fields['cantidad'].widget.attrs.update({'max': cantidad_disponible})
+    context = {
+        'form': form,
+        'reserva': reserva,
+        'cantidad_disponible': cantidad_disponible
+    }
     return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
 
 def eliminar_reserva(request, evecod):
