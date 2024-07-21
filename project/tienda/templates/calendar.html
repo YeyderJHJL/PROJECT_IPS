@@ -3,31 +3,8 @@
 {% block title %}Calendario{% endblock %}
 
 {% block content %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title> Calendar</title>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-
-    <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="../static/evo-calendar/css/evo-calendar.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/evo-calendar/css/evo-calendar.orange-coral.min.css">
-
-    <link rel="stylesheet" type="text/css" href="../static/demo/demo.css">
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet">
-</head>
-<body>
-    
     <main>
         <div class="main-container">
-            
             <section id="demos">
                 <div class="section-content">
                     <p class="section-title --shrt">Calendario</p>
@@ -36,97 +13,10 @@
                             <div class="--noshadow" id="demoEvoCalendar"></div>
                         </div>
                     </div>
-                    
                 </div>
             </section>
-
+        </div>
     </main>
-    
-    <!-- jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-    <script src="../static/evo-calendar/js/evo-calendar.min.js"></script>
-    <script src="../static/demo/demo.js"></script>
-</body>
-</html>
 
-
-<!--
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Calendario Interactivo</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-</head>
-<body>
-    <div id="calendario"></div>
-
-    <script>
-        $(document).ready(function() {
-            $('#calendario').fullCalendar({
-                events: '/obtener_eventos/',
-                dayRender: function(date, cell) {
-                    cell.attr('data-date', date.format());
-                },
-                eventMouseover: function(event, jsEvent) {
-                    var tooltip = '<div class="tooltip">' +
-                                  'Servicio: ' + event.servicio + '<br>' +
-                                  'Técnico: ' + event.tecnico + '</div>';
-                    $('body').append(tooltip);
-                    $(this).mouseover(function(e) {
-                        $(this).css('z-index', 10000);
-                        $('.tooltip').fadeIn('500');
-                        $('.tooltip').fadeTo('10', 1.9);
-                    }).mousemove(function(e) {
-                        $('.tooltip').css('top', e.pageY + 10);
-                        $('.tooltip').css('left', e.pageX + 20);
-                    });
-                },
-                eventMouseout: function(event, jsEvent) {
-                    $(this).css('z-index', 8);
-                    $('.tooltip').remove();
-                }
-            });
-        });
-    </script>
-    <style>
-        .tooltip {
-            position: absolute;
-            z-index: 10001;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-</body>
-</html>
--->
-<!--
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-    <title>FullCalendar Tutorial</title>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth'
-        });
-        calendar.render();
-    });
-    </script>
-</head>
-<body>
-    <div style="max-width: 1000px; margin: auto" id='calendar'></div>
-</body>
-</html>
--->
 {% endblock %}
+
