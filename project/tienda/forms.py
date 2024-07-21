@@ -2,6 +2,8 @@ from django import forms
 from .models import *
 import datetime
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 class EventoForm(forms.ModelForm):
     evecod = forms.IntegerField(
@@ -276,6 +278,18 @@ class ReservaForm(forms.Form):
         label='Acepto las condiciones de la reserva.',
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        cantidad = cleaned_data.get('cantidad')
+        fecha_reserva = cleaned_data.get('fecha_reserva')
+        # Validación personalizada para la cantidad
+        if cantidad is not None and cantidad < 1:
+            self.add_error('cantidad', 'La cantidad debe ser al menos 1.')
+        # Validación personalizada para la fecha
+        if fecha_reserva is not None and fecha_reserva < timezone.now().date():
+            self.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')
+        return cleaned_data
 
 class ProductoForm(forms.ModelForm):
     class Meta:

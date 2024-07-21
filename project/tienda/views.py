@@ -88,9 +88,10 @@ def reserva_producto(request, procod):
             notas = form.cleaned_data['notas']
             forma_pago = form.cleaned_data['forma_pago']
             confirmacion = form.cleaned_data['confirmacion']
-
             if cantidad > cantidad_disponible:
                 form.add_error('cantidad', 'La cantidad solicitada excede la disponible.')
+            if fecha_reserva < timezone.now().date():
+               form.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')            
             else:
                 EventoProducto.objects.create(
                     evedes=f'Reserva de {cantidad} unidades del producto {producto.pronom}',
@@ -104,21 +105,16 @@ def reserva_producto(request, procod):
                 inventario.invcan -= cantidad
                 inventario.save()
                 messages.success(request, 'Reserva realizada con éxito.')
-                return redirect('index')
-        else:
-            form.add_error(None, 'Por favor corrige los errores en el formulario.')
+                return redirect('index')        
     else:
-        form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario     
-    
-    form.fields['cantidad'].max_value = cantidad_disponible
-
+        form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario         
+    form.fields['cantidad'].widget.attrs.update({'max': cantidad_disponible})
     context = {
         'cliente': cliente,
         'producto': producto,
         'cantidad_disponible': cantidad_disponible,
         'form': form
     }
-
     return render(request, 'productos/reservaProducto.html', context)
 
 def detalle_reserva(request, evecod):
