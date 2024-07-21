@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Formulario{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Formulario de Contacto</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            {{ form.message.label_tag }}
+            {{ form.message }}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Enviar Consulta</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

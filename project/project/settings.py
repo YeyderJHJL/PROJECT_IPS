@@ -12,36 +12,20 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import environ
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# Inicializar el entorno
+# Initialize environment variables
 env = environ.Env()
-
-# Leer el archivo .env
 environ.Env.read_env()
 
-# Usar variables de entorno en la configuración
+# Use environment variables in the configuration
 DEBUG = env.bool('DEBUG', default=False)
-
 SECRET_KEY = env.str('SECRET_KEY')
-
-# SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-+a62mtrhb(0tq!(3nuzqo3fqo@ck8^*$xnf&rkzheoj1&fdhlt'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-
-ALLOWED_HOSTS =tuple(env.list('ALLOWED_HOSTS', default=[]))  
-
+ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS', default=[]))
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tienda',
+    'tienda',  # Your app
 ]
 
 MIDDLEWARE = [
@@ -67,7 +51,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'tienda' / 'templates'],  # Path to templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,27 +64,30 @@ TEMPLATES = [
     },
 ]
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'tienda' / 'static',  # Path to static files
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 WSGI_APPLICATION = 'project.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+# Database configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': env.str('DB_NAME'),
-        'USER': env.str('DB_USER'),
-        'PASSWORD': env.str('DB_PASSWORD'),
-        'HOST': env.str('DB_HOST'),
-        'PORT': env.int('DB_PORT'),
+        'NAME': 'ips',           # Nombre de la base de datos
+        'USER': 'root',          # Usuario de la base de datos
+        'PASSWORD': '123456',    # Contraseña del usuario
+        'HOST': '127.0.0.1',     # Dirección del servidor de la base de datos
+        'PORT': 3306,            # Puerto del servidor de la base de datos (3306 es el predeterminado para MySQL)
     }
 }
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -116,25 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

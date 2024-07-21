@@ -1,8 +1,82 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1>Bienvenido a la Tienda</h1>
-    <p>Esta es la página principal de la tienda.</p>
+<section id="inicio" class="text-center">
+    <img src="{% static 'img/bannerprincipal.jpg' %}" alt="Imagen Principal" class="img-fluid">
+</section>
+
+<section id="marcas" class="text-center mt-4">
+    <h2>Marcas con las que Trabajamos</h2>
+    <div class="logos">
+        <img src="{% static 'img/logo1.jpg' %}" alt="Logo Empresa 1" class="img-thumbnail">
+        <img src="{% static 'img/logo2.jpg' %}" alt="Logo Empresa 2" class="img-thumbnail">
+    </div>
+</section>
+
+<section id="historia" class="mt-4">
+    <h2>Nuestra Historia</h2>
+    <p>Breve resumen sobre cómo comenzó la empresa, sus logros y evolución a lo largo del tiempo.</p>
+</section>
+
+<section id="equipo" class="mt-4">
+    <h2>Conoce a Nuestro Equipo</h2>
+    <div class="team-members">
+        <div class="team-member">
+            <h3>Sharon Condori</h3>
+        </div>
+        <div class="team-member">
+            <h3>Jhamil Turpo</h3>
+        </div>
+        <div class="team-member">
+            <h3>Paola Marroquin</h3>
+        </div>
+        <div class="team-member">
+            <h3>Maria Ezcurra</h3>
+        </div>
+        <div class="team-member">
+            <h3>Gabriela Martell</h3>
+        </div>
+    </div>
+</section>
+
+<style>
+    #inicio img {
+        width: 100%;
+        height: auto;
+    }
+
+    #marcas .logos {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    #marcas .logos img {
+        margin: 10px;
+        width: 150px;
+        height: auto;
+    }
+
+    #historia, #equipo {
+        padding: 20px;
+    }
+
+    #equipo .team-members {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #equipo .team-member {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    #equipo .team-member h3 {
+        margin: 10px 0;
+    }
+</style>
 {% endblock %}
