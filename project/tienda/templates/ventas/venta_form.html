@@ -1,14 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}Editar Venta{% endblock %}
+{% block title %}{{ form.instance.vencod|default:"Nueva Venta" }}{% endblock %}
 
 {% block content %}
     <div class="container my-5">
-        <h2 class="mb-4">Editar Venta</h2>
+        <h1 class="mb-4">{{ form.instance.vencod|default:"Nueva Venta" }}</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{% url 'venta_list' %}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>
+
+    <style>
+        .container {
+            max-width: 800px;
+        }
+
+        form {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .btn {
+            margin-top: 1rem;
+        }
+    </style>
 {% endblock %}
+
