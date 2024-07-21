@@ -274,6 +274,37 @@ class ClienteLoginForm(forms.Form):
 
 # PRODUCTO ################################################################
 
+class ReservaForm(forms.Form):
+    cantidad = forms.IntegerField(
+        min_value=1,
+        max_value=1000,  # se actualiza en el html
+        label='Cantidad',
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+    fecha_reserva = forms.DateField(
+        label='Fecha de Recogo',
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+    )
+    notas = forms.CharField(
+        required=False,
+        label='Notas Adicionales',
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+    )
+    forma_pago = forms.ChoiceField(
+        choices=[
+            ('tarjeta', 'Tarjeta de Crédito'),
+            ('efectivo', 'Efectivo'),
+            ('transferencia', 'Transferencia Bancaria')
+        ],
+        label='Forma de Pago',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    confirmacion = forms.BooleanField(
+        required=True,
+        label='Acepto las condiciones de la reserva.',
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
+
 # SERVICIO ################################################################
 
 class CategoriaServicioForm(forms.ModelForm):

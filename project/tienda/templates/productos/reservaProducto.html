@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Reserva de Producto{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Reserva de Producto</h2>                    
+                    <div class="bg-light rounded p-4 mb-4 shadow-sm">
+                        <h5 class="mb-3 fs-5">Datos del Cliente</h5>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Nombre:</div>
+                            <div class="col-md-8">{{ cliente.clinom }} {{ cliente.cliape }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">DNI:</div>
+                            <div class="col-md-8">{{ cliente.clidni }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Ubicación:</div>
+                            <div class="col-md-8">{{ cliente.clidir }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Teléfono:</div>
+                            <div class="col-md-8">{{ cliente.clitel }}</div>
+                        </div>
+                    </div>
+                    
+                    {% if producto %}
+                    <div class="bg-light rounded p-4 mb-4 shadow-sm">
+                        <h5 class="mb-3 fs-5">Detalles del Producto</h5>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Nombre:</div>
+                            <div class="col-md-8">{{ producto.pronom }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Precio:</div>
+                            <div class="col-md-8">{{ producto.propreuni }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Cantidad Disponible:</div>
+                            <div class="col-md-8">{{ cantidad_disponible }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="bg-light rounded p-4 mb-4 shadow-sm">
+                        <h5 class="mb-3 fs-5">Recojo en Tienda</h5>
+                        <p class="alert alert-info">Recogida de productos solo en tienda. 
+                            La dirección de nuestra tienda es: Pj. Santa Catalina 103 Urb. La Isla Int. 47 - Arequipa</p>
+                        <h5 class="mb-3 fs-5">Formulario de Reserva</h5>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                {{ form.as_p }}
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5 me-2">Reservar</button>
+                                <a href="{% url 'productos' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

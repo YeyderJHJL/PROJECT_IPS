@@ -15,12 +15,15 @@
                 </div>
                 <div class="col-md-6">
                     <div class="card-body">
+                        <div class="mt-auto d-flex justify-content-end gap-2"> 
+                            <a href="{% url 'productos' %}" class="btn btn-outline-dark btn-sm me-2"><i class="bi bi-info-circle-fill me-1"></i> X</a>
+                        </div>
                         <h2 class="card-title mb-3 texto-centrado">{{ producto.pronom }}</h2>
                         <p class="card-text">{{ producto.prodes }}</p>
                         <p class="card-text"><strong>Precio unitario: S/</strong> {{ producto.propreuni }}</p>
                         <!-- <p class="card-text"><strong>Cantidad disponible:</strong> </p> -->
-                        <div class="d-flex justify-content-center"> <!-- Agregado para centrar el botón -->
-                            <a href="#" class="btn btn-outline-primary btn-sm"><i class="bi bi-cart-plus-fill me-1"></i>Reservar</a>
+                        <div class="d-flex justify-content-center">
+                            <a href="{% url 'reserva_producto' procod=producto.procod %}" class="btn btn-outline-dark btn-sm me-2"> <i class="bi bi-info-circle-fill me-1"></i> Reservar Producto</a>
                         </div>
                     </div>
                 </div>

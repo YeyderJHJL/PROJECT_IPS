@@ -15,7 +15,11 @@ urlpatterns = [
     # Paola
     path('productos', views.productos, name='productos'),
     path('producto/<int:procod>/', views.detalle_producto, name='detalle_producto'),
-    
+    path('reserva/<int:procod>/', views.reserva_producto, name='reserva_producto'),
+    path('reserva/detalle/<int:evecod>/', views.detalle_reserva, name='detalle_reserva'),
+    path('reserva/editar/<int:evecod>/', views.editar_reserva, name='editar_reserva'),
+    path('reserva/eliminar/<int:evecod>/', views.eliminar_reserva, name='eliminar_reserva'),
+
     # Daniel
     path('calendar/', views.calendar_view, name='calendar'),
 
@@ -54,3 +58,6 @@ urlpatterns = [
     # path('cambiar_usuario/', views.cambiar_usuario, name='cambiar_usuario'),
     # path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
