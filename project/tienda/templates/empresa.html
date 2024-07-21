@@ -1,3 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}Empresa{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,11 +35,10 @@
                 <!-- Información de bienvenida según el estado de autenticación -->
                 <?php if ($is_logged_in): ?>
                     <p>Bienvenido, usuario con cuenta.</p>
-                <?php else: ?>
-                    <p>Bienvenido, usuario sin cuenta.</p>
                 <?php endif; ?>
             </section>
         </main>
     </div>
 </body>
 </html>
+{% endblock %}
