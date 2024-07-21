@@ -31,6 +31,10 @@ urlpatterns = [
 
     # Daniel
     path('calendar/', views.calendar_view, name='calendar'),
+        path('calendar/events/', views.calendar_events, name='calendar_events'),
+
+    path('obtener_eventos/', views.obtener_eventos, name='obtener_eventos'),
+    path('calendar2/', views.calendar2, name='calendar2'),
 
     # Mishel
     path('estado_registro/', views.estado_registro_list, name='estado_registro_list'),
