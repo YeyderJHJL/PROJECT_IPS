@@ -7,8 +7,16 @@
     <h2>Iniciar Sesión</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Login</button>
+        {{ form.username }}
+        {{ form.password }}
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
     </form>
     {% if messages %}
         <ul class="messages">
