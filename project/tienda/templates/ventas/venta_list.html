@@ -1,35 +1,59 @@
 {% extends "base.html" %}
 
-{% block title %}Listado de Ventas{% endblock %}
+{% block title %}Lista de Ventas{% endblock %}
 
 {% block content %}
     <div class="container my-5">
-        <h2 class="mb-4">Listado de Ventas</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Fecha</th>
-                    <th>Cliente</th>
-                    <th>Producto</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for venta in ventas %}
-                    <tr>
-                        <td>{{ venta.vencod }}</td>
-                        <td>{{ venta.venfecres }}</td>
-                        <td>{{ venta.venclicod }}</td>
-                        <td>{{ venta.veninvcod }}</td>
-                        <td>
-                            <a href="{% url 'venta_detail' pk=venta.pk %}" class="btn btn-info btn-sm">Ver</a>
-                            <a href="{% url 'venta_edit' pk=venta.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'venta_delete' pk=venta.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h1 class="mb-4">Lista de Ventas</h1>
+        <div class="row">
+            {% for venta in ventas %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">Venta {{ venta.vencod }}</h5>
+                            <p class="card-text"><strong>Fecha de Reserva:</strong> {{ venta.venfecres }}</p>
+                            <p class="card-text"><strong>Cliente:</strong> {{ venta.venclicod.clinom }} {{ venta.venclicod.cliape }}</p>
+                            <p class="card-text"><strong>Producto:</strong> {{ venta.veninvcod.prodes }}</p>
+                            <p class="card-text"><strong>Cantidad:</strong> {{ venta.vencan }}</p>
+                            <p class="card-text"><strong>Total:</strong> S/ {{ venta.venprotot }}</p>
+                            <a href="{% url 'venta_detail' venta.vencod %}" class="btn btn-primary">Ver Detalles</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center">No hay ventas registradas.</p>
+            {% endfor %}
+        </div>
     </div>
+
+    <style>
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 2rem;
+            background-color: #fff;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
 {% endblock %}
