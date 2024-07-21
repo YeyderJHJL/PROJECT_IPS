@@ -9,4 +9,4 @@ def contactForm(request):
     return render(request, 'contactForm.html')
 
 def InfoEmpresa(request):
-    return render(request, 'InfoEmpresa.html')
+    return render(request, 'InfoEmpresa.php')
