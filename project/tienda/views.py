@@ -290,6 +290,51 @@ def cliente_delete(request):
 
     return render(request, 'cliente/cliente_delete.html', {'form': form})
 
+from django.urls import reverse
+def solicitar_cambio_password(request):
+    if request.method == 'POST':
+        cliusu = request.POST.get('cliusu')
+        try:
+            cliente = Cliente.objects.get(cliusu=cliusu)
+            token = generate_token(cliente)
+            reset_url = request.build_absolute_uri(
+                reverse('cambiar_password', kwargs={'token': token})
+            )
+            # Asumiendo que tienes un campo para el correo electrónico del cliente
+            email = cliente.clicor  # Ajusta esto si el campo de correo es diferente
+            send_mail(
+                'Solicitud de cambio de contraseña',
+                f'Usa este enlace para cambiar tu contraseña: {reset_url}',
+                'noreply@tudominio.com',
+                [email],
+                fail_silently=False,
+            )
+            messages.success(request, 'Se ha enviado un email con instrucciones para cambiar tu contraseña.')
+        except Cliente.DoesNotExist:
+            messages.error(request, 'No existe un cliente con ese nombre de usuario.')
+        return redirect('solicitar_cambio_password')
+    return render(request, 'cliente/solicitar_cambio_password.html')
+
+def cambiar_password(request, token):
+    clidni = confirm_token(token)
+    if not clidni:
+        messages.error(request, 'El enlace de cambio de contraseña es inválido o ha expirado.')
+        return redirect('solicitar_cambio_password')
+    
+    cliente = get_object_or_404(Cliente, clidni=clidni)
+    
+    if request.method == 'POST':
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        if password1 and password2 and password1 == password2:
+            cliente.clicon = password1  # Asumiendo que 'clicon' es el campo de contraseña
+            cliente.save()
+            messages.success(request, 'Tu contraseña ha sido cambiada exitosamente.')
+            return redirect('login')  # Asegúrate de tener una vista de login
+        else:
+            messages.error(request, 'Las contraseñas no coinciden o están vacías.')
+    
+    return render(request, 'cliente/cambiar_password.html')
 
 def send_confirmation_email(request, cliente, new_value, field):
     token = generate_token(cliente)
@@ -408,6 +453,35 @@ def detalle_producto(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
     return render(request, 'detalle_producto.html', {'producto': producto})
 
+# registro de ventas
+
+def venta_list(request):
+    ventas = Venta.objects.all()
+    return render(request, 'ventas/venta_list.html', {'ventas': ventas})
+
+def venta_detail(request, pk):
+    venta = get_object_or_404(Venta, pk=pk)
+    return render(request, 'ventas/venta_detail.html', {'venta': venta})
+
+def venta_edit(request, pk):
+    venta = get_object_or_404(Venta, pk=pk)
+    if request.method == 'POST':
+        form = VentaForm(request.POST, instance=venta)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Venta actualizada exitosamente')
+            return redirect('venta_detail', pk=venta.pk)
+    else:
+        form = VentaForm(instance=venta)
+    return render(request, 'ventas/venta_form.html', {'form': form})
+
+def venta_delete(request, pk):
+    venta = get_object_or_404(Venta, pk=pk)
+    if request.method == 'POST':
+        venta.delete()
+        messages.success(request, 'Venta eliminada exitosamente')
+        return redirect('venta_list')
+    return render(request, 'ventas/venta_confirm_delete.html', {'venta': venta})
 # SERVICIO ################################################
 
 def servicios(request, codigo=None):
