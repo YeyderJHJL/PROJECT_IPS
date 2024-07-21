@@ -3,6 +3,55 @@
 {% block title %}Calendario{% endblock %}
 
 {% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> Calendar</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="../static/evo-calendar/css/evo-calendar.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/evo-calendar/css/evo-calendar.orange-coral.min.css">
+
+    <link rel="stylesheet" type="text/css" href="../static/demo/demo.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <main>
+        <div class="main-container">
+            
+            <section id="demos">
+                <div class="section-content">
+                    <p class="section-title --shrt">Calendario</p>
+                    <div class="console-log">
+                        <div class="log-content">
+                            <div class="--noshadow" id="demoEvoCalendar"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+
+    </main>
+    
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="../static/evo-calendar/js/evo-calendar.min.js"></script>
+    <script src="../static/demo/demo.js"></script>
+</body>
+</html>
+
+
+<!--
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,7 +73,7 @@
                     cell.attr('data-date', date.format());
                 },
                 eventMouseover: function(event, jsEvent) {
-                    var tooltip = '<div class="tooltip">' + 
+                    var tooltip = '<div class="tooltip">' +
                                   'Servicio: ' + event.servicio + '<br>' +
                                   'Técnico: ' + event.tecnico + '</div>';
                     $('body').append(tooltip);
@@ -56,7 +105,7 @@
     </style>
 </body>
 </html>
-
+-->
 <!--
 <!DOCTYPE html>
 <html lang="es">
