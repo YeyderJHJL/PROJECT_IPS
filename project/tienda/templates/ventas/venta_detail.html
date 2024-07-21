@@ -6,16 +6,41 @@
     <div class="container my-5">
         <div class="card mb-4 shadow-sm border-0">
             <div class="card-body">
-                <h2 class="card-title mb-3">Venta {{ venta.vencod }}</h2>
-                <p><strong>Fecha:</strong> {{ venta.venfecres }}</p>
-                <p><strong>Cliente:</strong> {{ venta.venclicod }}</p>
-                <p><strong>Producto:</strong> {{ venta.veninvcod }}</p>
-                <p><strong>Cantidad:</strong> {{ venta.vencan }}</p>
-                <p><strong>Precio Total:</strong> S/ {{ venta.venprotot }}</p>
-                <a href="{% url 'venta_edit' pk=venta.pk %}" class="btn btn-warning">Editar</a>
-                <a href="{% url 'venta_delete' pk=venta.pk %}" class="btn btn-danger">Eliminar</a>
-                <a href="{% url 'venta_list' %}" class="btn btn-secondary">Volver</a>
+                <h2 class="card-title mb-3">Detalle de Venta - {{ venta.vencod }}</h2>
+                <p class="card-text"><strong>Fecha de Reserva:</strong> {{ venta.venfecres }}</p>
+                <p class="card-text"><strong>Cliente:</strong> {{ venta.venclicod.clinom }} {{ venta.venclicod.cliape }}</p>
+                <p class="card-text"><strong>Producto:</strong> {{ venta.veninvcod.prodes }}</p>
+                <p class="card-text"><strong>Cantidad:</strong> {{ venta.vencan }}</p>
+                <p class="card-text"><strong>Total:</strong> S/ {{ venta.venprotot }}</p>
+                <a href="{% url 'venta_edit' venta.vencod %}" class="btn btn-warning me-2">Editar</a>
+                <a href="{% url 'venta_delete' venta.vencod %}" class="btn btn-danger">Eliminar</a>
             </div>
         </div>
     </div>
+
+    <style>
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-body {
+            padding: 2rem;
+            background-color: #fff;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
 {% endblock %}
