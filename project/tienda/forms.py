@@ -310,3 +310,16 @@ class ProductoForm(forms.ModelForm):
             'estregcod': 'Estado del Registro',
             'catprocod': 'Categoría del Producto',
         }
+
+class InventarioForm(forms.ModelForm):
+    class Meta:
+        model = Inventario
+        fields = ['invcan', 'invfecing']
+        widgets = {
+            'invcan': forms.NumberInput(attrs={'class': 'form-control'}),
+            'invfecing': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+        labels = {
+            'invcan': 'Cantidad',
+            'invfecing': 'Fecha de Ingreso',
+        }

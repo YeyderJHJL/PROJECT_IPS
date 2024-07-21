@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Gestión de Productos{% endblock %}
+{% block title %}Gestión de Productos en Inventario{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4 mb-4 text-center">Gestionar Productos</h1>
+    <h1 class="mt-4 mb-4 text-center">Gestionar Productos en Inventario</h1>
 
  <!-- Categorías -->
  <div class="row justify-content-center mb-4">
     <div class="col-12 col-md-8">
         <div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">                        
-            <a href="{% url 'lista_productos' %}" class="btn btn-secondary me-2">Todos</a>
+            <a href="{% url 'lista_productos' %}" class="btn btn-secondary me-2">Gestionar Productos en Inventario</a>
             {% for categoria in categorias %}
                 <a href="?categoria={{ categoria.catprocod }}" class="btn btn-secondary me-2">{{ categoria.catpronom }}</a>
             {% endfor %}
@@ -18,7 +18,7 @@
     </div>
     <div>
         <div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">
-            <a href="{% url 'agregar_producto' %}" class="btn btn-secondary me-2">+ Agregar producto</a>
+            <a href="{% url 'producto_create' %}" class="btn btn-secondary me-2"> + Agregar producto</a>
         </div>
     </div>
 </div>
@@ -46,16 +46,13 @@
                 </div>
                 <div class="card-body d-flex flex-column p-3">
                     <h5 class="text">{{ p.pronom }}</h5>
-                    <hr class="my-2" style="border-top: none;">
-                    <p class="card-text mb-1"><strong>Precio:  </strong> {{ p.propreuni }}</p>
-                    <p class="card-text mb-1"><strong>Cantidad:  </strong> {{ p.procan }}</p>
-                    
+                    <hr class="my-2" style="border-top: none;">                    
                     <br>
                     <hr style="margin-top: 0;">
                     <br>
                     <div class="mt-auto d-flex justify-content-center">
-                        <a href="{% url 'modificar_producto' procod=p.procod %}" class="btn btn-outline-dark btn-sm me-2">Modificar</a>
-                        <form action="{% url 'eliminar_producto' procod=p.procod %}" method="post">
+                        <a href="{% url 'producto_update' procod=p.procod %}" class="btn btn-outline-dark btn-sm me-2">Modificar</a>
+                        <form action="{% url 'producto_delete' procod=p.procod %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-dark btn-sm">Eliminar</button>
                         </form>
@@ -157,3 +154,4 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.2.3/js/bootstrap.min.js"></script>
 {% endblock %}
+

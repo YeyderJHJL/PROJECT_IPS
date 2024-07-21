@@ -7,7 +7,8 @@ from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login
 import logging
-
+from django.urls import reverse
+from django.db.models import Sum
 # Create your views here.
 
 def index(request):
@@ -180,38 +181,69 @@ def eliminar_reserva(request, evecod):
     messages.success(request, 'Reserva eliminada con éxito.')
     return redirect('index')
 
-##gestion de los productos
+  #gestion productos con inventario
+
 def lista_productos(request):
-    productos = Producto.objects.all() 
-    return render(request, 'productos/lista_productos.html', {'productos': productos})
+    productos = Producto.objects.all()
+    inventarios = Inventario.objects.values('procod').annotate(total_can=Sum('invcan'))
+    cantidad_dict = {inv['procod']: inv['total_can'] for inv in inventarios}
+    context = {
+        'productos': productos,
+        'cantidad_dict': cantidad_dict,
+    }
+    return render(request, 'productos/producto_lista.html', context)
 
-def agregar_producto(request):
+
+def producto_create(request):
     if request.method == 'POST':
-        form = ProductoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
+        producto_form = ProductoForm(request.POST, request.FILES)
+        inventario_form = InventarioForm(request.POST)
+        if producto_form.is_valid() and inventario_form.is_valid():
+            producto = producto_form.save()
+            inventario = inventario_form.save(commit=False)
+            inventario.procod = producto
+            inventario.save()
             return redirect('lista_productos')
     else:
-        form = ProductoForm()
-    return render(request, 'productos/form_producto.html', {'form': form, 'titulo': 'Agregar Producto'})
+        producto_form = ProductoForm()
+        inventario_form = InventarioForm()
 
-def modificar_producto(request, procod):
-    producto = get_object_or_404(Producto, procod=procod)
+    context = {
+        'producto_form': producto_form,
+        'inventario_form': inventario_form
+    }
+    return render(request, 'productos/producto_form.html', context)
+
+
+def producto_update(request, procod):
+    producto = Producto.objects.get(procod=procod)
+    inventario = Inventario.objects.get(procod=producto)
     if request.method == 'POST':
-        form = ProductoForm(request.POST, request.FILES, instance=producto)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_productos')
+        producto_form = ProductoForm(request.POST, request.FILES, instance=producto)
+        inventario_form = InventarioForm(request.POST, instance=inventario)
+        if producto_form.is_valid() and inventario_form.is_valid():
+            producto_form.save()
+            inventario_form.save()
+            return redirect(reverse('lista_productos'))
     else:
-        form = ProductoForm(instance=producto)
-    return render(request, 'productos/form_producto.html', {'form': form, 'titulo': 'Modificar Producto'})
+        producto_form = ProductoForm(instance=producto)
+        inventario_form = InventarioForm(instance=inventario)
+    return render(request, 'productos/producto_form.html', {
+        'producto_form': producto_form,
+        'inventario_form': inventario_form,
+    })
 
-def eliminar_producto(request, procod):
-    producto = get_object_or_404(Producto, procod=procod)
+def producto_delete(request, procod):
+    producto = Producto.objects.get(procod=procod)
+    inventario = Inventario.objects.get(procod=producto)
     if request.method == 'POST':
+        inventario.delete()
         producto.delete()
-        return redirect('lista_productos')    
-    return render(request, 'productos/eliminar_producto.html', {'producto': producto})
+        return redirect(reverse('lista_productos'))
+    return render(request, 'productos/producto_eliminar.html', {
+        'producto': producto,
+        'inventario': inventario,
+    })
 
 ####################################################
 def calendar_view(request):
