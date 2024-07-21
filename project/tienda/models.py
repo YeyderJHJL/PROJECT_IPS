@@ -1,5 +1,15 @@
 from django.db import models
 
+class ContactForm(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class CategoariaProducto(models.Model):
     catprocod = models.AutoField(db_column='CatProCod', primary_key=True)
     catpronom = models.CharField(db_column='CatProNom', unique=True, max_length=60)

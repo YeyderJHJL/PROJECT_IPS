@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Empresa{% endblock %}
 
 {% block content %}
@@ -8,6 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <section id="inicio">
+        <img src="{% static 'tienda/img/imagen.png' %}" alt="Logo de la empresa">
     <title>Información de la Empresa</title>
 </head>
 <body>
