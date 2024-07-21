@@ -34,12 +34,12 @@ def servicios(request, codigo=None):
     else:
         formulario = CategoriaServicioForm(instance=instancia_clase)
 
-    return render(request, 'servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+    return render(request, 'servicios/servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
 def detalle_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
     personal = Personal.objects.filter(tippercod='2')
-    return render(request, 'detalle_servicio.html', {'servicio': servicio, 'personal':personal})
+    return render(request, 'servicios/detalle_servicio.html', {'servicio': servicio, 'personal':personal})
 
 
 def gestionar_servicios(request, codigo=None):
@@ -59,7 +59,7 @@ def gestionar_servicios(request, codigo=None):
     else:
         formulario = CategoriaServicioForm(instance=instancia_clase)
 
-    return render(request, 'gestionarServicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+    return render(request, 'servicios/gestionarServicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
 def agregar_servicio(request):
     if request.method == 'POST':
@@ -70,7 +70,7 @@ def agregar_servicio(request):
     else:
         form = ServicioForm()
     
-    return render(request, 'agregarServicios.html', {'form': form})
+    return render(request, 'servicios/agregarServicios.html', {'form': form})
 
 def modificar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod) 
@@ -82,7 +82,7 @@ def modificar_servicio(request, sercod):
     else:
         form = ServicioForm(instance=servicio)
     
-    return render(request, 'modificarServicios.html', {'form': form, 'servicio': servicio})
+    return render(request, 'servicios/modificarServicios.html', {'form': form, 'servicio': servicio})
 
 def eliminar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
@@ -145,7 +145,7 @@ def crear_evento(request):
 
 def detalle_reservaS(request, evecod):
     reserva = get_object_or_404(Evento, evecod=evecod)  
-    return render(request, 'detalle_reservaS.html', {'reserva': reserva})
+    return render(request, 'servicios/detalle_reservaS.html', {'reserva': reserva})
 
 def editar_reservaS(request, evecod):
     reserva = get_object_or_404(Evento, evecod=evecod)
@@ -154,11 +154,11 @@ def editar_reservaS(request, evecod):
         if form.is_valid():
             form.save()
             messages.success(request, 'Reserva actualizada con éxito.')
-            return redirect('detalle_reservaS', evecod=reserva.evecod)
+            return redirect('servicios/detalle_reservaS', evecod=reserva.evecod)
     else:
         form = EventoForm(instance=reserva)
     
-    return render(request, 'editar_reservaS.html', {'form': form, 'reserva': reserva})
+    return render(request, 'servicios/editar_reservaS.html', {'form': form, 'reserva': reserva})
 
 def eliminar_reservaS(request, evecod):
     reserva = get_object_or_404(Evento, evecod=evecod)
