@@ -368,7 +368,7 @@ def cliente_delete(request):
 
 @cliente_login_required
 def cliente_orders(request):
-    productos = Venta.objects.filter(cliente=request.cl)
+    productos = Venta.objects.filter(cliente=request.cliente)
     return render(request, 'productos/productos.html', {'producto': productos})
 
 @cliente_login_required
