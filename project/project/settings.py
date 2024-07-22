@@ -138,7 +138,7 @@ STATICFILES_DIRS = [
 
 # Directorio donde se almacenarán los archivos de medios (imágenes, archivos subidos, etc.)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'tienda' / 'static'
+MEDIA_ROOT = BASE_DIR / 'tienda' / 'media'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

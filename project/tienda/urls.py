@@ -25,9 +25,14 @@ urlpatterns = [
     path('productos', views.productos, name='productos'),
     path('producto/<int:procod>/', views.detalle_producto, name='detalle_producto'),
     path('reserva/<int:procod>/', views.reserva_producto, name='reserva_producto'),
+    path('reservas/', views.lista_reservas, name='lista_reservas'),
     path('reserva/detalle/<int:evecod>/', views.detalle_reserva, name='detalle_reserva'),
     path('reserva/editar/<int:evecod>/', views.editar_reserva, name='editar_reserva'),
     path('reserva/eliminar/<int:evecod>/', views.eliminar_reserva, name='eliminar_reserva'),
+    path('productoslista', views.lista_productos, name='lista_productos'),
+    path('producto/agregar/', views.producto_create, name='producto_create'),
+    path('producto/editar/<int:procod>/', views.producto_update, name='producto_update'),
+    path('producto/eliminar/<int:procod>/', views.producto_delete, name='producto_delete'),
 
     # Daniel
     path('calendar/', views.calendar_view, name='calendar'),

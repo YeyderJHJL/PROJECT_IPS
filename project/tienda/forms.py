@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 import datetime
+from django.utils import timezone
 
 class EventoForm(forms.ModelForm):
     evedes = forms.CharField(
@@ -411,6 +412,50 @@ class ReservaForm(forms.Form):
         label='Acepto las condiciones de la reserva.',
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
+    def clean(self):
+        cleaned_data = super().clean()
+        cantidad = cleaned_data.get('cantidad')
+        fecha_reserva = cleaned_data.get('fecha_reserva')
+        # Validación personalizada para la cantidad
+        if cantidad is not None and cantidad < 1:
+            self.add_error('cantidad', 'La cantidad debe ser al menos 1.')
+        # Validación personalizada para la fecha
+        if fecha_reserva is not None and fecha_reserva < timezone.now().date():
+            self.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')
+        return cleaned_data
+    
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['pronom', 'prodes', 'propreuni', 'proimg', 'proima', 'estregcod', 'catprocod']
+        widgets = {
+            'proimg': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'estregcod': forms.Select(attrs={'class': 'form-control'}),
+            'catprocod': forms.Select(attrs={'class': 'form-control'}),
+            'proima': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'pronom': 'Nombre del Producto',
+            'prodes': 'Descripción del Producto',
+            'propreuni': 'Precio Unitario',
+            'proimg': 'Imagen del Producto',
+            'proima': 'URL de la Imagen',
+            'estregcod': 'Estado del Registro',
+            'catprocod': 'Categoría del Producto',
+        }
+
+class InventarioForm(forms.ModelForm):
+    class Meta:
+        model = Inventario
+        fields = ['invcan', 'invfecing']
+        widgets = {
+            'invcan': forms.NumberInput(attrs={'class': 'form-control'}),
+            'invfecing': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+        labels = {
+            'invcan': 'Cantidad',
+            'invfecing': 'Fecha de Ingreso',
+        }
 
 class VentaForm(forms.ModelForm):
     class Meta:
