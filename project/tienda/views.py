@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Evento
-=======
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -15,7 +14,6 @@ from django.contrib.auth import authenticate, login
 import logging
 
 # Create your views here.
->>>>>>> main
 
 def index(request):
     return render(request, 'index.html')
@@ -82,33 +80,6 @@ def detalle_producto(request, procod):
 
 def calendar_view(request):
     return render(request, 'calendar.html')
-
-
-def calendar2(request):
-    return render(request, 'calendar2.html')
-
-@csrf_exempt
-def calendar_events(request):
-    events = Evento.objects.all()
-    event_list = []
-    for event in events:
-        event_list.append({
-            'title': event.sercod.sernom,
-            'start': event.evefec.isoformat(),
-            'description': f"Cliente: {event.clidni}, Personal: {event.perdni}"
-        })
-    return JsonResponse(event_list, safe=False)
-
-def obtener_eventos(request):
-    eventos = Evento.objects.all().select_related('sercod', 'perdni')
-    eventos_json = [
-        {
-            'fecha': evento.evefec.strftime('%Y-%m-%d'),
-            'servicio': evento.sercod.sernom,
-            'tecnico': evento.perdni.nombre_completo  # Asumiendo que tienes un campo nombre_completo en el modelo Personal
-        }
-    for evento in eventos]
-    return JsonResponse(eventos_json, safe=False)
 
 # Estado Registro CRUD
 def estado_registro_list(request):
@@ -282,7 +253,7 @@ def toggle_personal_status(request, pk):
     personal.estregcod = inactivo_estado if personal.estregcod == activo_estado else activo_estado  
     personal.save()
     return redirect('personal_list')
-
+##########
 def login_view(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
@@ -357,3 +328,31 @@ def cambiar_contrasena(request):
         form = ContrasenaUpdateForm()
 
     return render(request, 'cliente/cambiar_contrasena.html', {'form': form})
+
+##########
+
+def calendar2(request):
+    return render(request, 'calendar2.html')
+
+@csrf_exempt
+def calendar_events(request):
+    events = Evento.objects.all()
+    event_list = []
+    for event in events:
+        event_list.append({
+            'title': event.sercod.sernom,
+            'start': event.evefec.isoformat(),
+            'description': f"Cliente: {event.clidni}, Personal: {event.perdni}"
+        })
+    return JsonResponse(event_list, safe=False)
+
+def obtener_eventos(request):
+    eventos = Evento.objects.all().select_related('sercod', 'perdni')
+    eventos_json = [
+        {
+            'fecha': evento.evefec.strftime('%Y-%m-%d'),
+            'servicio': evento.sercod.sernom,
+            'tecnico': evento.perdni.nombre_completo  # Asumiendo que tienes un campo nombre_completo en el modelo Personal
+        }
+    for evento in eventos]
+    return JsonResponse(eventos_json, safe=False)
