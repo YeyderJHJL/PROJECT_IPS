@@ -93,7 +93,7 @@ class Producto(models.Model):
     propreuni = models.DecimalField(db_column='ProPreUni', max_digits=10, decimal_places=2)
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')
     catprocod = models.ForeignKey(CategoariaProducto, models.PROTECT, db_column='CatProCod')
-    proima = models.CharField(db_column='ProImaUrl', max_length=400, default='')
+    proima = models.CharField(db_column='ProImaUrl', max_length=400, default='', blank=True, null=True)
     proimg = models.ImageField(upload_to='images/', blank=True, null=True, db_column='ProImaPmg')
 
     class Meta:

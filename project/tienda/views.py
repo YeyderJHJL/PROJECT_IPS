@@ -13,6 +13,7 @@ from .utils import *
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -509,12 +510,10 @@ def cambiar_contrasena(request):
 
 def productos(request):
     categorias = CategoariaProducto.objects.all()  
-    productos = Producto.objects.all()  
-    
+    productos = Producto.objects.all()      
     categoria_id = request.GET.get('categoria')  
     if categoria_id:
-        productos = productos.filter(catprocod=categoria_id)  
-    
+        productos = productos.filter(catprocod=categoria_id)      
     context = {
         'categorias': categorias,
         'producto': productos,
@@ -523,7 +522,11 @@ def productos(request):
 
 def detalle_producto(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
-    return render(request, 'productos/detalle_producto.html', {'producto': producto})
+    cantidad_disponible = producto.inventario_set.aggregate(total_cantidad=models.Sum('invcan'))['total_cantidad'] or 0
+    return render(request, 'productos/detalle_producto.html', {
+        'producto': producto,
+        'cantidad_disponible': cantidad_disponible
+    })
 
 def reserva_producto(request, procod):
     cliente = Cliente.objects.first()
@@ -539,9 +542,10 @@ def reserva_producto(request, procod):
             notas = form.cleaned_data['notas']
             forma_pago = form.cleaned_data['forma_pago']
             confirmacion = form.cleaned_data['confirmacion']
-
             if cantidad > cantidad_disponible:
                 form.add_error('cantidad', 'La cantidad solicitada excede la disponible.')
+            if fecha_reserva < timezone.now().date():
+               form.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')            
             else:
                 EventoProducto.objects.create(
                     evedes=f'Reserva de {cantidad} unidades del producto {producto.pronom}',
@@ -555,22 +559,21 @@ def reserva_producto(request, procod):
                 inventario.invcan -= cantidad
                 inventario.save()
                 messages.success(request, 'Reserva realizada con éxito.')
-                return redirect('index')
-        else:
-            form.add_error(None, 'Por favor corrige los errores en el formulario.')
+                return redirect('productos')        
     else:
-        form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario     
-    
-    form.fields['cantidad'].max_value = cantidad_disponible
-
+        form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario         
+    form.fields['cantidad'].widget.attrs.update({'max': cantidad_disponible})
     context = {
         'cliente': cliente,
         'producto': producto,
         'cantidad_disponible': cantidad_disponible,
         'form': form
     }
-
     return render(request, 'productos/reservaProducto.html', context)
+
+def lista_reservas(request):
+    reservas = EventoProducto.objects.all()
+    return render(request, 'productos/lista_reservas.html', {'reservas': reservas})
 
 def detalle_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)  
@@ -579,18 +582,27 @@ def detalle_reserva(request, evecod):
 def editar_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)
     cantidad_anterior = reserva.cantidad
+    producto = reserva.procod
+    inventario = Inventario.objects.filter(procod=producto).first()
+    cantidad_disponible = inventario.invcan if inventario else 0
     if request.method == 'POST':
         form = ReservaForm(request.POST)
         if form.is_valid():
             cantidad = form.cleaned_data['cantidad']
             fecha_reserva = form.cleaned_data['fecha_reserva']
             notas = form.cleaned_data['notas']
-            # Actualiza el inventario según la diferencia en la cantidad
-            producto = reserva.procod
-            inventario = Inventario.objects.filter(procod=producto).first()
+            # Validaciones adicionales
+            if cantidad > cantidad_disponible:
+                form.add_error('cantidad', 'La cantidad solicitada excede la disponible.')
+            if fecha_reserva < timezone.now().date():
+                form.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')            
+            # Actualiza el inventario según la diferencia en la cantidad            
             if inventario:
                 inventario.invcan += cantidad_anterior - cantidad
-                inventario.save()            
+                inventario.save()     
+            else:
+                messages.error(request, 'No se encontró el producto en el inventario.')
+                return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})       
             # Actualizar la reserva
             reserva.cantidad = cantidad
             reserva.evefec = fecha_reserva
@@ -605,6 +617,12 @@ def editar_reserva(request, evecod):
             'notas': reserva.notas,
         }
         form = ReservaForm(initial=initial_data)
+    form.fields['cantidad'].widget.attrs.update({'max': cantidad_disponible})
+    context = {
+        'form': form,
+        'reserva': reserva,
+        'cantidad_disponible': cantidad_disponible
+    }
     return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
 
 def eliminar_reserva(request, evecod):
@@ -620,6 +638,67 @@ def eliminar_reserva(request, evecod):
     messages.success(request, 'Reserva eliminada con éxito.')
     return redirect('index')
 
+#gestion productos con inventario
+
+def lista_productos(request):
+    productos = Producto.objects.all()
+    inventarios = Inventario.objects.values('procod').annotate(total_can=Sum('invcan'))
+    cantidad_dict = {inv['procod']: inv['total_can'] for inv in inventarios}
+    context = {
+        'productos': productos,
+        'cantidad_dict': cantidad_dict,
+    }
+    return render(request, 'productos/producto_lista.html', context)
+
+def producto_create(request):
+    if request.method == 'POST':
+        producto_form = ProductoForm(request.POST, request.FILES)
+        inventario_form = InventarioForm(request.POST)
+        if producto_form.is_valid() and inventario_form.is_valid():
+            producto = producto_form.save()
+            inventario = inventario_form.save(commit=False)
+            inventario.procod = producto
+            inventario.save()
+            return redirect('lista_productos')
+    else:
+        producto_form = ProductoForm()
+        inventario_form = InventarioForm()
+
+    context = {
+        'producto_form': producto_form,
+        'inventario_form': inventario_form
+    }
+    return render(request, 'productos/producto_form.html', context)
+
+def producto_update(request, procod):
+    producto = Producto.objects.get(procod=procod)
+    inventario = Inventario.objects.get(procod=producto)
+    if request.method == 'POST':
+        producto_form = ProductoForm(request.POST, request.FILES, instance=producto)
+        inventario_form = InventarioForm(request.POST, instance=inventario)
+        if producto_form.is_valid() and inventario_form.is_valid():
+            producto_form.save()
+            inventario_form.save()
+            return redirect(reverse('lista_productos'))
+    else:
+        producto_form = ProductoForm(instance=producto)
+        inventario_form = InventarioForm(instance=inventario)
+    return render(request, 'productos/producto_form.html', {
+        'producto_form': producto_form,
+        'inventario_form': inventario_form,
+    })
+
+def producto_delete(request, procod):
+    producto = Producto.objects.get(procod=procod)
+    inventario = Inventario.objects.get(procod=producto)
+    if request.method == 'POST':
+        inventario.delete()
+        producto.delete()
+        return redirect(reverse('lista_productos'))
+    return render(request, 'productos/producto_eliminar.html', {
+        'producto': producto,
+        'inventario': inventario,
+    })
 
 # registro de ventas
 

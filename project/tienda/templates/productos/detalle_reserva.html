@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}Detalle de Reserva{% endblock %}
+
 {% block content %}
 <div class="container py-4">
     <div class="row justify-content-center">
@@ -26,8 +27,7 @@
                             <div class="col-md-4 fw-bold">Teléfono:</div>
                             <div class="col-md-8">{{ reserva.cliente.clitel }}</div>
                         </div>
-                    </div>
-                    
+                    </div>                    
                     <div class="bg-light rounded p-4 mb-4 shadow-sm">
                         <h5 class="mb-3 fs-5">Detalles del Producto</h5>
                         <div class="row mb-2">
@@ -50,12 +50,11 @@
                             <div class="col-md-4 fw-bold">Notas:</div>
                             <div class="col-md-8">{{ reserva.notas }}</div>
                         </div>
-                    </div>
-                    
+                    </div>                    
                     <div class="text-center">
                         <a href="{% url 'editar_reserva' reserva.evecod %}" class="btn btn-warning btn-lg px-5 me-2">Editar</a>
                         <a href="{% url 'eliminar_reserva' reserva.evecod %}" class="btn btn-danger btn-lg px-5">Eliminar</a>
-                        <a href="{% url 'index' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
+                        <a href="{% url 'lista_reservas' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
                     </div>
                 </div>
             </div>
