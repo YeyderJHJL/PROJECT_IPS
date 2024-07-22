@@ -230,4 +230,5 @@ class Consulta(models.Model):
         verbose_name_plural = 'Consultas'
 
     def __str__(self):
-        return f"Consulta {self.concod} - {self.clidni}"
+        return f"Consulta {self.concod}"
+

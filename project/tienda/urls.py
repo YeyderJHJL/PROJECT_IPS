@@ -8,6 +8,27 @@ urlpatterns = [
     # General
     path('', views.index, name='index'),
 
+    # Gabriela
+    path('contact/', views.contact_form, name='contact_form'),
+    path('empresa/', views.empresa, name='empresa'),
+    path('login/', views.login, name='login'),
+    path('contact/success/', views.contact_success, name='contact_success'),
+
+    
+    path('consulta/', views.gestion_consulta, name='gestion_consulta'),
+
+    path('consulta/list/', views.consulta_list, name='consulta_list'),
+    path('consulta/add/', views.consulta_add, name='consulta_add'),
+    path('consulta/edit/<int:pk>/', views.consulta_edit, name='consulta_edit'),
+    path('consulta/delete/<int:pk>/', views.consulta_delete, name='consulta_delete'),
+
+    path('consulta/toggle_status/<int:pk>/', views.toggle_consulta_status, name='toggle_consulta_status'),
+
+    path('tipo_consulta/', views.tipo_consulta_list, name='tipo_consulta_list'),
+    path('tipo_consulta/add/', views.tipo_consulta_add, name='tipo_consulta_add'),
+    path('tipo_consulta/edit/<str:pk>/', views.tipo_consulta_edit, name='tipo_consulta_edit'),
+    path('tipo_consulta/delete/<str:pk>/', views.tipo_consulta_delete, name='tipo_consulta_delete'),
+
     # Maria
     path('servicios', views.servicios, name='servicios'),
     path('servicios/<str:codigo>/', views.servicios, name='servicios_codigo'),

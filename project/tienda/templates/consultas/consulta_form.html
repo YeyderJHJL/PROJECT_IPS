@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+
+<form method="post" action="{% url return_url %}">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.concod.label_tag }}
+        {{ form.concod }}
+        {{ form.concod.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.conpre.label_tag }}
+        {{ form.conpre }}
+        {{ form.conpre.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.conres.label_tag }}
+        {{ form.conres }}
+        {{ form.conres.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.confec.label_tag }}
+        {{ form.confec }}
+        {{ form.confec.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.tipconcod.label_tag }}
+        {{ form.tipconcod }}
+        {{ form.tipconcod.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.perdni.label_tag }}
+        {{ form.perdni }}
+        {{ form.perdni.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.clidni.label_tag }}
+        {{ form.clidni }}
+        {{ form.clidni.errors }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

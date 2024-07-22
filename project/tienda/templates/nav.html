@@ -11,6 +11,9 @@
                 <a class="nav-link" href="{% url 'index' %}">Home</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'empresa' %}">Nosotros</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#">Categorias</a>
             </li>
             <li class="nav-item">
@@ -21,6 +24,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'contact_form' %}">Formulario de Contacto</a>
             </li>
             {% if request.cliente %}
             <li class="dropdown nav-item">

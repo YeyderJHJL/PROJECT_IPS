@@ -2,21 +2,74 @@ from django import forms
 from .models import *
 import datetime
 
-class EventoForm(forms.ModelForm):
-    evedes = forms.CharField(
-        max_length=150, 
-        label="Descripción",
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+#  CONSULTAS ################################################
+class TipoConsultaForm(forms.ModelForm):
+    class Meta:
+        model = TipoConsulta
+        fields = ['tipconnom']  # Solo incluir campos editables
+        widgets = {
+            'tipconnom': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'tipconnom': 'Nombre',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(TipoConsultaForm, self).__init__(*args, **kwargs)
+        if self.instance.pk:  # Solo para ediciones
+            self.fields['tipconcod'] = forms.CharField(
+                initial=self.instance.tipconcod,
+                widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+                label='Código'
+            )
+            self.fields['tipconcod'].required = False
+
+class ConsultaForm(forms.ModelForm):
+    class Meta:
+        model = Consulta
+        fields = ['concod', 'conpre', 'conres', 'confec', 'tipconcod', 'perdni', 'clidni']
+        widgets = {
+            'conpre': forms.TextInput(attrs={'class': 'form-control'}),
+            'conres': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'confec': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'tipconcod': forms.Select(attrs={'class': 'form-control'}),
+            'perdni': forms.Select(attrs={'class': 'form-control'}),
+            'clidni': forms.Select(attrs={'class': 'form-control'}),
+            'concod': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+        }
+        labels = {
+            'concod': 'Código',
+            'conpre': 'Pregunta',
+            'conres': 'Respuesta',
+            'confec': 'Fecha de la Consulta',
+            'tipconcod': 'Tipo de Consulta',
+            'perdni': 'Personal Encargado',
+            'clidni': 'Cliente',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ConsultaForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:  # Solo para nuevos registros
+            self.fields['confec'].initial = datetime.date.today()
+
+#  FORMULARIO DE CONTACTO ################################################
+
+class ContactForm(forms.Form):
+    name = forms.CharField(
+        label='Nombre',
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
-    evefec = forms.DateField(
-        label="Fecha",
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    email = forms.EmailField(
+        label='Correo Electrónico',
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
     )
-    perdni = forms.ModelChoiceField(
-        queryset=Personal.objects.all(),
-        label="Personal Encargado",
-        widget=forms.Select(attrs={'class': 'form-control'})
+    message = forms.CharField(
+        label='Mensaje',
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
     )
+
+# ESTADO DE REGISTRO ################################################################
 
 class EstadoRegistroForm(forms.ModelForm):
     class Meta:
@@ -38,96 +91,8 @@ class EstadoRegistroForm(forms.ModelForm):
                 label='Código'
             )
             self.fields['estregcod'].required = False
-        model = Evento
-        fields = ['evedes', 'evefec', 'perdni']
-        labels = {
-            'evedes': 'Agregar Otros datos',
-            'evefec': 'Fecha',
-            'perdni': 'Personal Encargado',
-        }
-
-class ServicioForm(forms.ModelForm):
-    sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}), required=False)
-    sernom=forms.CharField(label="Nombre", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
-    serdes=forms.CharField(label="Descripcion", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
-    serreqpre=forms.CharField(label="Prerequisitos", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
-    serdur=forms.CharField(label="Duración", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
-    sercos=forms.FloatField(label= "Costo",widget=forms.NumberInput(attrs={'min': 0, 'class': 'form-control'}), initial=0)
-    serima=forms.CharField(label="URL de imagen", required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
-    serimg=forms.CharField(label="Directorio de Imagen", required=False)
-    estado_registro_estregcod = forms.ModelChoiceField(queryset=EstadoRegistro.objects.all(), label="Estado de Registro", widget=forms.Select(attrs={'class': 'form-control'}))
-    categoaria_servicio_catsercod=forms.ModelChoiceField(queryset=CategoariaServicio.objects.order_by('catsernom'), label="Categoria", widget=forms.Select(attrs={'class': 'form-control'}))
-
-    class Meta:
-        model=Servicio
-        fields = ['sercod', 'sernom', 'serdes', 'serreqpre', 'serdur', 'sercos', 'serima', 'serimg', 'estado_registro_estregcod', 'categoaria_servicio_catsercod']
-        labels={
-            'sernom' : 'Nombre de Servicio',
-            'serdes' : 'Descripción',
-            'serreqpre' : 'Prerequisitos',
-            'serdur' : 'Duración',
-            'sercos' : 'Costo',
-            'serima' : 'Imagen URL',
-            'serimg' : 'Imagen directorio',
-            'estado_registro_estregcod' : 'Estado registro',
-            'categoaria_servicio_catsercod' : 'Categoria', 
-        }
 
 # PERSONAL ################################################################
-
-class ClienteForm(forms.ModelForm):
-    clifecreg = forms.DateField(widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}), required=False)
-    
-    class Meta:
-        model = Cliente
-        fields = ['clidni', 'clinom', 'cliape', 'clitel', 'clidir', 'cliusu', 'clicon', 'clicor', 'clifecreg', 'estregcod']
-        widgets = {
-            'clidni': forms.TextInput(attrs={'class': 'form-control'}),
-            'clinom': forms.TextInput(attrs={'class': 'form-control'}),
-            'cliape': forms.TextInput(attrs={'class': 'form-control'}),
-            'clitel': forms.TextInput(attrs={'class': 'form-control'}),
-            'clidir': forms.TextInput(attrs={'class': 'form-control'}),
-            'cliusu': forms.TextInput(attrs={'class': 'form-control'}),
-            'clicon': forms.PasswordInput(attrs={'class': 'form-control'}),
-            'clicor': forms.EmailInput(attrs={'class': 'form-control'}),
-            'clifecreg': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'estregcod': forms.Select(attrs={'class': 'form-control'}),
-        }
-        labels = {
-            'clidni': 'DNI',
-            'clinom': 'Nombre',
-            'cliape': 'Apellido',
-            'clitel': 'Teléfono',
-            'clidir': 'Dirección',
-            'cliusu': 'Usuario',
-            'clicon': 'Contraseña',
-            'clicor': 'Correo',
-            'clifecreg': 'Fecha de Registro',
-            'estregcod': 'Estado de Registro',
-        }
-        error_messages = {
-            'clidni': {
-                'unique': "Ya existe un cliente con este DNI.",
-                'required': "El DNI del cliente es obligatorio."
-            },
-            'clinom': {
-                'required': "El nombre del cliente es obligatorio."
-            },
-            'cliape': {
-                'required': "El apellido del cliente es obligatorio."
-            },
-            'cliusu': {
-                'required': "El usuario del cliente es obligatorio."
-            },
-        }
-    
-    def __init__(self, *args, **kwargs):
-        super(ClienteForm, self).__init__(*args, **kwargs)
-        if not self.instance.pk:  # Solo para nuevos registros
-            self.fields['clifecreg'].initial = datetime.date.today()
-            self.fields['estregcod'].initial = EstadoRegistro.objects.get(estregnom='Activo')
-        else:
-            self.fields['clidni'].widget.attrs['readonly'] = True
 
 class LoginPersonalForm(forms.Form):
     username = forms.CharField(
@@ -269,6 +234,60 @@ class ActualizarPerfilPersonalForm(forms.ModelForm):
         self.fields['tippercod'].widget.attrs['readonly'] = True
 
 # CLIENTE ################################################################
+
+class ClienteForm(forms.ModelForm):
+    clifecreg = forms.DateField(widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}), required=False)
+    
+    class Meta:
+        model = Cliente
+        fields = ['clidni', 'clinom', 'cliape', 'clitel', 'clidir', 'cliusu', 'clicon', 'clicor', 'clifecreg', 'estregcod']
+        widgets = {
+            'clidni': forms.TextInput(attrs={'class': 'form-control'}),
+            'clinom': forms.TextInput(attrs={'class': 'form-control'}),
+            'cliape': forms.TextInput(attrs={'class': 'form-control'}),
+            'clitel': forms.TextInput(attrs={'class': 'form-control'}),
+            'clidir': forms.TextInput(attrs={'class': 'form-control'}),
+            'cliusu': forms.TextInput(attrs={'class': 'form-control'}),
+            'clicon': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'clicor': forms.EmailInput(attrs={'class': 'form-control'}),
+            'clifecreg': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'estregcod': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'clidni': 'DNI',
+            'clinom': 'Nombre',
+            'cliape': 'Apellido',
+            'clitel': 'Teléfono',
+            'clidir': 'Dirección',
+            'cliusu': 'Usuario',
+            'clicon': 'Contraseña',
+            'clicor': 'Correo',
+            'clifecreg': 'Fecha de Registro',
+            'estregcod': 'Estado de Registro',
+        }
+        error_messages = {
+            'clidni': {
+                'unique': "Ya existe un cliente con este DNI.",
+                'required': "El DNI del cliente es obligatorio."
+            },
+            'clinom': {
+                'required': "El nombre del cliente es obligatorio."
+            },
+            'cliape': {
+                'required': "El apellido del cliente es obligatorio."
+            },
+            'cliusu': {
+                'required': "El usuario del cliente es obligatorio."
+            },
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super(ClienteForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:  # Solo para nuevos registros
+            self.fields['clifecreg'].initial = datetime.date.today()
+            self.fields['estregcod'].initial = EstadoRegistro.objects.get(estregnom='Activo')
+        else:
+            self.fields['clidni'].widget.attrs['readonly'] = True
 
 class ClienteUpdateForm(forms.ModelForm):
     class Meta:
@@ -419,7 +438,36 @@ class VentaForm(forms.ModelForm):
         widgets = {
             'venfecres': forms.DateInput(attrs={'type': 'date'}),
         }
+
+
 # SERVICIO ################################################################
+
+class ServicioForm(forms.ModelForm):
+    sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}), required=False)
+    sernom=forms.CharField(label="Nombre", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    serdes=forms.CharField(label="Descripcion", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+    serreqpre=forms.CharField(label="Prerequisitos", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+    serdur=forms.CharField(label="Duración", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    sercos=forms.FloatField(label= "Costo",widget=forms.NumberInput(attrs={'min': 0, 'class': 'form-control'}), initial=0)
+    serima=forms.CharField(label="URL de imagen", required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    serimg=forms.CharField(label="Directorio de Imagen", required=False)
+    estado_registro_estregcod = forms.ModelChoiceField(queryset=EstadoRegistro.objects.all(), label="Estado de Registro", widget=forms.Select(attrs={'class': 'form-control'}))
+    categoaria_servicio_catsercod=forms.ModelChoiceField(queryset=CategoariaServicio.objects.order_by('catsernom'), label="Categoria", widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model=Servicio
+        fields = ['sercod', 'sernom', 'serdes', 'serreqpre', 'serdur', 'sercos', 'serima', 'serimg', 'estado_registro_estregcod', 'categoaria_servicio_catsercod']
+        labels={
+            'sernom' : 'Nombre de Servicio',
+            'serdes' : 'Descripción',
+            'serreqpre' : 'Prerequisitos',
+            'serdur' : 'Duración',
+            'sercos' : 'Costo',
+            'serima' : 'Imagen URL',
+            'serimg' : 'Imagen directorio',
+            'estado_registro_estregcod' : 'Estado registro',
+            'categoaria_servicio_catsercod' : 'Categoria', 
+        }
 
 class CategoriaServicioForm(forms.ModelForm):
     catsernom = forms.ModelChoiceField(
