@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Ajustes</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="cliusu">Usuario</label>
+            <input type="text" class="form-control" id="cliusu" name="cliusu" value="{{ cliente.cliusu }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="clinom">Nombre</label>
+            <input type="text" class="form-control" id="clinom" name="clinom" value="{{ cliente.clinom }}">
+        </div>
+        <div class="form-group">
+            <label for="cliape">Apellido</label>
+            <input type="text" class="form-control" id="cliape" name="cliape" value="{{ cliente.cliape }}">
+        </div>
+        <div class="form-group">
+            <label for="clitel">Teléfono</label>
+            <input type="text" class="form-control" id="clitel" name="clitel" value="{{ cliente.clitel }}">
+        </div>
+        <div class="form-group">
+            <label for="clidir">Dirección</label>
+            <input type="text" class="form-control" id="clidir" name="clidir" value="{{ cliente.clidir }}">
+        </div>
+        <div class="form-group">
+            <label for="clicor">Correo Electrónico</label>
+            <input type="email" class="form-control" id="clicor" name="clicor" value="{{ cliente.clicor }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </form>
+</div>
+{% endblock %}

@@ -74,6 +74,10 @@ urlpatterns = [
     path('detail/', views.cliente_detail, name='cliente_detail'),
     path('update/', views.cliente_update, name='cliente_update'),
     path('delete/', views.cliente_delete, name='cliente_delete'),
+
+    path('orders/', views.cliente_orders, name='cliente_orders'),
+    path('services/', views.cliente_services, name='cliente_services'),
+    path('settings/', views.cliente_settings, name='cliente_settings'),
     # path('change_username/', views.change_username, name='change_username'),
     # path('confirm_username/<uidb64>/<token>/', views.confirm_username, name='confirm_username'),
     path('solicitar-cambio-password/', views.solicitar_cambio_password, name='solicitar_cambio_password'),

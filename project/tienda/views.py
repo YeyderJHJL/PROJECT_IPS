@@ -7,12 +7,12 @@ from django.core.mail import send_mail
 from django.db import IntegrityError
 from .models import *
 from .forms import *
-from django.contrib.auth import authenticate, login
 import logging
 from .utils import *
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from .decorators import cliente_login_required
 
 # Create your views here.
 
@@ -304,6 +304,7 @@ def cliente_login(request):
         form = ClienteLoginForm()
     return render(request, 'registration/login.html', {'form': form})
 
+@cliente_login_required
 def cliente_logout(request):
     cliente_id = request.session.get('cliente_id')
     if not cliente_id:
@@ -316,6 +317,7 @@ def cliente_logout(request):
         pass
     return redirect('index') 
 
+@cliente_login_required
 def cliente_detail(request):
     cliente_id = request.session.get('cliente_id')
     if not cliente_id:
@@ -325,6 +327,7 @@ def cliente_detail(request):
     cliente = request.cliente
     return render(request, 'cliente/cliente_detail.html', {'cliente': cliente})
 
+@cliente_login_required
 def cliente_update(request):
     cliente_id = request.session.get('cliente_id')
     if not cliente_id:
@@ -342,6 +345,7 @@ def cliente_update(request):
         form = ClienteUpdateForm(instance=cliente)
     return render(request, 'cliente/cliente_update.html', {'form': form})
 
+@cliente_login_required
 def cliente_delete(request):
     cliente_id = request.session.get('cliente_id')
     if not cliente_id:
@@ -351,7 +355,7 @@ def cliente_delete(request):
     cliente = get_object_or_404(Cliente, clidni=cliente_id)
 
     if request.method == 'POST':
-        form = ClienteDeleteForm(request.PsOST)
+        form = ClienteDeleteForm(request.POST)
         if form.is_valid():
             cliente.delete()
             request.session.flush()
@@ -361,6 +365,24 @@ def cliente_delete(request):
         form = ClienteDeleteForm()
 
     return render(request, 'cliente/cliente_delete.html', {'form': form})
+
+@cliente_login_required
+def cliente_orders(request):
+    productos = Venta.objects.filter(cliente=request.cl)
+    return render(request, 'productos/productos.html', {'producto': productos})
+
+@cliente_login_required
+def cliente_services(request):
+    servicios = Servicio.objects.filter(cliente=request.cliente)
+    return render(request, 'servicios/servicios.html', {'servicios': servicios})
+
+@cliente_login_required
+def cliente_settings(request):
+    cliente = request.cliente
+    if request.method == 'POST':
+        # Aquí puedes agregar la lógica para actualizar los datos del cliente
+        pass
+    return render(request, 'cliente/settings.html', {'cliente': cliente})
 
 from django.urls import reverse
 def solicitar_cambio_password(request):
@@ -525,6 +547,7 @@ def detalle_producto(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
     return render(request, 'productos/detalle_producto.html', {'producto': producto})
 
+@cliente_login_required
 def reserva_producto(request, procod):
     cliente = Cliente.objects.first()
     producto = get_object_or_404(Producto, procod=procod)
@@ -572,10 +595,12 @@ def reserva_producto(request, procod):
 
     return render(request, 'productos/reservaProducto.html', context)
 
+@cliente_login_required
 def detalle_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)  
     return render(request, 'productos/detalle_reserva.html', {'reserva': reserva})
 
+@cliente_login_required
 def editar_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)
     cantidad_anterior = reserva.cantidad
@@ -607,6 +632,7 @@ def editar_reserva(request, evecod):
         form = ReservaForm(initial=initial_data)
     return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
 
+@cliente_login_required
 def eliminar_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)
     cantidad = reserva.cantidad

@@ -1,14 +1,47 @@
 {% extends "base.html" %}
 {% block title %}Datos del Cliente{% endblock %}
 {% block content %}
-<div class="container">
-    <h2>Detalle del Cliente</h2>
-    <p><strong>Nombre:</strong> {{ cliente.clinom }}</p>
-    <p><strong>Apellido:</strong> {{ cliente.cliape }}</p>
-    <p><strong>Teléfono:</strong> {{ cliente.clitel }}</p>
-    <p><strong>Dirección:</strong> {{ cliente.clidir }}</p>
-    <p><strong>Email:</strong> {{ cliente.clicor }}</p>
-    <a href="{% url 'cliente_update' %}">Editar Perfil</a>
-    <a href="{% url 'cliente_delete' %}">Eliminar Cuenta</a>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Datos del Cliente</h2>                    
+                    <div class="bg-light rounded p-4 mb-4 shadow-sm">
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Usuario:</div>
+                            <div class="col-md-8">{{ cliente.cliusu }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Nombre:</div>
+                            <div class="col-md-8">{{ cliente.clinom }} {{ cliente.cliape }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">DNI:</div>
+                            <div class="col-md-8">{{ cliente.clidni }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Ubicación:</div>
+                            <div class="col-md-8">{{ cliente.clidir }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Teléfono:</div>
+                            <div class="col-md-8">{{ cliente.clitel }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Email:</div>
+                            <div class="col-md-8">{{ cliente.clicor }}</div>
+                        </div>
+                    </div>
+                    <div class="bg-light rounded p-4 mb-4 shadow-sm">
+                        <div class="text-center">
+                            <a href="{% url 'cliente_update' %}" class="btn btn-primary  px-5 me-2">Editar Perfil</a>
+                            <a href="{% url 'cliente_delete' %}" class="btn btn-secondary  px-5">Eliminar Cuenta</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,53 +1,64 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{{ title }}</h2>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">{{ title }}</h2>                    
+                    <div class="bg-light rounded p-4 mb-4 shadow-sm">
+                        <form method="post" action="{% if form.instance.pk %}{% url 'cliente_edit' form.instance.clidni %}{% else %}{% url 'cliente_add' %}{% endif %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ form.clidni.label_tag }}
+                                {{ form.clidni }}
+                                {{ form.clidni.errors }}
+                            </div>
 
-<form method="post" action="{% if form.instance.pk %}{% url 'cliente_edit' form.instance.clidni %}{% else %}{% url 'cliente_add' %}{% endif %}">
-    {% csrf_token %}
-    <div class="form-group">
-        {{ form.clidni.label_tag }}
-        {{ form.clidni }}
-        {{ form.clidni.errors }}
+                            <div class="form-group">
+                                {{ form.clinom.label_tag }}
+                                {{ form.clinom }}
+                                {{ form.clinom.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.cliape.label_tag }}
+                                {{ form.cliape }}
+                                {{ form.cliape.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.cliusu.label_tag }}
+                                {{ form.cliusu }}
+                                {{ form.cliusu.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.clicon.label_tag }}
+                                {{ form.clicon }}
+                                {{ form.clicon.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.estregcod.label_tag }}
+                                {{ form.estregcod }}
+                                {{ form.estregcod.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.clifecreg.label_tag }}
+                                {{ form.clifecreg }}
+                                {{ form.clifecreg.errors }}
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        {{ form.clinom.label_tag }}
-        {{ form.clinom }}
-        {{ form.clinom.errors }}
-    </div>
-
-    <div class="form-group">
-        {{ form.cliape.label_tag }}
-        {{ form.cliape }}
-        {{ form.cliape.errors }}
-    </div>
-
-    <div class="form-group">
-        {{ form.cliusu.label_tag }}
-        {{ form.cliusu }}
-        {{ form.cliusu.errors }}
-    </div>
-
-    <div class="form-group">
-        {{ form.clicon.label_tag }}
-        {{ form.clicon }}
-        {{ form.clicon.errors }}
-    </div>
-
-    <div class="form-group">
-        {{ form.estregcod.label_tag }}
-        {{ form.estregcod }}
-        {{ form.estregcod.errors }}
-    </div>
-
-    <div class="form-group">
-        {{ form.clifecreg.label_tag }}
-        {{ form.clifecreg }}
-        {{ form.clifecreg.errors }}
-    </div>
-
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
-</form>
+</div>
 {% endblock %}
