@@ -1,7 +1,10 @@
-{% extends "base.html" %}
+{% extends "baseAdministrador.html" %}
 
 {% block content %}
-<h2 class="mb-4">Gestión de Personal</h2>
+
+<h1 class="text mb-4 display-1 fw-bold text-dark" style="font-family: 'Roboto', sans-serif;">
+    <span class="text-muted" style="font-style: italic;"> Gestión Personal</span>
+</h1>
 <nav class="navigation mb-4">
     <a class="btn btn-secondary {% if request.path == '/project/tienda/personal/list/' %}active{% endif %}" href="{% url 'personal_list' %}">Lista de Personal</a>
     <a class="btn btn-secondary {% if request.path == '/project/tienda/tipo_personal/' %}active{% endif %}" href="{% url 'tipo_personal_list' %}">Tipos de Personal</a>

@@ -1,6 +1,6 @@
 {% extends "baseAdministrador.html" %}
 
-{% block title %}Modificar Servicio{% endblock %}
+{% block title %}Agregar Categoria Servicio{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -8,7 +8,7 @@
         <div class="col-lg-8">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Modificar Servicio</h2>
+                    <h2 class="card-title text-center mb-4">Agregar Categoria Servicio</h2>
                     
                     <div class="bg-light rounded p-4 mb-4 shadow-sm">
                         <form method="post">
@@ -17,8 +17,8 @@
                                 {{ form.as_p }}
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary btn-lg px-5 me-2">Guardar Cambios</button>
-                                <a href="{% url 'gestionar_servicios' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
+                                <button type="submit" class="btn btn-primary btn-lg px-5 me-2">Agregar</button>
+                                <a href="{% url 'gestionar_CategoriaServicios' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
                             </div>
                         </form>
                     </div>

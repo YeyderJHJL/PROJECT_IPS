@@ -2,21 +2,6 @@ from django import forms
 from .models import *
 import datetime
 
-class EventoForm(forms.ModelForm):
-    evedes = forms.CharField(
-        max_length=150, 
-        label="Descripción",
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
-    )
-    evefec = forms.DateField(
-        label="Fecha",
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
-    )
-    perdni = forms.ModelChoiceField(
-        queryset=Personal.objects.all(),
-        label="Personal Encargado",
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
 
 class EstadoRegistroForm(forms.ModelForm):
     class Meta:
@@ -38,13 +23,7 @@ class EstadoRegistroForm(forms.ModelForm):
                 label='Código'
             )
             self.fields['estregcod'].required = False
-        model = Evento
-        fields = ['evedes', 'evefec', 'perdni']
-        labels = {
-            'evedes': 'Agregar Otros datos',
-            'evefec': 'Fecha',
-            'perdni': 'Personal Encargado',
-        }
+  
 
 class ServicioForm(forms.ModelForm):
     sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}), required=False)
@@ -422,18 +401,20 @@ class VentaForm(forms.ModelForm):
 # SERVICIO ################################################################
 
 class CategoriaServicioForm(forms.ModelForm):
-    catsernom = forms.ModelChoiceField(
-        queryset=CategoariaServicio.objects.all(),
-        label="Seleccione una categoría",
-        widget=forms.Select(attrs={'class': 'form-control', 'onchange': 'this.form.submit();'})
+    catsernom = forms.CharField(
+        max_length=150, 
+        label="Nombre de Categoria",
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1})
     )
 
     class Meta:
         model = CategoariaServicio
         fields = ['catsernom']
+        labels = {
+            'catsernom': 'Nombre de Categoria',
+        }
 
 # EVENTO ################################################################
-
 class EventoForm(forms.ModelForm):
     evecod = forms.IntegerField(
         label="Código",
@@ -450,18 +431,18 @@ class EventoForm(forms.ModelForm):
         label="Fecha",
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
     )
-    perdni = forms.ModelChoiceField(
-        queryset=Personal.objects.all(),
-        label="Personal Encargado",
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
 
     class Meta:
         model = Evento
-        fields = ['evecod', 'evedes', 'evefec', 'perdni']
+        fields = ['evecod', 'evedes', 'evefec']
         labels = {
             'evecod': 'Número de Servicio',
             'evedes': 'Agregar Otros datos',
             'evefec': 'Fecha',
-            'perdni': 'Personal Encargado',
         }
+    
+    def clean_evefec(self):
+        fecha = self.cleaned_data.get('evefec')
+        if fecha < datetime.date.today():
+            raise forms.ValidationError('La fecha no puede ser anterior a la fecha actual.')
+        return fecha
