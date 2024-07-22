@@ -302,3 +302,30 @@ $('[data-go*="#"]').on("click", function(a) {
         scrollTop: c
     }, 500);
 });
+
+async function obtenerEventos() {
+  try {
+      // Cambia la URL a la que corresponde con tu configuración
+      const response = await fetch('/api/eventos/');
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      const eventos = await response.json();
+
+      // Aquí puedes procesar los eventos o actualizarlos en el DOM
+      console.log(eventos);
+
+      // Ejemplo: agregar eventos a una lista en el HTML
+      const listaEventos = document.getElementById('lista-eventos');
+      listaEventos.innerHTML = eventos.map(evento => `
+          <li>
+              Fecha: ${evento.fecha}, Servicio: ${evento.servicio}, Técnico: ${evento.tecnico}
+          </li>
+      `).join('');
+  } catch (error) {
+      console.error('Error fetching events:', error);
+  }
+}
+
+// Llamar a la función cuando la página esté lista
+document.addEventListener('DOMContentLoaded', obtenerEventos);

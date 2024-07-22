@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Tienda</a>
     
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,28 +17,37 @@
                 <a class="nav-link" href="{% url 'productos' %}">Productos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Pedidos</a>
+                <a class="nav-link" href="{% url 'lista_productos' %}">Gestionar Productos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'lista_reservas' %}">Gestionar Reserva Productos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'calendar' %}">Pedidos</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
             </li>
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'actualizar_cliente' %}">actualizar</a>
+            {% if request.cliente %}
+            <li class="dropdown nav-item">
+                <a href="javascript:void(0)" class="dropbtn nav-link">Cliente</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'cliente_detail' %}">Ver Perfil</a>
+                    <a href="{% url 'cliente_update' %}">Editar Perfil</a>
+                    <a href="{% url 'cliente_delete' %}">Eliminar Cuenta</a>
+                </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'cambiar_usuario' %}">cambio usuario</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'cambiar_contrasena' %}">cambio contraseña</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cliente_logout' %}" onclick="confirmLogout(event)">Logout</a>
+                </li>
+                <li class="nav-item">Bienvenido, {{ request.cliente.cliusu }}</li>
             {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cliente_login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cliente_register' %}">Registrarse</a>
+                </li>
             {% endif %}
             <!-- Añade más enlaces aquí -->
         </ul>
