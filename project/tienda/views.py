@@ -73,7 +73,11 @@ def productos(request):
 
 def detalle_producto(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
-    return render(request, 'productos/detalle_producto.html', {'producto': producto})
+    cantidad_disponible = producto.inventario_set.aggregate(total_cantidad=models.Sum('invcan'))['total_cantidad'] or 0
+    return render(request, 'productos/detalle_producto.html', {
+        'producto': producto,
+        'cantidad_disponible': cantidad_disponible
+    })
 
 def reserva_producto(request, procod):
     cliente = Cliente.objects.first()
@@ -106,7 +110,7 @@ def reserva_producto(request, procod):
                 inventario.invcan -= cantidad
                 inventario.save()
                 messages.success(request, 'Reserva realizada con éxito.')
-                return redirect('index')        
+                return redirect('productos')        
     else:
         form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario         
     form.fields['cantidad'].widget.attrs.update({'max': cantidad_disponible})
@@ -117,6 +121,10 @@ def reserva_producto(request, procod):
         'form': form
     }
     return render(request, 'productos/reservaProducto.html', context)
+
+def lista_reservas(request):
+    reservas = EventoProducto.objects.all()
+    return render(request, 'productos/lista_reservas.html', {'reservas': reservas})
 
 def detalle_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)  
