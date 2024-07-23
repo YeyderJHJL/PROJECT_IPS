@@ -32,6 +32,7 @@ urlpatterns = [
     path('productoslista', views.lista_productos, name='lista_productos'),
     path('producto/agregar/', views.producto_create, name='producto_create'),
     path('producto/editar/<int:procod>/', views.producto_update, name='producto_update'),
+    path('producto/confirmar_eliminacion/<int:procod>/', views.confirmar_eliminacion, name='confirmar_eliminacion'),
     path('producto/eliminar/<int:procod>/', views.producto_delete, name='producto_delete'),
 
     # Daniel

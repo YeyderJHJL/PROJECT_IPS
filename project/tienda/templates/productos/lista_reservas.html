@@ -9,12 +9,18 @@
         <thead>
             <tr>
                 <th>ID de Reserva</th>
+                <th>Producto Reservado</th>
+                <th>Cantidad solicitada</th>
+                <th>Cliente</th>
             </tr>
         </thead>
         <tbody>
             {% for reserva in reservas %}
             <tr>
                 <td>{{ reserva.evecod }}</td>
+                <td>{{ reserva.procod }}</td>
+                <td>{{ reserva.cantidad }}</td>
+                <td>{{ reserva.cliente }}</td>
                 <td>
                     <a href="{% url 'detalle_reserva' reserva.evecod %}" class="btn btn-info">Ver Detalle</a>
                 </td>
