@@ -2,45 +2,73 @@
 {% load static %}
 {% block title %}Empresa{% endblock %}
 
+{% block styles %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    #inicio img {
+        width: 100%;
+        height: 80vh;
+        object-fit: cover;
+    }
+
+    section {
+        padding: 40px 20px;
+        margin-bottom: 40px;
+        background: linear-gradient(to right, #fff, #f1f1f1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h1, h2, h3 {
+        margin-top: 20px;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #444;
+        margin-bottom: 20px;
+    }
+
+    p {
+        line-height: 1.8;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+    }
+
+    #company-info, #mission-vision, #welcome {
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <section id="inicio">
-        <img src="{% static 'img/bannerprincipal.jpg' %}" alt="Logo de la empresa">
-    <title>Información de la Empresa</title>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Información de la Empresa</h1>
-        </header>
-        <main>
-            <section id="company-info">
-                <!-- Aquí se mostrará la información de la empresa -->
-                <h2>Nombre de la Empresa: SYSEGUR AQP</h2>
-                <p>Empresa dedicada a la supervisión de sistemas electrónicos de seguridad, el mantenimiento de alarmas contra robos e incendios, y la instalación, reparación y ajuste de dispositivos de cierre mecánicos, cajas de caudales y cajas fuertes. Además, ofrece una amplia gama de productos de seguridad, incluyendo cámaras de seguridad, alarmas contra robo, y otros dispositivos, para satisfacer todas las necesidades de sus clientes en materia de seguridad </p>
-                <p>Ubicación: Arequipa, Perú</p>
-                <p>Contacto: contacto@sysegurap.com</p>
-                <p>Teléfono: +51 961 385 515</p>
-                
-                <!-- Misión de la empresa -->
-                <h3>Misión</h3>
-                <p>Nuestra misión es proporcionar servicios de seguridad y sistemas de alta calidad para garantizar la protección y el bienestar de nuestros clientes.</p>
-                
-                <!-- Visión de la empresa -->
-                <h3>Visión</h3>
-                <p>Nuestra visión es ser líderes en el sector de la seguridad y sistemas en la región, reconocidos por nuestra innovación y compromiso con la excelencia.</p>
-                
-                <!-- Información de bienvenida según el estado de autenticación -->
-                <?php if ($is_logged_in): ?>
-                    <p>Bienvenido, usuario con cuenta.</p>
-                <?php endif; ?>
-            </section>
-        </main>
-    </div>
-</body>
-</html>
+<section id="inicio">
+    <img src="{% static 'img/bannerprincipal.jpg' %}" alt="Logo de la empresa" class="img-fluid">
+</section>
+<section id="company-info" class="mt-4">
+    <h1>Información de la Empresa</h1>
+    <h2>Nombre de la Empresa: SYSEGUR AQP</h2>
+    <p>Empresa dedicada a la supervisión de sistemas electrónicos de seguridad, el mantenimiento de alarmas contra robos e incendios, y la instalación, reparación y ajuste de dispositivos de cierre mecánicos, cajas de caudales y cajas fuertes. Además, ofrece una amplia gama de productos de seguridad, incluyendo cámaras de seguridad, alarmas contra robo, y otros dispositivos, para satisfacer todas las necesidades de sus clientes en materia de seguridad.</p>
+    <p>Ubicación: Arequipa, Perú</p>
+    <p>Contacto: contacto@sysegurap.com</p>
+    <p>Teléfono: +51 961 385 515</p>
+</section>
+
+<section id="mission-vision" class="mt-4">
+    <h3>Misión</h3>
+    <p>Nuestra misión es proporcionar servicios de seguridad y sistemas de alta calidad para garantizar la protección y el bienestar de nuestros clientes.</p>
+
+    <h3>Visión</h3>
+    <p>Nuestra visión es ser líderes en el sector de la seguridad y sistemas en la región, reconocidos por nuestra innovación y compromiso con la excelencia.</p>
+</section>
+
+{% if is_logged_in %}
+<section id="welcome" class="mt-4">
+    <p>Bienvenido, usuario con cuenta.</p>
+</section>
+{% endif %}
 {% endblock %}

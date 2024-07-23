@@ -25,18 +25,55 @@
 <section id="historia" class="mt-4">
     <h2>Nuestra Experiencia</h2>
     <p>Desarrollamos sistemas de seguridad que operan de manera independiente, así como sistemas integrados en plataformas avanzadas. Esta capacidad nos permite establecer centros de control inteligente que monitorizan en tiempo real todos los sistemas existentes, logrando así mejores resultados. Al integrar la tecnología en nuestras soluciones, ofrecemos respuestas eficaces y eficientes a los problemas cotidianos de seguridad que enfrentan nuestros clientes.</p>
+</section>
+
 <section id="personal" class="mt-4">
     <h2>Nuestro Personal</h2>
     <p>En SYSEGUR AQP, empleamos ingenieros y técnicos competentes para garantizar la calidad y el rendimiento óptimo de cada uno de nuestros proyectos. Nuestro personal recibe capacitación constante, lo que asegura un manejo adecuado de las normas de seguridad vigentes y los altos estándares técnicos que requieren nuestros equipos.</p>
-    <section id="ppromesa" class="mt-4">
-        <h2>Nuestro Promesa</h2>
-        <p>Nos comprometemos a brindar soluciones de seguridad adaptadas a las necesidades específicas de cada cliente, utilizando tecnología de punta y prácticas de ingeniería robustas. Nuestra dedicación a la excelencia y nuestro enfoque en la satisfacción del cliente nos han permitido construir una reputación sólida en el mercado de la seguridad electrónica.</p>
 </section>
 
+<section id="promesa" class="mt-4">
+    <h2>Nuestra Promesa</h2>
+    <p>Nos comprometemos a brindar soluciones de seguridad adaptadas a las necesidades específicas de cada cliente, utilizando tecnología de punta y prácticas de ingeniería robustas. Nuestra dedicación a la excelencia y nuestro enfoque en la satisfacción del cliente nos han permitido construir una reputación sólida en el mercado de la seguridad electrónica.</p>
+</section>
+
+{% endblock %}
+
+{% block styles %}
 <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
     #inicio img {
         width: 100%;
-        height: auto;
+        height: 80vh;
+        object-fit: cover;
+    }
+
+    section {
+        padding: 40px 20px;
+        margin-bottom: 40px;
+        background: linear-gradient(to right, #fff, #f1f1f1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h2 {
+        margin-top: 20px;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #444;
+        margin-bottom: 20px;
+    }
+
+    p {
+        line-height: 1.8;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
     }
 
     #marcas .logos {
@@ -49,25 +86,12 @@
         margin: 10px;
         width: 150px;
         height: auto;
+        transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    #historia, #equipo {
-        padding: 20px;
-    }
-
-    #equipo .team-members {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #equipo .team-member {
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    #equipo .team-member h3 {
-        margin: 10px 0;
+    #marcas .logos img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 </style>
 {% endblock %}
