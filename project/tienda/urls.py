@@ -36,7 +36,7 @@ urlpatterns = [
     path('producto/eliminar/<int:procod>/', views.producto_delete, name='producto_delete'),
 
     # Daniel
-    path('calendar/', views.calendar_view, name='calendar'),
+    path('calendario/', views.calendar_view, name='calendar_view'),
     path('calendar2/', views.calendar2, name='calendar2'),
     path('calendar/events/', views.calendar_events, name='calendar_events'),
     path('obtener_eventos/', views.obtener_eventos, name='obtener_eventos'),

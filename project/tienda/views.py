@@ -16,7 +16,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum
 from .models import Evento
 
-
 # Create your views here.
 
 
@@ -298,7 +297,7 @@ def cliente_login(request):
                 if check_password(password, cliente.clicon):
                     request.session['cliente_id'] = cliente.clidni
                     messages.success(request, 'Inicio de sesión exitoso.')
-                    return redirect('calendar')  # Cambia 'home' por la URL de redirección deseada
+                    return redirect('calendario')  # Cambia 'home' por la URL de redirección deseada
                 else:
                     messages.error(request, 'Contraseña incorrecta')
             except Cliente.DoesNotExist:
@@ -889,7 +888,7 @@ def eliminar_reservaS(request, evecod):
 # EVENTO ################################################
 
 def calendar_view(request):
-    return render(request, 'calendar.html')
+    return render(request, 'calendario.html')
 
 
 def calendar2(request):
