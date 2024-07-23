@@ -22,8 +22,6 @@ urlpatterns = [
     path('consulta/edit/<int:pk>/', views.consulta_edit, name='consulta_edit'),
     path('consulta/delete/<int:pk>/', views.consulta_delete, name='consulta_delete'),
 
-    path('consulta/toggle_status/<int:pk>/', views.toggle_consulta_status, name='toggle_consulta_status'),
-
     path('tipo_consulta/', views.tipo_consulta_list, name='tipo_consulta_list'),
     path('tipo_consulta/add/', views.tipo_consulta_add, name='tipo_consulta_add'),
     path('tipo_consulta/edit/<str:pk>/', views.tipo_consulta_edit, name='tipo_consulta_edit'),
@@ -75,6 +73,7 @@ urlpatterns = [
     path('personal/edit/<int:pk>/', views.personal_edit, name='personal_edit'),
     path('personal/delete/<int:pk>/', views.personal_delete, name='personal_delete'),
     path('personal/toggle_status/<int:pk>/', views.toggle_personal_status, name='toggle_personal_status'),
+    
     path('tipo_personal/', views.tipo_personal_list, name='tipo_personal_list'),
     path('tipo_personal/add/', views.tipo_personal_add, name='tipo_personal_add'),
     path('tipo_personal/edit/<str:pk>/', views.tipo_personal_edit, name='tipo_personal_edit'),
@@ -85,6 +84,7 @@ urlpatterns = [
     path('cliente/add/', views.cliente_add, name='cliente_add'),
     path('cliente/edit/<int:pk>/', views.cliente_edit, name='cliente_edit'),
     path('cliente/delete/<int:pk>/', views.cliente_delete, name='cliente_delete'),
+    
     path('cliente/toggle_status/<int:pk>/', views.toggle_cliente_status, name='toggle_cliente_status'),
 
     # Jhamil

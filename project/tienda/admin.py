@@ -12,3 +12,7 @@ admin.site.register(Producto)
 admin.site.register(CategoariaProducto) 
 admin.site.register(Inventario) 
 admin.site.register(EventoProducto) 
+
+
+admin.site.register(Consulta) 
+admin.site.register(TipoConsulta) 

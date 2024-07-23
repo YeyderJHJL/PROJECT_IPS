@@ -27,30 +27,40 @@ class TipoConsultaForm(forms.ModelForm):
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = ['concod', 'conpre', 'conres', 'confec', 'tipconcod', 'perdni', 'clidni']
+        fields = ['conpre', 'tipconcod', 'clidni']
         widgets = {
-            'conpre': forms.TextInput(attrs={'class': 'form-control'}),
-            'conres': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'confec': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'conpre': forms.Textarea(attrs={'class': 'form-control'}),
             'tipconcod': forms.Select(attrs={'class': 'form-control'}),
-            'perdni': forms.Select(attrs={'class': 'form-control'}),
+            # 'perdni': forms.Select(attrs={'class': 'form-control', 'required': False}),
             'clidni': forms.Select(attrs={'class': 'form-control'}),
-            'concod': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
         }
         labels = {
-            'concod': 'Código',
             'conpre': 'Pregunta',
-            'conres': 'Respuesta',
-            'confec': 'Fecha de la Consulta',
             'tipconcod': 'Tipo de Consulta',
-            'perdni': 'Personal Encargado',
+            # 'perdni': 'Personal Encargado',
             'clidni': 'Cliente',
+        }
+        error_messages = {
+            'conpre': {
+                'required': "La pregunta es obligatoria."
+            },
+            'tipconcod': {
+                'required': "El tipo de consulta es obligatorio."
+            },
+            'clidni': {
+                'required': "El cliente es obligatorio."
+            },
         }
 
     def __init__(self, *args, **kwargs):
         super(ConsultaForm, self).__init__(*args, **kwargs)
         if not self.instance.pk:  # Solo para nuevos registros
-            self.fields['confec'].initial = datetime.date.today()
+            # Establecer el cliente predeterminado como el último cliente creado
+            try:
+                ultimo_cliente = Cliente.objects.latest('clifecreg')
+                self.fields['clidni'].initial = ultimo_cliente.pk
+            except Cliente.DoesNotExist:
+                pass
 
 #  FORMULARIO DE CONTACTO ################################################
 

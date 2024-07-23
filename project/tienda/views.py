@@ -57,7 +57,6 @@ def gestion_consulta(request):
     return render(request, 'consultas/gestion_consulta.html')
 
 # Consulta CRUD
-
 def consulta_list(request):
     consultas = Consulta.objects.all()
     return render(request, 'consultas/consulta_list.html', {'consultas': consultas})
@@ -66,10 +65,15 @@ def consulta_add(request):
     if request.method == 'POST':
         form = ConsultaForm(request.POST)
         if form.is_valid():
+            consulta = form.save(commit=False)
+            # Establecer la fecha automáticamente
+            consulta.conres = ""
+            consulta.confec = datetime.date.today()
             form.save()
-            return redirect('consulta_list')  # Redirigir a la lista de consultas
+            return redirect('consulta_list')
     else:
         form = ConsultaForm()
+
     return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'consulta_list', 'title': 'Agregar Consulta'})
 
 def consulta_edit(request, pk):
@@ -86,8 +90,11 @@ def consulta_edit(request, pk):
 def consulta_delete(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     if request.method == 'POST':
-        consulta.delete()
-        return redirect('consulta_list')
+        try:
+            consulta.delete()
+            return redirect('consulta_list')
+        except IntegrityError:
+            return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
     return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
 
 # Tipo Consulta CRUD
@@ -122,14 +129,6 @@ def tipo_consulta_delete(request, pk):
         consulta.delete()
         return redirect('tipo_consulta_list')
     return render(request, 'consultas/tipo_consulta_confirm_delete.html', {'consulta': consulta})
-
-def toggle_consulta_status(request, pk):
-    consulta = get_object_or_404(Consulta, pk=pk)
-    activo_estado = Consulta.objects.get(estregnom='Activo')
-    inactivo_estado = Consulta.objects.get(estregnom='Inactivo')
-    consulta.estregcod = inactivo_estado if consulta.estregcod == activo_estado else activo_estado  
-    consulta.save()
-    return redirect('consulta_list')
 
 # ESTADO DE REGISTRO ################################################
 
