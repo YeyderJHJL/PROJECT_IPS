@@ -28,10 +28,15 @@ urlpatterns = [
     path('tipo_consulta/delete/<str:pk>/', views.tipo_consulta_delete, name='tipo_consulta_delete'),
 
     # Maria
+    #cliente
     path('servicios', views.servicios, name='servicios'),
     path('servicios/<str:codigo>/', views.servicios, name='servicios_codigo'),
     path('servicios/detalle/<str:sercod>/', views.detalle_servicio, name='detalle_servicio'),
     path('crear_evento', views.crear_evento, name='crear_evento'),
+    path('reservaServicio/detalle/<int:evecod>/', views.detalle_reservaS, name='detalle_reservaS'),
+    path('reservaServicio/editar/<int:evecod>/', views.editar_reservaS, name='editar_reservaS'),
+    path('reservaServicio/eliminar/<int:evecod>/', views.eliminar_reservaS, name='eliminar_reservaS'),
+    #personal
     path('gestionar_servicios', views.gestionar_servicios, name='gestionar_servicios'),
     path('agregar_servicio/', views.agregar_servicio, name='agregar_servicio'),
     path('modificar_servicio/<str:sercod>/', views.modificar_servicio, name='modificar_servicio'),
@@ -45,6 +50,7 @@ urlpatterns = [
     path('reservaServicio/eliminar/<int:evecod>/', views.eliminar_reservaS, name='eliminar_reservaS'),
 
     # Paola
+    #cliente
     path('productos', views.productos, name='productos'),
     path('producto/<int:procod>/', views.detalle_producto, name='detalle_producto'),
     path('reserva/<int:procod>/', views.reserva_producto, name='reserva_producto'),
@@ -52,6 +58,7 @@ urlpatterns = [
     path('reserva/detalle/<int:evecod>/', views.detalle_reserva, name='detalle_reserva'),
     path('reserva/editar/<int:evecod>/', views.editar_reserva, name='editar_reserva'),
     path('reserva/eliminar/<int:evecod>/', views.eliminar_reserva, name='eliminar_reserva'),
+    #personal
     path('productoslista', views.lista_productos, name='lista_productos'),
     path('producto/agregar/', views.producto_create, name='producto_create'),
     path('producto/editar/<int:procod>/', views.producto_update, name='producto_update'),
@@ -59,7 +66,9 @@ urlpatterns = [
     path('producto/eliminar/<int:procod>/', views.producto_delete, name='producto_delete'),
 
     # Daniel
+    #cliente?
     path('calendar/', views.calendar_view, name='calendar'),
+    #personal?
     path('calendar2/', views.calendar2, name='calendar2'),
     path('calendar/events/', views.calendar_events, name='calendar_events'),
     path('obtener_eventos/', views.obtener_eventos, name='obtener_eventos'),
@@ -98,6 +107,7 @@ urlpatterns = [
     path('cliente/toggle_status/<int:pk>/', views.toggle_cliente_status, name='toggle_cliente_status'),
 
     # Jhamil
+    #cliente
     path('register/', views.register_view, name='cliente_register'),
     path('protected/', views.protected_view, name='protected'),
     path('login/', views.cliente_login, name='cliente_login'),
@@ -105,6 +115,8 @@ urlpatterns = [
     path('detail/', views.cliente_detail, name='cliente_detail'),
     path('update/', views.cliente_update, name='cliente_update'),
     path('delete/', views.cliente_delete, name='cliente_delete'),
+
+    path('sales_report/', views.sales_report, name='sales_report'),
 
     path('orders/', views.cliente_orders, name='cliente_orders'),
     path('services/', views.cliente_services, name='cliente_services'),
