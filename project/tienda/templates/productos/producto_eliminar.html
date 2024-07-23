@@ -1,15 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}Eliminar Producto{% endblock %}
+{% block title %}Confirmar Eliminación{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="mt-4">Eliminar Producto</h1>
-    <p>¿Estás seguro de que quieres eliminar el producto "{{ producto.pronom }}"?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Eliminar</button>
-        <a href="{% url 'lista_productos' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    {% if messages %}
+                    <div class="alert-container">
+                        {% for message in messages %}
+                            <div class="alert custom-alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <h2>¿Estás seguro de que deseas eliminar el producto "{{ producto.pronom }}"?</h2>
+                    <form method="post" action="{% url 'producto_delete' producto.procod %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-lg px-5 me-2">Eliminar</button>
+                        <a href="{% url 'lista_productos' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

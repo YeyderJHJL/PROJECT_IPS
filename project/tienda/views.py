@@ -772,15 +772,24 @@ def eliminar_reserva(request, evecod):
         inventario.save()
     reserva.delete()
     messages.success(request, 'Reserva eliminada con éxito.')
-    return redirect('index')
+    return redirect('lista_reservas') 
 
 #gestion productos con inventario
-
 def lista_productos(request):
+    categorias = CategoariaProducto.objects.all()
     productos = Producto.objects.all()
-    inventarios = Inventario.objects.values('procod').annotate(total_can=Sum('invcan'))
-    cantidad_dict = {inv['procod']: inv['total_can'] for inv in inventarios}
+    categoria_id = request.GET.get('categoria')    
+    if categoria_id:
+        productos = productos.filter(catprocod=categoria_id)    
+    # Crear un diccionario de cantidades disponibles por producto
+    cantidad_dict = {}
+    for producto in productos:
+        # Obtener la cantidad total disponible para cada producto
+        cantidad = Inventario.objects.filter(procod=producto.procod).aggregate(total_cantidad=Sum('invcan'))['total_cantidad'] or 0
+        cantidad_dict[producto.procod] = cantidad
+
     context = {
+        'categorias': categorias,
         'productos': productos,
         'cantidad_dict': cantidad_dict,
     }
@@ -791,18 +800,28 @@ def producto_create(request):
         producto_form = ProductoForm(request.POST, request.FILES)
         inventario_form = InventarioForm(request.POST)
         if producto_form.is_valid() and inventario_form.is_valid():
-            producto = producto_form.save()
+            producto = producto_form.save(commit=False)       
+            try:
+                activo_estado = EstadoRegistro.objects.get(estregnom='Activo')
+                producto.estregcod = activo_estado
+            except EstadoRegistro.DoesNotExist:
+                return render(request, 'productos/producto_form.html', {
+                    'producto_form': producto_form,
+                    'inventario_form': inventario_form,
+                    'error': 'Estado de registro "Activo" no encontrado.'
+                })            
+            producto.save()            
             inventario = inventario_form.save(commit=False)
             inventario.procod = producto
-            inventario.save()
+            inventario.invfecha = timezone.now().date()
+            inventario.save()            
             return redirect('lista_productos')
     else:
         producto_form = ProductoForm()
-        inventario_form = InventarioForm()
-
+        inventario_form = InventarioForm()    
     context = {
         'producto_form': producto_form,
-        'inventario_form': inventario_form
+        'inventario_form': inventario_form,
     }
     return render(request, 'productos/producto_form.html', context)
 
@@ -824,17 +843,28 @@ def producto_update(request, procod):
         'inventario_form': inventario_form,
     })
 
-def producto_delete(request, procod):
-    producto = Producto.objects.get(procod=procod)
-    inventario = Inventario.objects.get(procod=producto)
-    if request.method == 'POST':
-        inventario.delete()
-        producto.delete()
-        return redirect(reverse('lista_productos'))
+def confirmar_eliminacion(request, procod):
+    producto = get_object_or_404(Producto, procod=procod)
+    inventario = get_object_or_404(Inventario, procod=producto)
+    # Renderizar el template de confirmación
     return render(request, 'productos/producto_eliminar.html', {
         'producto': producto,
         'inventario': inventario,
     })
+
+def producto_delete(request, procod):
+    producto = get_object_or_404(Producto, procod=procod)
+    inventario = get_object_or_404(Inventario, procod=producto)
+    if EventoProducto.objects.filter(procod=producto).exists():
+        messages.error(request, 'No se puede eliminar el producto porque tiene reservas asociadas.')
+        return redirect(reverse('confirmar_eliminacion', kwargs={'procod': procod}))
+    if request.method == 'POST':
+        inventario.delete()
+        producto.delete()
+        messages.success(request, 'Producto eliminado con éxito.')
+        return redirect(reverse('lista_productos'))
+
+    return redirect(reverse('confirmar_eliminacion', kwargs={'procod': procod}))
 
 # registro de ventas
 

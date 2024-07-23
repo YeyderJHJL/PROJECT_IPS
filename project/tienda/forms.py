@@ -2,6 +2,7 @@ from django import forms
 from .models import *
 import datetime
 from django.utils import timezone
+from datetime import date
 
 #  CONSULTAS ################################################
 class TipoConsultaForm(forms.ModelForm):
@@ -452,7 +453,15 @@ class ReservaForm(forms.Form):
         if fecha_reserva is not None and fecha_reserva < timezone.now().date():
             self.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')
         return cleaned_data
-    
+
+class CategoriaProductoForm(forms.ModelForm):
+    class Meta:
+        model = CategoariaProducto
+        fields = ['catpronom']  # Especifica los campos que quieres incluir en el formulario
+        widgets = {
+            'catpronom': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de la categoría'})
+        }
+
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
