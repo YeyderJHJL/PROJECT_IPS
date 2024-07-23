@@ -23,33 +23,30 @@ from django.db.models import Sum
 def index(request):
     return render(request, 'index.html')
 
-def login(request):
-    return render(request, './login.html') ################################################
-
 def empresa(request):
     return render(request, './empresa.html')
 
 #  FORMULARIO DE CONTACTO ################################################
 
-def contact_form(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            # Procesa el formulario, como enviar un correo electrónico
-            send_mail(
-                'Nuevo mensaje de contacto',
-                form.cleaned_data['message'],
-                form.cleaned_data['email'],
-                ['tu_email@example.com'],  # Cambia esto por tu dirección de correo
-            )
-            return redirect('contact_success')  # Redirige a una página de éxito
-    else:
-        form = ContactForm()
+# def contact_form(request):
+#     if request.method == 'POST':
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#             # Procesa el formulario, como enviar un correo electrónico
+#             send_mail(
+#                 'Nuevo mensaje de contacto',
+#                 form.cleaned_data['message'],
+#                 form.cleaned_data['email'],
+#                 ['tu_email@example.com'],  # Cambia esto por tu dirección de correo
+#             )
+#             return redirect('contact_success')  # Redirige a una página de éxito
+#     else:
+#         form = ContactForm()
     
-    return render(request, 'consultas/contact_form.html', {'form': form})
+#     return render(request, 'consultas/contact_form.html', {'form': form})
 
-def contact_success(request):
-    return render(request, 'consultas/contact_success.html')
+# def contact_success(request):
+#     return render(request, 'consultas/contact_success.html')
 
 #  CONSULTAS ################################################
 
@@ -71,11 +68,33 @@ def consulta_add(request):
             consulta.conres = ""
             consulta.confec = datetime.date.today()
             form.save()
-            return redirect('consulta_list')
+            return redirect('index')
     else:
         form = ConsultaForm()
 
     return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'consulta_list', 'title': 'Agregar Consulta'})
+
+def consulta_add_new(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login') 
+    
+    cliente = request.cliente
+    if request.method == 'POST':
+        form = ConsultaForm(request.POST, instance=cliente)
+        if form.is_valid():
+            consulta = form.save(commit=False)
+            # Establecer la fecha automáticamente
+            consulta.conres = ""
+            consulta.confec = datetime.date.today()
+            cliente_id = Cliente.objects.filter(cliente=request.cliente)
+            form.save()
+            return redirect('index')
+    else:
+        form = ConsultaForm(instance=cliente)
+
+    return render(request, 'consultas/consulta_nueva_form.html', {'form': form, 'cliente': cliente, 'return_url': 'consulta_list', 'title': 'Agregar Nueva Consulta'})
 
 def consulta_edit(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
@@ -406,7 +425,7 @@ def cliente_login(request):
                 if check_password(password, cliente.clicon):
                     request.session['cliente_id'] = cliente.clidni
                     messages.success(request, 'Inicio de sesión exitoso.')
-                    return redirect('calendar')  # Cambia 'home' por la URL de redirección deseada
+                    return redirect('index')  # Cambia 'home' por la URL de redirección deseada
                 else:
                     messages.error(request, 'Contraseña incorrecta')
             except Cliente.DoesNotExist:
@@ -454,7 +473,7 @@ def cliente_update(request):
             return redirect('cliente_detail')
     else:
         form = ClienteUpdateForm(instance=cliente)
-    return render(request, 'cliente/cliente_update.html', {'form': form})
+    return render(request, 'cliente/cliente_update.html', {'form': form, 'title': 'Actualizar Datos'})
 
 @cliente_login_required
 def cliente_delete(request):

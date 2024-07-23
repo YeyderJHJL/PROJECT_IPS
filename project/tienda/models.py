@@ -60,7 +60,7 @@ class Cliente(models.Model):
     clitel = models.CharField(db_column='CliTel', max_length=9, blank=True, null=True)
     clidir = models.CharField(db_column='CliDir', max_length=150, blank=True, null=True)
     cliusu = models.CharField(db_column='CliUsu', unique=True, max_length=60)
-    clicon = models.CharField(db_column='CliCon', max_length=255)
+    clicon = models.CharField(db_column='CliCon', max_length=500)
     clicor = models.CharField(db_column='CliCor', max_length=60, blank=True, null=True)
     clifecreg = models.DateField(db_column='CliFecReg', blank=True, null=True)
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')

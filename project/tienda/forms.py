@@ -29,17 +29,17 @@ class TipoConsultaForm(forms.ModelForm):
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = ['conpre', 'tipconcod', 'clidni']
+        fields = ['conpre', 'tipconcod', 'clidni', 'perdni']
         widgets = {
             'conpre': forms.Textarea(attrs={'class': 'form-control'}),
             'tipconcod': forms.Select(attrs={'class': 'form-control'}),
-            # 'perdni': forms.Select(attrs={'class': 'form-control', 'required': False}),
+            'perdni': forms.Select(attrs={'class': 'form-control', 'required': False}),
             'clidni': forms.Select(attrs={'class': 'form-control'}),
         }
         labels = {
             'conpre': 'Pregunta',
             'tipconcod': 'Tipo de Consulta',
-            # 'perdni': 'Personal Encargado',
+            'perdni': 'Personal Encargado',
             'clidni': 'Cliente',
         }
         error_messages = {
@@ -59,27 +59,29 @@ class ConsultaForm(forms.ModelForm):
         if not self.instance.pk:  # Solo para nuevos registros
             # Establecer el cliente predeterminado como el último cliente creado
             try:
-                ultimo_cliente = Cliente.objects.latest('clifecreg')
-                self.fields['clidni'].initial = ultimo_cliente.pk
+                cliente = Cliente.objects.get(user=self.cliente_id)
+                self.fields['clidni'].initial = cliente.pk
+                ultimo_personal = Personal.objects.latest('perfecreg')
+                self.fields['perdni'].initial = ultimo_personal.pk
             except Cliente.DoesNotExist:
                 pass
 
-#  FORMULARIO DE CONTACTO ################################################
+# #  FORMULARIO DE CONTACTO ################################################
 
-class ContactForm(forms.Form):
-    name = forms.CharField(
-        label='Nombre',
-        max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-    email = forms.EmailField(
-        label='Correo Electrónico',
-        widget=forms.EmailInput(attrs={'class': 'form-control'})
-    )
-    message = forms.CharField(
-        label='Mensaje',
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
-    )
+# class ContactForm(forms.Form):
+#     name = forms.CharField(
+#         label='Nombre',
+#         max_length=100,
+#         widget=forms.TextInput(attrs={'class': 'form-control'})
+#     )
+#     email = forms.EmailField(
+#         label='Correo Electrónico',
+#         widget=forms.EmailInput(attrs={'class': 'form-control'})
+#     )
+#     message = forms.CharField(
+#         label='Mensaje',
+#         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
+#     )
 
 # ESTADO DE REGISTRO ################################################################
 
@@ -305,6 +307,21 @@ class ClienteUpdateForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = ['clinom', 'cliape', 'clitel', 'clidir', 'clicor']
+        labels = {
+            'clinom': 'Nombre',
+            'cliape': 'Apellido',
+            'clitel': 'Teléfono',
+            'clidir': 'Dirección',
+            'clicor': 'Correo',
+        }
+        error_messages = {
+            'clitel': {
+                'unique': "Este teléfono ya está registrado.",
+            },
+            'clicor': {
+                'unique': "Este correo ya está registrado.",
+            },
+        }
 
     def clean_clicor(self):
         clicor = self.cleaned_data.get('clicor')
@@ -349,16 +366,13 @@ class ClienteRegisterForm(forms.ModelForm):
 
     class Meta:
         model = Cliente
-        fields = ['clidni', 'clinom', 'cliape', 'clitel', 'clidir', 'cliusu', 'clicon', 'clicor', 'clifecreg', 'estregcod']
+        fields = ['clidni', 'clinom', 'cliape', 'cliusu', 'clicon', 'clifecreg', 'estregcod']
         labels = {
             'clidni': 'DNI',
             'clinom': 'Nombre',
             'cliape': 'Apellido',
-            'clitel': 'Teléfono',
-            'clidir': 'Dirección',
             'cliusu': 'Usuario',
             'clicon': 'Contraseña',
-            'clicor': 'Correo',
             'clifecreg': 'Fecha de Registro',
             'estregcod': 'Estado de Registro',
         }
@@ -398,6 +412,7 @@ class ClienteRegisterForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
         self.fields['estregcod'].initial = 1  # Asumiendo que 1 es 'activo'
+        self.fields['clifecreg'].initial = datetime.date.today()
     
 class ClienteLoginForm(forms.Form):
     username = forms.CharField(
