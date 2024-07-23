@@ -464,6 +464,11 @@ class VentaForm(forms.ModelForm):
         widgets = {
             'venfecres': forms.DateInput(attrs={'type': 'date'}),
         }
+
+class SalesReportForm(forms.Form):
+    start_date = forms.DateField(required=True, widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(required=False, widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    
 # SERVICIO ################################################################
 
 class CategoriaServicioForm(forms.ModelForm):

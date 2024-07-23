@@ -756,6 +756,30 @@ def venta_delete(request, pk):
         messages.success(request, 'Venta eliminada exitosamente')
         return redirect('venta_list')
     return render(request, 'ventas/venta_confirm_delete.html', {'venta': venta})
+
+def sales_report(request):
+    form = SalesReportForm()
+    sales = []
+    total_sales = 0
+
+    if request.method == 'POST':
+        form = SalesReportForm(request.POST)
+        if form.is_valid():
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            if end_date:
+                sales = Venta.objects.filter(venfecres__range=[start_date, end_date])
+            else:
+                sales = Venta.objects.filter(venfecres__gte=start_date)
+            total_sales = sales.aggregate(total=Sum('venprotot'))['total']
+
+    context = {
+        'form': form,
+        'sales': sales,
+        'total_sales': total_sales,
+    }
+    return render(request, 'productos/sales_report.html', context)
+
 # SERVICIO ################################################
 
 def servicios(request, codigo=None):

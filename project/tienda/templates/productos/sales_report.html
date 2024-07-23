@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Reporte de Ventas{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 mb-4 text-center">Reporte de Ventas</h1>
+
+    <!-- Formulario de Fechas -->
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-5">
+                {{ form.start_date.label_tag }} {{ form.start_date }}
+            </div>
+            <div class="form-group col-md-5">
+                {{ form.end_date.label_tag }} {{ form.end_date }}
+            </div>
+            <div class="form-group col-md-2">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-dark btn-block">Generar Reporte</button>
+            </div>
+        </div>
+    </form>
+
+    {% if sales %}
+        <h2>Resultados</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                        <tr>
+                            <td>{{ sale.venfecres }}</td>
+                            <td>{{ sale.venclicod }}</td>
+                            <td>{{ sale.veninvcod.procod.pronom }}</td>
+                            <td>{{ sale.vencan }}</td>
+                            <td>{{ sale.venprotot }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <h3>Total Vendido: {{ total_sales }}</h3>
+    {% endif %}
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    .btn {
+        border-radius: 25px;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #495057;
+    }
+
+    .btn:focus {
+        outline: none;
+    }
+
+    .table {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .table:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .thead-dark {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .table-hover tbody tr:hover {
+        color: #495057;
+        background-color: rgba(0, 0, 0, 0.075);
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.2.3/js/bootstrap.min.js"></script>
+{% endblock %}
