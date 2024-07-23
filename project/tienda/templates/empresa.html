@@ -42,20 +42,128 @@
     #company-info, #mission-vision, #welcome {
         margin-bottom: 20px;
     }
+
+    .social-icons {
+        display: flex;
+        align-items: center;
+    }
+
+    .social-icons a {
+        margin-right: 10px;
+        color: #1dbf27; /* Color verde para WhatsApp */
+    }
+
+    .social-icons a.facebook {
+        color: #3b5998; /* Color azul de Facebook */
+    }
+
+    #galeria {
+        padding: 20px;
+    }
+
+    #galeria .col-33 {
+        padding: 15px;
+    }
+
+    #galeria .cuadrado-perfecto {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    #galeria .cuadrado-perfecto img {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: grayscale(1);
+        transition: filter 0.3s ease;
+    }
+
+    #galeria .cuadrado-perfecto:hover img {
+        filter: grayscale(0);
+    }
+
+    #galeria h4 {
+        padding-right: 15px;
+        padding-left: 15px;
+        text-align: center;
+        position: absolute;
+        top: 40%;
+        color: white;
+        font-size: 18px;
+        width: 100%;
+        transition: display 0.3s ease;
+    }
+
+    #galeria .cuadrado-perfecto:hover h4 {
+        display: none;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<section id="inicio">
-    <img src="{% static 'img/bannerprincipal.jpg' %}" alt="Logo de la empresa" class="img-fluid">
+
+<!-- Galería -->
+<section id="galeria" class="mt-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-33">
+                <div class="cuadrado-perfecto">
+                    <img src="{% static 'img/servicio1.jpg' %}" alt="Imagen1">
+                    <h4>Alarmas</h4>
+                </div>
+            </div>
+            <div class="col-33">
+                <div class="cuadrado-perfecto">
+                    <img src="{% static 'img/servicio2.jpg' %}" alt="Imagen2">
+                    <h4>Cámaras</h4>
+                </div>
+            </div>
+            <div class="col-33">
+                <div class="cuadrado-perfecto">
+                    <img src="{% static 'img/servicio3.jpg' %}" alt="Imagen3">
+                    <h4>Contra-robos</h4>
+                </div>
+            </div>
+            <div class="col-33">
+                <div class="cuadrado-perfecto">
+                    <img src="{% static 'img/servicio4.jpg' %}" alt="Imagen4">
+                    <h4>Instalación</h4>
+                </div>
+            </div>
+            <div class="col-33">
+                <div class="cuadrado-perfecto">
+                    <img src="{% static 'img/servicio5.jpg' %}" alt="Imagen5">
+                    <h4>Monitoreo 24/7</h4>
+                </div>
+            </div>
+            <div class="col-33">
+                <div class="cuadrado-perfecto">
+                    <img src="{% static 'img/servicio6.jpg' %}" alt="Imagen6">
+                    <h4>Mantenimiento</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
 <section id="company-info" class="mt-4">
     <h1>Información de la Empresa</h1>
     <h2>Nombre de la Empresa: SYSEGUR AQP</h2>
     <p>Empresa dedicada a la supervisión de sistemas electrónicos de seguridad, el mantenimiento de alarmas contra robos e incendios, y la instalación, reparación y ajuste de dispositivos de cierre mecánicos, cajas de caudales y cajas fuertes. Además, ofrece una amplia gama de productos de seguridad, incluyendo cámaras de seguridad, alarmas contra robo, y otros dispositivos, para satisfacer todas las necesidades de sus clientes en materia de seguridad.</p>
+    <h3>Datos de contacto</h3>
     <p>Ubicación: Arequipa, Perú</p>
     <p>Contacto: contacto@sysegurap.com</p>
     <p>Teléfono: +51 961 385 515</p>
+    <h3>Redes sociales</h3>
+    <div class="social-icons">
+        <a href="https://wa.link/fx05ir" target="_blank">
+            <i class="fab fa-whatsapp"></i> Whatsapp
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61563405085432" target="_blank" class="facebook">
+            <i class="fab fa-facebook"></i> Facebook
+        </a>
+    </div>
 </section>
 
 <section id="mission-vision" class="mt-4">
