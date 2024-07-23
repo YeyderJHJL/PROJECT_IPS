@@ -3,21 +3,84 @@ from .models import *
 import datetime
 from django.utils import timezone
 
-class EventoForm(forms.ModelForm):
-    evedes = forms.CharField(
-        max_length=150, 
-        label="Descripción",
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+#  CONSULTAS ################################################
+class TipoConsultaForm(forms.ModelForm):
+    class Meta:
+        model = TipoConsulta
+        fields = ['tipconnom']  # Solo incluir campos editables
+        widgets = {
+            'tipconnom': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'tipconnom': 'Nombre',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(TipoConsultaForm, self).__init__(*args, **kwargs)
+        if self.instance.pk:  # Solo para ediciones
+            self.fields['tipconcod'] = forms.CharField(
+                initial=self.instance.tipconcod,
+                widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+                label='Código'
+            )
+            self.fields['tipconcod'].required = False
+
+class ConsultaForm(forms.ModelForm):
+    class Meta:
+        model = Consulta
+        fields = ['conpre', 'tipconcod', 'clidni']
+        widgets = {
+            'conpre': forms.Textarea(attrs={'class': 'form-control'}),
+            'tipconcod': forms.Select(attrs={'class': 'form-control'}),
+            # 'perdni': forms.Select(attrs={'class': 'form-control', 'required': False}),
+            'clidni': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'conpre': 'Pregunta',
+            'tipconcod': 'Tipo de Consulta',
+            # 'perdni': 'Personal Encargado',
+            'clidni': 'Cliente',
+        }
+        error_messages = {
+            'conpre': {
+                'required': "La pregunta es obligatoria."
+            },
+            'tipconcod': {
+                'required': "El tipo de consulta es obligatorio."
+            },
+            'clidni': {
+                'required': "El cliente es obligatorio."
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ConsultaForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:  # Solo para nuevos registros
+            # Establecer el cliente predeterminado como el último cliente creado
+            try:
+                ultimo_cliente = Cliente.objects.latest('clifecreg')
+                self.fields['clidni'].initial = ultimo_cliente.pk
+            except Cliente.DoesNotExist:
+                pass
+
+#  FORMULARIO DE CONTACTO ################################################
+
+class ContactForm(forms.Form):
+    name = forms.CharField(
+        label='Nombre',
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
-    evefec = forms.DateField(
-        label="Fecha",
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    email = forms.EmailField(
+        label='Correo Electrónico',
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
     )
-    perdni = forms.ModelChoiceField(
-        queryset=Personal.objects.all(),
-        label="Personal Encargado",
-        widget=forms.Select(attrs={'class': 'form-control'})
+    message = forms.CharField(
+        label='Mensaje',
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
     )
+
+# ESTADO DE REGISTRO ################################################################
 
 class EstadoRegistroForm(forms.ModelForm):
     class Meta:
@@ -39,40 +102,6 @@ class EstadoRegistroForm(forms.ModelForm):
                 label='Código'
             )
             self.fields['estregcod'].required = False
-        model = Evento
-        fields = ['evedes', 'evefec', 'perdni']
-        labels = {
-            'evedes': 'Agregar Otros datos',
-            'evefec': 'Fecha',
-            'perdni': 'Personal Encargado',
-        }
-
-class ServicioForm(forms.ModelForm):
-    sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}), required=False)
-    sernom=forms.CharField(label="Nombre", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
-    serdes=forms.CharField(label="Descripcion", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
-    serreqpre=forms.CharField(label="Prerequisitos", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
-    serdur=forms.CharField(label="Duración", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
-    sercos=forms.FloatField(label= "Costo",widget=forms.NumberInput(attrs={'min': 0, 'class': 'form-control'}), initial=0)
-    serima=forms.CharField(label="URL de imagen", required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
-    serimg=forms.CharField(label="Directorio de Imagen", required=False)
-    estado_registro_estregcod = forms.ModelChoiceField(queryset=EstadoRegistro.objects.all(), label="Estado de Registro", widget=forms.Select(attrs={'class': 'form-control'}))
-    categoaria_servicio_catsercod=forms.ModelChoiceField(queryset=CategoariaServicio.objects.order_by('catsernom'), label="Categoria", widget=forms.Select(attrs={'class': 'form-control'}))
-
-    class Meta:
-        model=Servicio
-        fields = ['sercod', 'sernom', 'serdes', 'serreqpre', 'serdur', 'sercos', 'serima', 'serimg', 'estado_registro_estregcod', 'categoaria_servicio_catsercod']
-        labels={
-            'sernom' : 'Nombre de Servicio',
-            'serdes' : 'Descripción',
-            'serreqpre' : 'Prerequisitos',
-            'serdur' : 'Duración',
-            'sercos' : 'Costo',
-            'serima' : 'Imagen URL',
-            'serimg' : 'Imagen directorio',
-            'estado_registro_estregcod' : 'Estado registro',
-            'categoaria_servicio_catsercod' : 'Categoria', 
-        }
 
 # PERSONAL ################################################################
 
@@ -464,7 +493,36 @@ class VentaForm(forms.ModelForm):
         widgets = {
             'venfecres': forms.DateInput(attrs={'type': 'date'}),
         }
+
+
 # SERVICIO ################################################################
+
+class ServicioForm(forms.ModelForm):
+    sercod=forms.IntegerField(label="Codigo", disabled=True, widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}), required=False)
+    sernom=forms.CharField(label="Nombre", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    serdes=forms.CharField(label="Descripcion", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+    serreqpre=forms.CharField(label="Prerequisitos", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+    serdur=forms.CharField(label="Duración", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    sercos=forms.FloatField(label= "Costo",widget=forms.NumberInput(attrs={'min': 0, 'class': 'form-control'}), initial=0)
+    serima=forms.CharField(label="URL de imagen", required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1}))
+    serimg=forms.CharField(label="Directorio de Imagen", required=False)
+    estado_registro_estregcod = forms.ModelChoiceField(queryset=EstadoRegistro.objects.all(), label="Estado de Registro", widget=forms.Select(attrs={'class': 'form-control'}))
+    categoaria_servicio_catsercod=forms.ModelChoiceField(queryset=CategoariaServicio.objects.order_by('catsernom'), label="Categoria", widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model=Servicio
+        fields = ['sercod', 'sernom', 'serdes', 'serreqpre', 'serdur', 'sercos', 'serima', 'serimg', 'estado_registro_estregcod', 'categoaria_servicio_catsercod']
+        labels={
+            'sernom' : 'Nombre de Servicio',
+            'serdes' : 'Descripción',
+            'serreqpre' : 'Prerequisitos',
+            'serdur' : 'Duración',
+            'sercos' : 'Costo',
+            'serima' : 'Imagen URL',
+            'serimg' : 'Imagen directorio',
+            'estado_registro_estregcod' : 'Estado registro',
+            'categoaria_servicio_catsercod' : 'Categoria', 
+        }
 
 class CategoriaServicioForm(forms.ModelForm):
     catsernom = forms.ModelChoiceField(

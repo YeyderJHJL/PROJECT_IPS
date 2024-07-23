@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -216,18 +217,17 @@ class TipoConsulta(models.Model):
         return self.tipconnom
 
 class Consulta(models.Model):
-    concod = models.AutoField(db_column='ConCod', primary_key=True)
-    conpre = models.CharField(db_column='ConPre', max_length=300)
-    conres = models.CharField(db_column='ConRes', max_length=300, blank=True, null=True)
-    confec = models.DateField(db_column='ConFec')
-    tipconcod = models.ForeignKey(TipoConsulta, models.PROTECT, db_column='TipConCod')
-    perdni = models.ForeignKey(Personal, models.PROTECT, db_column='PerDni')
-    clidni = models.ForeignKey(Cliente, models.CASCADE, db_column='CliDni')
-
+    concod = models.AutoField(db_column='ConCod', primary_key=True)  # Campo autogenerado
+    conpre = models.TextField(db_column='ConPre')  # Pregunta
+    conres = models.TextField(db_column='ConRes', null=True, blank=True)  # Respuesta
+    confec = models.DateField(db_column='ConFec', default=datetime.date.today)  # Fecha automática
+    clidni = models.ForeignKey('Cliente', models.PROTECT, db_column='CliDNI')  # Cliente
+    perdni = models.ForeignKey(Personal, models.PROTECT, db_column='PerDNI', null=True, blank=True)  # Personal
+    tipconcod = models.ForeignKey('TipoConsulta', models.PROTECT, db_column='TipConCod')  # Tipo de Consulta
     class Meta:
         db_table = 'consulta'
         verbose_name = 'Consulta'
         verbose_name_plural = 'Consultas'
 
     def __str__(self):
-        return f"Consulta {self.concod} - {self.clidni}"
+        return f"Consulta {self.concod}: {self.conpre}"

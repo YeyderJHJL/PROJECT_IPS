@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section id="inicio" class="text-center">
+    <img src="{% static 'img/banner.jpg' %}" alt="Imagen Principal" class="img-fluid">
+</section>
+
+<section>
+    <div class="container">
+        <main>
+            <h1>Información de la Empresa</h1>
+            <section id="company-info">
+                <!-- Aquí se mostrará la información de la empresa -->
+            Es una empresa especialiazada en actividades de servicio de sistemas de seguridad.
+            Su principal enfoque está en la supervisión a distancia de sistemas electrónicos de 
+            seguridad, mantenimiento de alarmas contra robos robos e incendios, así como la
+            instalación, reparación y ajuste de dispositivos de cierre mecánicos y electrónicos,
+            cajas caudales y cajas fuertes.
+            </section>
+        </main>
+    </div>
+</section>
+
+<section id="marcas" class="text-center mt-4">
+    <h2>Marcas con las que Trabajamos</h2>
+    <div class="logos">
+        <img src="{% static 'img/logo1.jpg' %}" alt="Logo Empresa 1" class="img-thumbnail">
+        <img src="{% static 'img/logo2.jpg' %}" alt="Logo Empresa 2" class="img-thumbnail">
+        <img src="{% static 'img/logo3.jpg' %}" alt="Logo Empresa 3" class="img-thumbnail">
+        <img src="{% static 'img/logo4.jpg' %}" alt="Logo Empresa 4" class="img-thumbnail">
+        <img src="{% static 'img/logo5.jpg' %}" alt="Logo Empresa 5" class="img-thumbnail">
+        <img src="{% static 'img/logo6.jpg' %}" alt="Logo Empresa 6" class="img-thumbnail">
+        <img src="{% static 'img/logo7.jpg' %}" alt="Logo Empresa 7" class="img-thumbnail">
+        <img src="{% static 'img/logo8.jpg' %}" alt="Logo Empresa 8" class="img-thumbnail">
+    </div>
+</section>
+
+<section id="historia" class="mt-4">
+    <h2>Nuestra Experiencia</h2>
+    <p>Desarrollamos sistemas de seguridad que operan de manera independiente, así como sistemas integrados en plataformas avanzadas. Esta capacidad nos permite establecer centros de control inteligente que monitorizan en tiempo real todos los sistemas existentes, logrando así mejores resultados. Al integrar la tecnología en nuestras soluciones, ofrecemos respuestas eficaces y eficientes a los problemas cotidianos de seguridad que enfrentan nuestros clientes.</p>
+<section id="personal" class="mt-4">
+    <h2>Nuestro Personal</h2>
+    <p>En SYSEGUR AQP, empleamos ingenieros y técnicos competentes para garantizar la calidad y el rendimiento óptimo de cada uno de nuestros proyectos. Nuestro personal recibe capacitación constante, lo que asegura un manejo adecuado de las normas de seguridad vigentes y los altos estándares técnicos que requieren nuestros equipos.</p>
+    <section id="ppromesa" class="mt-4">
+        <h2>Nuestro Promesa</h2>
+        <p>Nos comprometemos a brindar soluciones de seguridad adaptadas a las necesidades específicas de cada cliente, utilizando tecnología de punta y prácticas de ingeniería robustas. Nuestra dedicación a la excelencia y nuestro enfoque en la satisfacción del cliente nos han permitido construir una reputación sólida en el mercado de la seguridad electrónica.</p>
+</section>
+
+<style>
+    #inicio img {
+        width: 100%;
+        height: auto;
+    }
+
+    #marcas .logos {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    #marcas .logos img {
+        margin: 10px;
+        width: 150px;
+        height: auto;
+    }
+
+    #historia, #equipo {
+        padding: 20px;
+    }
+
+    #equipo .team-members {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #equipo .team-member {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    #equipo .team-member h3 {
+        margin: 10px 0;
+    }
+</style>
+{% endblock %}

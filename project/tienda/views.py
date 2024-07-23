@@ -23,6 +23,116 @@ from django.db.models import Sum
 def index(request):
     return render(request, 'index.html')
 
+def login(request):
+    return render(request, './login.html') ################################################
+
+def empresa(request):
+    return render(request, './empresa.html')
+
+#  FORMULARIO DE CONTACTO ################################################
+
+def contact_form(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Procesa el formulario, como enviar un correo electrónico
+            send_mail(
+                'Nuevo mensaje de contacto',
+                form.cleaned_data['message'],
+                form.cleaned_data['email'],
+                ['tu_email@example.com'],  # Cambia esto por tu dirección de correo
+            )
+            return redirect('contact_success')  # Redirige a una página de éxito
+    else:
+        form = ContactForm()
+    
+    return render(request, 'consultas/contact_form.html', {'form': form})
+
+def contact_success(request):
+    return render(request, 'consultas/contact_success.html')
+
+#  CONSULTAS ################################################
+
+# Gestión Consulta
+def gestion_consulta(request):
+    return render(request, 'consultas/gestion_consulta.html')
+
+# Consulta CRUD
+def consulta_list(request):
+    consultas = Consulta.objects.all()
+    return render(request, 'consultas/consulta_list.html', {'consultas': consultas})
+
+def consulta_add(request):
+    if request.method == 'POST':
+        form = ConsultaForm(request.POST)
+        if form.is_valid():
+            consulta = form.save(commit=False)
+            # Establecer la fecha automáticamente
+            consulta.conres = ""
+            consulta.confec = datetime.date.today()
+            form.save()
+            return redirect('consulta_list')
+    else:
+        form = ConsultaForm()
+
+    return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'consulta_list', 'title': 'Agregar Consulta'})
+
+def consulta_edit(request, pk):
+    consulta = get_object_or_404(Consulta, pk=pk)
+    if request.method == 'POST':
+        form = ConsultaForm(request.POST, instance=consulta)
+        if form.is_valid():
+            form.save()
+            return redirect('consulta_list')
+    else:
+        form = ConsultaForm(instance=consulta)
+    return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'consulta_list', 'title': 'Modificar Consulta'})
+
+def consulta_delete(request, pk):
+    consulta = get_object_or_404(Consulta, pk=pk)
+    if request.method == 'POST':
+        try:
+            consulta.delete()
+            return redirect('consulta_list')
+        except IntegrityError:
+            return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
+    return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
+
+# Tipo Consulta CRUD
+def tipo_consulta_list(request):
+    consultas = TipoConsulta.objects.all()
+    return render(request, 'consultas/tipo_consulta_list.html', {'consultas': consultas})
+
+def tipo_consulta_add(request):
+    if request.method == 'POST':
+        form = TipoConsultaForm(request.POST)
+        if form.is_valid():
+            consulta = form.save()
+            return redirect('tipo_consulta_list')  # Redirigir a la lista de tipos de consulta
+    else:
+        form = TipoConsultaForm()
+    return render(request, 'consultas/tipo_consulta_form.html', {'form': form, 'return_url': 'tipo_consulta_list', 'title': 'Agregar Tipo de Consulta'})
+
+def tipo_consulta_edit(request, pk):
+    consulta = get_object_or_404(TipoConsulta, pk=pk)
+    if request.method == 'POST':
+        form = TipoConsultaForm(request.POST, instance=consulta)
+        if form.is_valid():
+            form.save()
+            return redirect('tipo_consulta_list')
+    else:
+        form = TipoConsultaForm(instance=consulta)
+    return render(request, 'consultas/tipo_consulta_form.html', {'form': form, 'return_url': 'tipo_consulta_list', 'title': 'Modificar Tipo de Consulta'})
+
+def tipo_consulta_delete(request, pk):
+    consulta = get_object_or_404(TipoConsulta, pk=pk)
+    if request.method == 'POST':
+        consulta.delete()
+        return redirect('tipo_consulta_list')
+    return render(request, 'consultas/tipo_consulta_confirm_delete.html', {'consulta': consulta})
+
+# ESTADO DE REGISTRO ################################################
+
 # Estado Registro CRUD
 def estado_registro_list(request):
     estados = EstadoRegistro.objects.all()

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+
+<form method="post" action="{% if form.instance.pk %}{% url 'consulta_edit' form.instance.concod %}{% else %}{% url 'consulta_add' %}{% endif %}">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.conpre.label_tag }}
+        {{ form.conpre }}
+        {{ form.conpre.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.tipconcod.label_tag }}
+        {{ form.tipconcod }}
+        {{ form.tipconcod.errors }}
+    </div>
+
+    <div class="form-group">
+        {{ form.clidni.label_tag }}
+        {{ form.clidni }}
+        {{ form.clidni.errors }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button> 
+    <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% if form.errors %}
+<div class="alert alert-danger mt-4">
+    <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% endblock %}

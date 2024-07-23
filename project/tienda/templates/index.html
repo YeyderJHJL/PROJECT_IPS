@@ -1,19 +1,45 @@
-{% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Empresa{% endblock %}
 
 {% block content %}
-<div class="container">
-    <main>
-        <h1>Información de la Empresa</h1>
-        <section id="company-info">
-            <!-- Aquí se mostrará la información de la empresa -->
-        Es una empresa especialiazada en actividades de servicio de sistemas de seguridad.
-        Su principal enfoque está en la supervisión a distancia de sistemas electrónicos de 
-        seguridad, mantenimiento de alarmas contra robos robos e incendios, así como la
-        instalación, reparación y ajuste de dispositivos de cierre mecánicos y electrónicos,
-        cajas caudales y cajas fuertes.
-        </section>
-    </main>
-</div>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <section id="inicio">
+        <img src="{% static 'img/bannerprincipal.jpg' %}" alt="Logo de la empresa">
+    <title>Información de la Empresa</title>
+</head>
+<body>
+    <div class="container">
+        <main>
+            <section id="company-info">
+                <!-- Aquí se mostrará la información de la empresa -->
+                <h2>Nombre de la Empresa: SYSEGUR AQP</h2>
+                <p>Empresa dedicada a la supervisión de sistemas electrónicos de seguridad, el mantenimiento de alarmas contra robos e incendios, y la instalación, reparación y ajuste de dispositivos de cierre mecánicos, cajas de caudales y cajas fuertes. Además, ofrece una amplia gama de productos de seguridad, incluyendo cámaras de seguridad, alarmas contra robo, y otros dispositivos, para satisfacer todas las necesidades de sus clientes en materia de seguridad </p>
+                <p>Ubicación: Arequipa, Perú</p>
+                <p>Contacto: contacto@sysegurap.com</p>
+                <p>Teléfono: +51 961 385 515</p>
+                
+                <!-- Misión de la empresa -->
+                <h3>Misión</h3>
+                <p>Nuestra misión es proporcionar servicios de seguridad y sistemas de alta calidad para garantizar la protección y el bienestar de nuestros clientes.</p>
+                
+                <!-- Visión de la empresa -->
+                <h3>Visión</h3>
+                <p>Nuestra visión es ser líderes en el sector de la seguridad y sistemas en la región, reconocidos por nuestra innovación y compromiso con la excelencia.</p>
+                
+                <!-- Información de bienvenida según el estado de autenticación -->
+                <?php if ($is_logged_in): ?>
+                    <p>Bienvenido, usuario con cuenta.</p>
+                <?php endif; ?>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
 {% endblock %}

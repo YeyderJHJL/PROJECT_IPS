@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Formulario de Consulta{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>{{ title }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.conpre.label_tag }}
+            {{ form.conpre }}
+        </div>
+        <div class="form-group">
+            {{ form.conres.label_tag }}
+            {{ form.conres }}
+        </div>
+        <div class="form-group">
+            {{ form.confec.label_tag }}
+            {{ form.confec }}
+        </div>
+        <div class="form-group">
+            {{ form.perdni.label_tag }}
+            {{ form.perdni }}
+        </div>
+        <div class="form-group">
+            {{ form.tipconcod.label_tag }}
+            {{ form.tipconcod }}
+        </div>
+        <div class="form-group">
+            {{ form.clidni.label_tag }}
+            {{ form.clidni }}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Guardar Consulta</button>
+            <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% if form.errors %}
+<div class="alert alert-danger mt-4">
+    <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
