@@ -51,8 +51,8 @@
                     <div class="bg-light rounded p-4 mb-4 shadow-sm">
                         <h5 class="mb-3 fs-5">Formulario de Reserva</h5>
                         <form method="post">
-                            {% csrf_token %}
                             <div class="mb-3">
+                                {% csrf_token %}
                                 {{ form.as_p }}
                             </div>
                             <div class="text-center">

@@ -505,8 +505,7 @@ def solicitar_cambio_password(request):
             reset_url = request.build_absolute_uri(
                 reverse('cambiar_password', kwargs={'token': token})
             )
-            # Asumiendo que tienes un campo para el correo electrónico del cliente
-            email = cliente.clicor  # Ajusta esto si el campo de correo es diferente
+            email = cliente.clicor 
             send_mail(
                 'Solicitud de cambio de contraseña',
                 f'Usa este enlace para cambiar tu contraseña: {reset_url}',
@@ -866,6 +865,7 @@ def venta_delete(request, pk):
         messages.success(request, 'Venta eliminada exitosamente')
         return redirect('venta_list')
     return render(request, 'ventas/venta_confirm_delete.html', {'venta': venta})
+
 # SERVICIO ################################################
 
 def servicios(request, codigo=None):
@@ -944,6 +944,64 @@ def eliminar_servicio(request, sercod):
 
     return redirect('gestionar_servicios')
 
+def gestionar_CategoriaServicios(request, codigo=None):
+    instancia_clase = None
+    categorias = CategoariaServicio.objects.all()
+
+    if request.method == 'POST':
+        formulario = CategoriaServicioForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('gestionar_CategoriaServicios')
+    else:
+        formulario = CategoriaServicioForm(instance=instancia_clase)
+
+    return render(request, 'servicios/gestionarCategoriaServicio.html', {'formulario': formulario, 'categorias': categorias})
+
+def agregar_CategoriaServicio(request):
+    if request.method == 'POST':
+        form = CategoriaServicioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionar_CategoriaServicios')  
+    else:
+        form = CategoriaServicioForm()
+    
+    return render(request, 'servicios/agregarCategoriaServicios.html', {'form': form})
+
+def modificar_CategoriaServicio(request, catsercod):
+    servicio = get_object_or_404(CategoariaServicio, catsercod=catsercod)
+    if request.method == 'POST':
+        form = CategoriaServicioForm(request.POST, instance=servicio)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionar_CategoriaServicios')  # Redirigir a la vista de listado de servicios
+    else:
+        form = CategoriaServicioForm(instance=servicio)
+    
+    return render(request, 'servicios/modificarCategoriaServicios.html', {'form': form, 'servicio': servicio})
+
+
+def eliminar_CategoriaServicio(request, catsercod):
+    categoria = get_object_or_404(CategoariaServicio, catsercod=catsercod)
+
+    if request.method == 'POST':
+        # Verificar si hay servicios asociados a la categoría
+        if Servicio.objects.filter(categoaria_servicio_catsercod=categoria).exists():
+            # Mostrar mensaje de error si hay servicios asociados
+            messages.error(request, 'No se puede eliminar la categoría porque tiene servicios asociados.')
+            return redirect('gestionar_CategoriaServicios')
+        
+        # Si no hay servicios asociados, eliminar la categoría
+        categoria.delete()
+        messages.success(request, 'Categoría de Servicio eliminada correctamente.')
+        return redirect('gestionar_CategoriaServicios')
+
+    # Redirigir si no es una solicitud POST
+    return redirect('gestionar_CategoriaServicios')
+
+
+
 @login_required
 def crear_evento(request):
     servicio_id = request.GET.get('servicio_id')
@@ -962,37 +1020,60 @@ def crear_evento(request):
                     evento.sercod = servicio  # Asignar la instancia del objeto Servicio
                 except Servicio.DoesNotExist:
                     form.add_error(None, 'El servicio seleccionado no existe.')
-                    return render(request, 'reservaServicio.html', {
+                    return render(request, 'servicios/reservaServicio.html', {
                         'form': form,
                         'servicio': None,
                         'cliente': cliente,
                     })
             else:
                 form.add_error(None, 'No se ha proporcionado un servicio válido.')
-                return render(request, 'reservaServicio.html', {
+                return render(request, 'servicios/reservaServicio.html', {
                     'form': form,
                     'servicio': None,
                     'cliente': cliente,
                 })
 
-            evento.save()
-            return redirect('index')
-    else:
-        if servicio_id:
-            try:
-                servicio = Servicio.objects.get(pk=servicio_id)
-            except Servicio.DoesNotExist:
-                servicio = None
-        else:
-            servicio = None
+            # Verificar disponibilidad del personal para la fecha seleccionada
+            fecha_evento = evento.evefec
 
+            # Encontrar personal que no tenga eventos en la fecha seleccionada
+            personal_disponible = Personal.objects.exclude(
+                pk__in=Evento.objects.filter(
+                    evefec=fecha_evento
+                ).values_list('perdni_id', flat=True)
+            ).first()
+
+            if personal_disponible:
+                evento.perdni = personal_disponible
+                evento.save()
+                messages.success(request, 'Evento creado y personal asignado con éxito.')
+                return redirect('calendar')
+            else:
+                # Mostrar mensaje de error si no hay personal disponible
+                messages.warning(request, 'No hay personal disponible para la fecha seleccionada. Por favor, elija otra fecha.')
+                form.add_error('evefec', 'No hay personal disponible para la fecha seleccionada.')
+                return render(request, 'servicios/reservaServicio.html', {
+                    'form': form,
+                    'servicio': Servicio.objects.filter(pk=servicio_id).first(),
+                    'cliente': cliente,
+                })
+    else:
         form = EventoForm()
+
+    if servicio_id:
+        try:
+            servicio = Servicio.objects.get(pk=servicio_id)
+        except Servicio.DoesNotExist:
+            servicio = None
+    else:
+        servicio = None
 
     return render(request, 'servicios/reservaServicio.html', {
         'form': form,
         'servicio': servicio,
         'cliente': cliente,
     })
+
 
 def detalle_reservaS(request, evecod):
     reserva = get_object_or_404(Evento, evecod=evecod)  

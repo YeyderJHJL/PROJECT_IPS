@@ -1,17 +1,79 @@
-{% extends "base.html" %}
+{% extends "baseAdministrador.html" %}
 
 {% block content %}
-<h2 class="mb-4">Gestión de Cliente</h2>
+<h1 class="text mb-4 display-1 fw-bold text-dark" style="font-family: 'Roboto', sans-serif;">
+    <span class="text-muted" style="font-style: italic;"> Gestión Clientes</span>
+</h1>
 
-<nav class="navigation mb-4">
-    <a class="btn btn-secondary {% if request.path == '/project/tienda/cliente/list/' %}active{% endif %}" href="{% url 'cliente_list' %}">Lista de Clientes</a>
-</nav>
-
-<div class="centered-box">
-    {% block gestion_cliente_content %}
-    <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
-        <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
-    </div>
-    {% endblock %}
+<div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">
+    <a href="{% url 'cliente_add' %}" class="btn btn-secondary me-2">+ Agregar Cliente</a>
 </div>
+<hr>
+<div class="scrollable-table-container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Fecha de Registro</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in cliente %}
+            <tr>
+                <td>{{ cliente.clidni }}</td>
+                <td>{{ cliente.clinom }}</td>
+                <td>{{ cliente.cliape }}</td>
+                <td>{{ cliente.clitel }}</td>
+                <td>{{ cliente.clidir }}</td>
+                <td>{{ cliente.cliusu }}</td>
+                <td>{{ cliente.clicor }}</td>
+                <td>{{ cliente.clifecreg }}</td>
+                <td>{{ cliente.estregcod.estregnom }}</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn1 btn-primary btn-sm" href="{% url 'cliente_edit' cliente.clidni %}">Modificar</a>
+                        <a class="btn1 btn-danger btn-sm" href="{% url 'cliente_delete' cliente.clidni %}">Eliminar</a>
+                        <a class="btn1 btn-secondary btn-sm" href="{% url 'toggle_cliente_status' cliente.clidni %}">
+                            {% if cliente.estregcod.estregnom == 'Activo' %}
+                                Inactivar
+                            {% else %}
+                                Activar
+                            {% endif %}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<style>
+
+    .btn-group .btn {
+        border-radius: 25px;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-group .btn:hover {
+        background-color: #535749;
+    }
+
+    .btn-group .btn:focus {
+        outline: none;
+    }
+</style>
+
 {% endblock %}
