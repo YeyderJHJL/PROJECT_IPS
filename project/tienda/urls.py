@@ -13,8 +13,8 @@ urlpatterns = [
     # path('contact/', views.contact_form, name='contact_form'),
     # path('contact/success/', views.contact_success, name='contact_success'),
 
-    path('consulta/add/', views.consulta_add, name='consulta_add'),
-    path('consulta/add/new', views.consulta_add_new, name='consulta_add_new'),
+    path('consulta/cliente/add', views.consulta_cliente_add, name='consulta_cliente_add'),
+    path('consulta/cliente/list', views.consulta_cliente_list, name='consulta_cliente_list'),
 
     path('consulta/', views.gestion_consulta, name='gestion_consulta'),
 

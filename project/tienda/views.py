@@ -59,43 +59,6 @@ def consulta_list(request):
     consultas = Consulta.objects.all()
     return render(request, 'consultas/consulta_list.html', {'consultas': consultas})
 
-def consulta_add(request):
-    if request.method == 'POST':
-        form = ConsultaForm(request.POST)
-        if form.is_valid():
-            consulta = form.save(commit=False)
-            # Establecer la fecha automáticamente
-            consulta.conres = ""
-            consulta.confec = datetime.date.today()
-            form.save()
-            return redirect('index')
-    else:
-        form = ConsultaForm()
-
-    return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'consulta_list', 'title': 'Agregar Consulta'})
-
-def consulta_add_new(request):
-    cliente_id = request.session.get('cliente_id')
-    if not cliente_id:
-        messages.error(request, 'No está autorizado para realizar esta acción.')
-        return redirect('login') 
-    
-    cliente = request.cliente
-    if request.method == 'POST':
-        form = ConsultaForm(request.POST, instance=cliente)
-        if form.is_valid():
-            consulta = form.save(commit=False)
-            # Establecer la fecha automáticamente
-            consulta.conres = ""
-            consulta.confec = datetime.date.today()
-            cliente_id = Cliente.objects.filter(cliente=request.cliente)
-            form.save()
-            return redirect('index')
-    else:
-        form = ConsultaForm(instance=cliente)
-
-    return render(request, 'consultas/consulta_nueva_form.html', {'form': form, 'cliente': cliente, 'return_url': 'consulta_list', 'title': 'Agregar Nueva Consulta'})
-
 def consulta_edit(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     if request.method == 'POST':
@@ -116,6 +79,50 @@ def consulta_delete(request, pk):
         except IntegrityError:
             return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
     return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
+
+def consulta_cliente_list(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login')  # Redirige si no hay cliente logueado
+    
+    try:
+        cliente = Cliente.objects.get(pk=cliente_id)
+    except Cliente.DoesNotExist:
+        messages.error(request, 'Cliente no encontrado.')
+        return redirect('login')  # Redirige si no se encuentra el cliente
+
+    # Filtra las consultas por el cliente logueado
+    consultas = Consulta.objects.filter(clidni=cliente.clidni)
+
+    return render(request, 'consultas/consulta_cliente_list.html', {
+        'consultas': consultas,
+        'cliente': cliente,
+        'return_url': 'consulta_list',  # Opcional, para navegación
+    })
+
+def consulta_cliente_add(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login')
+    
+    cliente = Cliente.objects.get(pk=cliente_id)
+    if request.method == 'POST':
+        form = ConsultaForm(request.POST)
+        if form.is_valid():
+            consulta = form.save(commit=False)
+            # Asigna el clidni del cliente logueado
+            consulta.clidni = cliente
+            # Establece la fecha automáticamente
+            consulta.conres = ""
+            consulta.confec = datetime.date.today()
+            consulta.save()
+            return redirect('consulta_cliente_list')
+    else:
+        form = ConsultaForm()
+
+    return render(request, 'consultas/consulta_nueva_form.html', {'form': form, 'cliente': cliente, 'return_url': 'consulta_list', 'title': 'Agregar Nueva Consulta'})
 
 # Tipo Consulta CRUD
 def tipo_consulta_list(request):

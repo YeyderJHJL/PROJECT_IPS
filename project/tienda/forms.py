@@ -29,18 +29,16 @@ class TipoConsultaForm(forms.ModelForm):
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = ['conpre', 'tipconcod', 'clidni', 'perdni']
+        fields = ['conpre', 'tipconcod', 'perdni']
         widgets = {
             'conpre': forms.Textarea(attrs={'class': 'form-control'}),
             'tipconcod': forms.Select(attrs={'class': 'form-control'}),
             'perdni': forms.Select(attrs={'class': 'form-control', 'required': False}),
-            'clidni': forms.Select(attrs={'class': 'form-control'}),
         }
         labels = {
             'conpre': 'Pregunta',
             'tipconcod': 'Tipo de Consulta',
             'perdni': 'Personal Encargado',
-            'clidni': 'Cliente',
         }
         error_messages = {
             'conpre': {
@@ -49,21 +47,15 @@ class ConsultaForm(forms.ModelForm):
             'tipconcod': {
                 'required': "El tipo de consulta es obligatorio."
             },
-            'clidni': {
-                'required': "El cliente es obligatorio."
-            },
         }
 
     def __init__(self, *args, **kwargs):
         super(ConsultaForm, self).__init__(*args, **kwargs)
         if not self.instance.pk:  # Solo para nuevos registros
-            # Establecer el cliente predeterminado como el último cliente creado
             try:
-                cliente = Cliente.objects.get(user=self.cliente_id)
-                self.fields['clidni'].initial = cliente.pk
                 ultimo_personal = Personal.objects.latest('perfecreg')
                 self.fields['perdni'].initial = ultimo_personal.pk
-            except Cliente.DoesNotExist:
+            except Personal.DoesNotExist:
                 pass
 
 # #  FORMULARIO DE CONTACTO ################################################
