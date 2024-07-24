@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .decorators import cliente_login_required
 from django.db.models import Sum
 from calendar import monthrange
-from datetime import datetime
+import datetime
 # Create your views here.
 
 
