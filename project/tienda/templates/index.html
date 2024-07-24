@@ -1,45 +1,142 @@
-
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Empresa{% endblock %}
-
 {% block content %}
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <section id="inicio">
-        <img src="{% static 'img/bannerprincipal.jpg' %}" alt="Logo de la empresa">
-    <title>Información de la Empresa</title>
-</head>
-<body>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 1200px; 
+            height: 400px; 
+            overflow: hidden;
+            border: none; 
+            box-shadow: none;
+            border-radius: 8px;
+        }
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+        .carousel-item {
+            min-width: 100%;
+            box-sizing: border-box;
+            height: 100%;
+            position: relative;
+        }
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+        }
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent; 
+            color: #ffffff; 
+            font-size: 20px; 
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+        }
+        .carousel-control.left {
+            left: 10px;
+        }
+        .carousel-control.right {
+            right: 10px;
+        }
+        .carousel-indicators {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+        }
+        .carousel-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 2px;
+            background-color: #bbb;
+            cursor: pointer;
+        }
+        .carousel-indicator.active {
+            background-color: #717171;
+        }
+        #company-info {
+            background: #ffffff;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        #company-info:hover {
+            transform: scale(1.02);
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .grid-item {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .grid-item:hover {
+            transform: scale(1.05);
+        }
+        .grid-item h3 {
+            margin-top: 0;
+            color: #35424a;
+        }
+        .grid-item p {
+            line-height: 1.8;
+            color: #333;
+        }
+    </style>
+    <header>
+        <div class="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active"> <img src="{% static 'img/img1.png' %}" alt="Logo de la empresa"> </div>
+                <div class="carousel-item"> <img src="{% static 'img/img2.png' %}" alt="Seguridad 1"> </div>
+                <div class="carousel-item"> <img src="{% static 'img/img3.jfif' %}" alt="Seguridad 2"> </div>
+            </div>
+            <button class="carousel-control left">&lt;</button>
+            <button class="carousel-control right">&gt;</button>
+            <div class="carousel-indicators">
+                <span class="carousel-indicator active"></span> <span class="carousel-indicator"></span> <span class="carousel-indicator"></span>
+            </div>
+        </div>
+        <script src="{% static 'js/carousel.js' %}"></script>
+    </header>
     <div class="container">
         <main>
             <section id="company-info">
-                <!-- Aquí se mostrará la información de la empresa -->
-                <h2>Nombre de la Empresa: SYSEGUR AQP</h2>
-                <p>Empresa dedicada a la supervisión de sistemas electrónicos de seguridad, el mantenimiento de alarmas contra robos e incendios, y la instalación, reparación y ajuste de dispositivos de cierre mecánicos, cajas de caudales y cajas fuertes. Además, ofrece una amplia gama de productos de seguridad, incluyendo cámaras de seguridad, alarmas contra robo, y otros dispositivos, para satisfacer todas las necesidades de sus clientes en materia de seguridad </p>
-                <p>Ubicación: Arequipa, Perú</p>
-                <p>Contacto: contacto@sysegurap.com</p>
-                <p>Teléfono: +51 961 385 515</p>
-                
-                <!-- Misión de la empresa -->
-                <h3>Misión</h3>
-                <p>Nuestra misión es proporcionar servicios de seguridad y sistemas de alta calidad para garantizar la protección y el bienestar de nuestros clientes.</p>
-                
-                <!-- Visión de la empresa -->
-                <h3>Visión</h3>
-                <p>Nuestra visión es ser líderes en el sector de la seguridad y sistemas en la región, reconocidos por nuestra innovación y compromiso con la excelencia.</p>
-                
-                <!-- Información de bienvenida según el estado de autenticación -->
-                <?php if ($is_logged_in): ?>
-                    <p>Bienvenido, usuario con cuenta.</p>
-                <?php endif; ?>
+                <h2 class="mt-4 mb-4 text-center" >Bienvenido a SISTEMAS Y SEGURIDAD A.Q.P.</h2>
+                <p>Empresa dedicada a la supervisión de sistemas electrónicos de seguridad, el mantenimiento de alarmas contra robos e incendios, y la instalación, reparación y ajuste de dispositivos de cierre mecánicos, cajas de caudales y cajas fuertes. Además, ofrece una amplia gama de productos de seguridad, incluyendo cámaras de seguridad, alarmas contra robo, y otros dispositivos, para satisfacer todas las necesidades de sus clientes en materia de seguridad.</p>
+                <p>RUC: 20609231531</p>
             </section>
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h3 class="mt-4 mb-4 text-center">Misión</h3>
+                    <p>Nuestra misión es ofrecer soluciones integrales de seguridad a través de productos de alta calidad, junto con servicios especializados relacionados a la seguridad de su hogar. Nos comprometemos a garantizar la máxima protección y tranquilidad para nuestros clientes, brindando un servicio profesional y confiable en cada etapa de la implementación de nuestros sistemas de seguridad.</p>
+                </div>
+                <div class="grid-item">
+                    <h3 class="mt-4 mb-4 text-center">Visión</h3>
+                    <p>Nuestra visión es ser la empresa líder en el sector de seguridad en la región, reconocida por nuestra innovación en productos y excelencia en servicios. Buscamos expandir nuestra presencia en el mercado, ofreciendo soluciones avanzadas y personalizadas que respondan a las necesidades cambiantes de nuestros clientes y contribuyan a su seguridad y bienestar.</p>
+                </div>
+            </div>
         </main>
     </div>
-</body>
-</html>
 {% endblock %}
