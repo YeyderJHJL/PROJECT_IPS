@@ -15,7 +15,8 @@
                         <form method="post">
                             {% csrf_token %}
                             {{ form.as_p }}
-                            <button type="submit">Login</button>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                            <a class="btn btn-primary" href="{% url 'cliente_register' %}">Crear Cuenta</a>
                         </form>
                     </div>
                 </div>
@@ -30,7 +31,6 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <a class="" href="{% url 'cliente_register' %}">registrar cuenta</a>
 </div>
 {% endblock %}
 
