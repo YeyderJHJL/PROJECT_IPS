@@ -117,7 +117,8 @@ def consulta_cliente_add(request):
         form = ConsultaClienteForm(request.POST, cliente_id=cliente_id)
         if form.is_valid():
             consulta = form.save(commit=False)
-            consulta.clidni = cliente
+            consulta.clidni = cliente  # Asigna el cliente internamente
+            consulta.perdni = form.ultimo_personal  # Asigna el último personal internamente
             consulta.conres = ""
             consulta.confec = datetime.date.today()
             consulta.save()
