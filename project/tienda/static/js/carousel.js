@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
             showSlide(index);
         });
     });
-
     showSlide(currentIndex);
     setInterval(nextSlide, 2000); 
 });
