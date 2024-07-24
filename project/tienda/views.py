@@ -263,14 +263,18 @@ def cliente_edit(request, pk):
     return render(request, 'cliente/cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Modificar Cliente'})
 
 def cliente_delete(request, pk):
-    cliente = get_object_or_404(Cliente, clidni=pk)
+    cliente = get_object_or_404(Cliente, pk=pk)
+    
     if request.method == 'POST':
-        try:
+        form = ClienteDeleteForm(request.POST)
+        if form.is_valid():
             cliente.delete()
+            messages.success(request, 'Cuenta eliminada exitosamente.')
             return redirect('cliente_list')
-        except IntegrityError:
-            return render(request, 'cliente/cliente_confirm_delete.html', {'cliente': cliente, 'error': "No se puede eliminar el cliente porque tiene dependencias asociadas."})
-    return render(request, 'cliente/cliente_confirm_delete.html', {'cliente': cliente})
+    else:
+        form = ClienteDeleteForm()
+
+    return render(request, 'cliente/cliente_confirm_delete.html', {'form': form})
 
 def toggle_cliente_status(request, pk):
     cliente = get_object_or_404(Cliente, clidni=pk)
