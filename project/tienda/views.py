@@ -750,9 +750,10 @@ def reserva_producto(request, procod):
     }
     return render(request, 'productos/reservaProducto.html', context)
 
-@cliente_login_required
+@login_required
 def lista_reservas(request):
-    reservas = EventoProducto.objects.all()
+    cliente = get_authenticated_cliente(request)
+    reservas = EventoProducto.objects.filter(cliente=cliente).select_related('procod')
     return render(request, 'productos/lista_reservas.html', {'reservas': reservas})
 
 @cliente_login_required
