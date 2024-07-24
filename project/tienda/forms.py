@@ -27,16 +27,24 @@ class TipoConsultaForm(forms.ModelForm):
             self.fields['tipconcod'].required = False
 
 class ConsultaForm(forms.ModelForm):
+    tipconcod = forms.ModelChoiceField(
+        queryset=TipoConsulta.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Tipo de Consulta'
+    )
+
     class Meta:
         model = Consulta
-        fields = ['conpre', 'tipconcod', 'perdni']
+        fields = ['conpre', 'conres', 'tipconcod', 'perdni']
         widgets = {
-            'conpre': forms.Textarea(attrs={'class': 'form-control'}),
-            'tipconcod': forms.Select(attrs={'class': 'form-control'}),
-            'perdni': forms.Select(attrs={'class': 'form-control', 'required': False}),
+            'conpre': forms.Textarea(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'conres': forms.Textarea(attrs={'class': 'form-control'}),
+            'tipconcod': forms.Textarea(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'perdni': forms.Select(attrs={'class': 'form-control'}),
         }
         labels = {
             'conpre': 'Pregunta',
+            'conres': 'Respuesta',
             'tipconcod': 'Tipo de Consulta',
             'perdni': 'Personal Encargado',
         }
@@ -57,6 +65,11 @@ class ConsultaForm(forms.ModelForm):
                 self.fields['perdni'].initial = ultimo_personal.pk
             except Personal.DoesNotExist:
                 pass
+
+        if self.instance.pk:  # Solo para ediciones
+            self.fields['tipconcod'].widget.attrs['readonly'] = 'readonly'
+            self.fields['conpre'].widget.attrs['readonly'] = 'readonly'
+        #################### Aqui falta añadir que sea el personal logueado automaticamente    
 
 # #  FORMULARIO DE CONTACTO ################################################
 

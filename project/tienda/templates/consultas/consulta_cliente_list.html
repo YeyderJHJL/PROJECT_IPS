@@ -6,32 +6,19 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Código</th>
+                <th>Tipo de Consulta</th>
+                <th>Fecha de la Consulta</th>
                 <th>Pregunta</th>
                 <th>Respuesta</th>
-                <th>Fecha de la Consulta</th>
-                <th>Cliente</th>
-                <th>Personal Encargado</th>
-                <th>Tipo de Consulta</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for consulta in consultas %}
             <tr>
-                <td>{{ consulta.concod }}</td>
+                <td>{{ consulta.tipconcod.tipconnom }}</td> 
+                <td>{{ consulta.confec }}</td>
                 <td>{{ consulta.conpre }}</td>
                 <td>{{ consulta.conres }}</td>
-                <td>{{ consulta.confec }}</td>
-                <td>{{ consulta.clidni.clinom }} {{ consulta.clidni.cliap }}</td> <!-- Verifica que 'clinom' y 'cliap' existan en Cliente -->
-                <td>{{ consulta.perdni.pernom }} {{ consulta.perdni.perape }}</td> <!-- Verifica que 'pernom' y 'perape' existan en Personal -->
-                <td>{{ consulta.tipconcod.tipconnom }}</td> <!-- Verifica que 'tipconnom' exista en TipoConsulta -->
-                <td>
-                    <div class="btn-group" role="group">
-                        <a class="btn btn-primary btn-sm" href="{% url 'consulta_edit' consulta.concod %}">Modificar</a>
-                        <a class="btn btn-danger btn-sm" href="{% url 'consulta_delete' consulta.concod %}">Eliminar</a>
-                    </div>
-                </td>
             </tr>
             {% empty %}
             <tr>

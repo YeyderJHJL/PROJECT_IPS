@@ -12,15 +12,21 @@
     </div>
 
     <div class="form-group">
+        {{ form.conres.label_tag }}
+        {{ form.conres }}
+        {{ form.conres.errors }}
+    </div>
+
+    <div class="form-group">
         {{ form.tipconcod.label_tag }}
         {{ form.tipconcod }}
         {{ form.tipconcod.errors }}
     </div>
 
     <div class="form-group">
-        {{ form.clidni.label_tag }}
-        {{ form.clidni }}
-        {{ form.clidni.errors }}
+        {{ form.perdni.label_tag }}
+        {{ form.perdni }}
+        {{ form.perdni.errors }}
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button> 
