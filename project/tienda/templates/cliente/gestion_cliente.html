@@ -5,12 +5,12 @@
     <span class="text-muted" style="font-style: italic;"> Gestión Clientes</span>
 </h1>
 
-<div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">
+<div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías" style="font-family: 'Roboto', sans-serif;">
     <a href="{% url 'cliente_add' %}" class="btn btn-secondary me-2">+ Agregar Cliente</a>
 </div>
 <hr>
-<div class="scrollable-table-container">
-    <table class="table table-striped">
+ 
+<table class="table table-striped" style="font-family: 'Roboto', sans-serif;">
         <thead>
             <tr>
                 <th>DNI</th>
@@ -53,9 +53,7 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table>
-</div>
-
+</table>
 
 <style>
 

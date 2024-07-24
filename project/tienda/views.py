@@ -285,9 +285,25 @@ def gestion_personal(request):
     return render(request, 'personal/gestion_personal.html')
 
 # Personal CRUD
-def personal_list(request):
+def personal_list(request, codigo=None):
+    instancia_clase = None
     personal = Personal.objects.all()
-    return render(request, 'personal/personal_list.html', {'personal': personal})
+    tipo=TipoPersonal.objects.all()
+
+    if codigo:
+        instancia_clase = get_object_or_404(TipoPersonal, tippercod=codigo)
+        personal=Personal.objects.filter(tippercod=codigo)
+
+    if request.method == 'POST':
+        formulario = TipoPersonalForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('personal_list')
+    else:
+        formulario = TipoPersonalForm(instance=instancia_clase)
+
+    return render(request, 'personal/personal_list.html', {'formulario': formulario, 'personal': personal, 'tipo':tipo})
+
 
 def personal_add(request):
     if request.method == 'POST':
@@ -916,7 +932,6 @@ def servicios(request, codigo=None):
 
     return render(request, 'servicios/servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
-#general
 def detalle_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
     personal = Personal.objects.filter(tippercod='2')

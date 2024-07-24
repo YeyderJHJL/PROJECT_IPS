@@ -1,7 +1,17 @@
-{% extends "personal/gestion_personal.html" %}
+{% extends "baseAdministrador.html" %}
 
-{% block gestion_personal_content %}
-<h2 class="mb-4">Tipos de Personal</h2>
+{% block title %}Tipo Personal{% endblock %}
+
+{% block content %}
+<div class="container" style="font-family: 'Roboto', sans-serif;">
+
+    <h1 class="text mb-4 display-1 fw-bold text-dark">
+        <span class="text-muted" style="font-style: italic;">Tipo Personal</span>
+    </h1>
+    <div class="btn-group d-flex justify-content-center mb-4" role="group" aria-label="Categorías">
+        <a href="{% url 'tipo_personal_add' %}" class="btn btn-secondary me-2">+ Agregar Tipo Personal</a>
+    </div>
+    <hr>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -16,22 +26,34 @@
             <td>{{ tipo.tippercod }}</td>
             <td>{{ tipo.tippernom }}</td>
             <td>
-                <div class="btn-group" role="group">
-                    <a class="btn btn-primary btn-sm" href="{% url 'tipo_personal_edit' tipo.tippercod %}">Modificar</a>
-                    <a class="btn btn-danger btn-sm" href="{% url 'tipo_personal_delete' tipo.tippercod %}">Eliminar</a>
+                <div class="d-flex justify-content-end">
+                    <a class="btn1 btn-primary btn-sm" href="{% url 'tipo_personal_edit' tipo.tippercod %}" class="btn btn-outline-primary btn-sm me-2"> <i class="bi bi-pencil-square"></i> Modificar</a>
+                    <a class="btn1 btn-danger btn-sm" href="{% url 'tipo_personal_delete' tipo.tippercod %}" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i> Eliminar</a>
                 </div>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-<div class="mb-3">
-    <a class="btn btn-success" href="{% url 'tipo_personal_add' %}">Adicionar</a>
 </div>
 
-<div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
-    <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
-</div>
+<style>
+    .btn-group .btn {
+        border-radius: 25px;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-group .btn:hover {
+        background-color: #495057;
+    }
+
+    .btn-group .btn:focus {
+        outline: none;
+    }
+    </style>
 
 {% endblock %}
