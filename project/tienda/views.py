@@ -27,27 +27,30 @@ def index(request):
 def empresa(request):
     return render(request, './empresa.html')
 
+def preguntas_frecuentes(request):
+    return render(request, './preguntas_frecuentes.html')
+
 #  FORMULARIO DE CONTACTO ################################################
 
-def contact_form(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            # Procesa el formulario, como enviar un correo electrónico
-            send_mail(
-                'Nuevo mensaje de contacto',
-                form.cleaned_data['message'],
-                form.cleaned_data['email'],
-                ['tu_email@example.com'],  # Cambia esto por tu dirección de correo
-            )
-            return redirect('contact_success')  # Redirige a una página de éxito
-    else:
-        form = ContactForm()
+# def contact_form(request):
+#     if request.method == 'POST':
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#             # Procesa el formulario, como enviar un correo electrónico
+#             send_mail(
+#                 'Nuevo mensaje de contacto',
+#                 form.cleaned_data['message'],
+#                 form.cleaned_data['email'],
+#                 ['tu_email@example.com'],  # Cambia esto por tu dirección de correo
+#             )
+#             return redirect('contact_success')  # Redirige a una página de éxito
+#     else:
+#         form = ContactForm()
     
-    return render(request, 'consultas/contact_form.html', {'form': form})
+#     return render(request, 'consultas/contact_form.html', {'form': form})
 
-def contact_success(request):
-    return render(request, 'consultas/contact_success.html')
+# def contact_success(request):
+#     return render(request, 'consultas/contact_success.html')
 
 #  CONSULTAS ################################################
 
@@ -59,21 +62,6 @@ def gestion_consulta(request):
 def consulta_list(request):
     consultas = Consulta.objects.all()
     return render(request, 'consultas/consulta_list.html', {'consultas': consultas})
-
-def consulta_add(request):
-    if request.method == 'POST':
-        form = ConsultaForm(request.POST)
-        if form.is_valid():
-            consulta = form.save(commit=False)
-            # Establecer la fecha automáticamente
-            consulta.conres = ""
-            consulta.confec = datetime.date.today()
-            form.save()
-            return redirect('consulta_list')
-    else:
-        form = ConsultaForm()
-
-    return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'consulta_list', 'title': 'Agregar Consulta'})
 
 def consulta_edit(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
@@ -92,6 +80,69 @@ def consulta_delete(request, pk):
         try:
             consulta.delete()
             return redirect('consulta_list')
+        except IntegrityError:
+            return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
+    return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
+
+def consulta_cliente_list(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login')  # Redirige si no hay cliente logueado
+    
+    try:
+        cliente = Cliente.objects.get(pk=cliente_id)
+    except Cliente.DoesNotExist:
+        messages.error(request, 'Cliente no encontrado.')
+        return redirect('login')  # Redirige si no se encuentra el cliente
+
+    # Filtra las consultas por el cliente logueado
+    consultas = Consulta.objects.filter(clidni=cliente.clidni)
+
+    return render(request, 'consultas/consulta_cliente_list.html', {
+        'consultas': consultas,
+        'cliente': cliente,
+        'return_url': 'consulta_list',  # Opcional, para navegación
+    })
+
+def consulta_cliente_add(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('login')
+    
+    try:
+        cliente = Cliente.objects.get(pk=cliente_id)
+    except Cliente.DoesNotExist:
+        messages.error(request, 'Cliente no encontrado.')
+        return redirect('login')
+    
+    if request.method == 'POST':
+        form = ConsultaClienteForm(request.POST, cliente_id=cliente_id)
+        if form.is_valid():
+            consulta = form.save(commit=False)
+            consulta.clidni = cliente  # Asigna el cliente internamente
+            consulta.perdni = form.ultimo_personal  # Asigna el último personal internamente
+            consulta.conres = ""
+            consulta.confec = datetime.date.today()
+            consulta.save()
+            return redirect('consulta_cliente_list')
+    else:
+        form = ConsultaClienteForm(cliente_id=cliente_id)
+
+    return render(request, 'consultas/consulta_nueva_form.html', {
+        'form': form,
+        'cliente': cliente,
+        'return_url': 'consulta_list',
+        'title': 'Agregar Nueva Consulta'
+    })
+
+def consulta_cliente_delete(request, pk):
+    consulta = get_object_or_404(Consulta, pk=pk)
+    if request.method == 'POST':
+        try:
+            consulta.delete()
+            return redirect('consulta_cliente_list')
         except IntegrityError:
             return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
     return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
@@ -420,7 +471,7 @@ def cliente_login(request):
                 if check_password(password, cliente.clicon):
                     request.session['cliente_id'] = cliente.clidni
                     messages.success(request, 'Inicio de sesión exitoso.')
-                    return redirect('productos')
+                    return redirect('index')  # Cambia 'home' por la URL de redirección deseada
                 else:
                     messages.error(request, 'Contraseña incorrecta')
             except Cliente.DoesNotExist:
@@ -468,7 +519,7 @@ def cliente_update(request):
             return redirect('cliente_detail')
     else:
         form = ClienteUpdateForm(instance=cliente)
-    return render(request, 'cliente/cliente_update.html', {'form': form})
+    return render(request, 'cliente/cliente_update.html', {'form': form, 'title': 'Actualizar Datos'})
 
 @cliente_login_required
 def cliente_delete(request):

@@ -6,35 +6,6 @@
     </button>
     
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'empresa' %}">Nosotros</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Categorias</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'productos' %}">Productos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'lista_productos' %}">Gestionar Productos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'lista_reservas' %}">Gestionar Reserva Productos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'calendar' %}">Pedidos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'contact_form' %}">Formulario de Contacto</a>
-            </li>
-        </ul>
         <ul class="navbar-nav ml-auto">
             {% if request.cliente %}
             <li class="nav-item">
@@ -49,18 +20,66 @@
                     <a class="dropdown-item" href="">Tus Pedidos</a>
                     <a class="dropdown-item" href="{% url 'lista_eventos' %}">Tus Servicios</a>
                     <a class="dropdown-item" href="{% url 'calendar' %}">Ver Calendario</a>
-                    <a class="dropdown-item" href="{% url 'cliente_update' %}">Ajustes</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'cliente_logout' %}" onclick="confirmLogout(event)">Logout</a>
                 </div>
             </li>
+            
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empresa' %}">Nosotros</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'productos' %}">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'calendar' %}">Pedidos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'preguntas_frecuentes' %}">Preguntas Frecuentes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'consulta_cliente_add' %}">Formulario de Consulta</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'consulta_cliente_list' %}">Consultas</a>
+                </li>
+            </ul>
             {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'cliente_login' %}">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'cliente_register' %}">Registrarse</a>
-            </li>
+            
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empresa' %}">Nosotros</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'preguntas_frecuentes' %}">Preguntas Frecuentes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'productos' %}">Productos</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="{% url 'calendar' %}">Pedidos</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cliente_login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cliente_register' %}">Registrarse</a>
+                </li>
+            </ul>
+
             {% endif %}
         </ul>
     </div>

@@ -26,21 +26,57 @@ class TipoConsultaForm(forms.ModelForm):
             )
             self.fields['tipconcod'].required = False
 
-class ConsultaForm(forms.ModelForm):
+class ConsultaClienteForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = ['conpre', 'tipconcod', 'clidni']
+        fields = ['conpre', 'tipconcod']  # Solo muestra estos campos
         widgets = {
             'conpre': forms.Textarea(attrs={'class': 'form-control'}),
             'tipconcod': forms.Select(attrs={'class': 'form-control'}),
-            # 'perdni': forms.Select(attrs={'class': 'form-control', 'required': False}),
-            'clidni': forms.Select(attrs={'class': 'form-control'}),
         }
         labels = {
             'conpre': 'Pregunta',
             'tipconcod': 'Tipo de Consulta',
-            # 'perdni': 'Personal Encargado',
-            'clidni': 'Cliente',
+        }
+        error_messages = {
+            'conpre': {'required': "La pregunta es obligatoria."},
+            'tipconcod': {'required': "El tipo de consulta es obligatorio."},
+        }
+
+    def __init__(self, *args, **kwargs):
+        cliente_id = kwargs.pop('cliente_id', None)
+        super().__init__(*args, **kwargs)
+        if not self.instance.pk and cliente_id:
+            try:
+                cliente = Cliente.objects.get(pk=cliente_id)
+                # Maneja internamente los valores de clidni y perdni
+                self.cliente = cliente
+                ultimo_personal = Personal.objects.latest('perfecreg')
+                self.ultimo_personal = ultimo_personal
+            except Cliente.DoesNotExist:
+                pass
+
+class ConsultaForm(forms.ModelForm):
+    tipconcod = forms.ModelChoiceField(
+        queryset=TipoConsulta.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Tipo de Consulta'
+    )
+
+    class Meta:
+        model = Consulta
+        fields = ['conpre', 'conres', 'tipconcod', 'perdni']
+        widgets = {
+            'conpre': forms.Textarea(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'conres': forms.Textarea(attrs={'class': 'form-control'}),
+            'tipconcod': forms.Textarea(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'perdni': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'conpre': 'Pregunta',
+            'conres': 'Respuesta',
+            'tipconcod': 'Tipo de Consulta',
+            'perdni': 'Personal Encargado',
         }
         error_messages = {
             'conpre': {
@@ -49,37 +85,38 @@ class ConsultaForm(forms.ModelForm):
             'tipconcod': {
                 'required': "El tipo de consulta es obligatorio."
             },
-            'clidni': {
-                'required': "El cliente es obligatorio."
-            },
         }
 
     def __init__(self, *args, **kwargs):
         super(ConsultaForm, self).__init__(*args, **kwargs)
         if not self.instance.pk:  # Solo para nuevos registros
-            # Establecer el cliente predeterminado como el último cliente creado
             try:
-                ultimo_cliente = Cliente.objects.latest('clifecreg')
-                self.fields['clidni'].initial = ultimo_cliente.pk
-            except Cliente.DoesNotExist:
+                ultimo_personal = Personal.objects.latest('perfecreg')
+                self.fields['perdni'].initial = ultimo_personal.pk
+            except Personal.DoesNotExist:
                 pass
 
-#  FORMULARIO DE CONTACTO ################################################
+        if self.instance.pk:  # Solo para ediciones
+            self.fields['tipconcod'].widget.attrs['readonly'] = 'readonly'
+            self.fields['conpre'].widget.attrs['readonly'] = 'readonly'
+        #################### Aqui falta añadir que sea el personal logueado automaticamente    
 
-class ContactForm(forms.Form):
-    name = forms.CharField(
-        label='Nombre',
-        max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-    email = forms.EmailField(
-        label='Correo Electrónico',
-        widget=forms.EmailInput(attrs={'class': 'form-control'})
-    )
-    message = forms.CharField(
-        label='Mensaje',
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
-    )
+# #  FORMULARIO DE CONTACTO ################################################
+
+# class ContactForm(forms.Form):
+#     name = forms.CharField(
+#         label='Nombre',
+#         max_length=100,
+#         widget=forms.TextInput(attrs={'class': 'form-control'})
+#     )
+#     email = forms.EmailField(
+#         label='Correo Electrónico',
+#         widget=forms.EmailInput(attrs={'class': 'form-control'})
+#     )
+#     message = forms.CharField(
+#         label='Mensaje',
+#         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
+#     )
 
 # ESTADO DE REGISTRO ################################################################
 
@@ -305,6 +342,21 @@ class ClienteUpdateForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = ['clinom', 'cliape', 'clitel', 'clidir', 'clicor']
+        labels = {
+            'clinom': 'Nombre',
+            'cliape': 'Apellido',
+            'clitel': 'Teléfono',
+            'clidir': 'Dirección',
+            'clicor': 'Correo',
+        }
+        error_messages = {
+            'clitel': {
+                'unique': "Este teléfono ya está registrado.",
+            },
+            'clicor': {
+                'unique': "Este correo ya está registrado.",
+            },
+        }
 
     def clean_clicor(self):
         clicor = self.cleaned_data.get('clicor')
@@ -349,16 +401,13 @@ class ClienteRegisterForm(forms.ModelForm):
 
     class Meta:
         model = Cliente
-        fields = ['clidni', 'clinom', 'cliape', 'clitel', 'clidir', 'cliusu', 'clicon', 'clicor', 'clifecreg', 'estregcod']
+        fields = ['clidni', 'clinom', 'cliape', 'cliusu', 'clicon', 'clifecreg', 'estregcod']
         labels = {
             'clidni': 'DNI',
             'clinom': 'Nombre',
             'cliape': 'Apellido',
-            'clitel': 'Teléfono',
-            'clidir': 'Dirección',
             'cliusu': 'Usuario',
             'clicon': 'Contraseña',
-            'clicor': 'Correo',
             'clifecreg': 'Fecha de Registro',
             'estregcod': 'Estado de Registro',
         }
@@ -398,6 +447,7 @@ class ClienteRegisterForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
         self.fields['estregcod'].initial = 1  # Asumiendo que 1 es 'activo'
+        self.fields['clifecreg'].initial = datetime.date.today()
     
 class ClienteLoginForm(forms.Form):
     username = forms.CharField(

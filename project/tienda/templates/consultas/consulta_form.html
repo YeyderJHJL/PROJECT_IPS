@@ -1,30 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{{ title }}</h2>
 
 <form method="post" action="{% if form.instance.pk %}{% url 'consulta_edit' form.instance.concod %}{% else %}{% url 'consulta_add' %}{% endif %}">
     {% csrf_token %}
-    <div class="form-group">
-        {{ form.conpre.label_tag }}
-        {{ form.conpre }}
-        {{ form.conpre.errors }}
-    </div>
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">{{ title }}</h2>
+                        
+                        <div class="bg-light rounded p-4 mb-4 shadow-sm">
 
-    <div class="form-group">
-        {{ form.tipconcod.label_tag }}
-        {{ form.tipconcod }}
-        {{ form.tipconcod.errors }}
-    </div>
+                            <div class="form-group">
+                                {{ form.conpre.label_tag }}
+                                {{ form.conpre }}
+                                {{ form.conpre.errors }}
+                            </div>
 
-    <div class="form-group">
-        {{ form.clidni.label_tag }}
-        {{ form.clidni }}
-        {{ form.clidni.errors }}
-    </div>
+                            <div class="form-group">
+                                {{ form.conres.label_tag }}
+                                {{ form.conres }}
+                                {{ form.conres.errors }}
+                            </div>
 
-    <button type="submit" class="btn btn-primary">Guardar</button> 
-    <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+                            <div class="form-group">
+                                {{ form.tipconcod.label_tag }}
+                                {{ form.tipconcod }}
+                                {{ form.tipconcod.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.perdni.label_tag }}
+                                {{ form.perdni }}
+                                {{ form.perdni.errors }}
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Guardar</button> 
+                            <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </form>
 
 {% if form.errors %}
