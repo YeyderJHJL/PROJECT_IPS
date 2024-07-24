@@ -63,8 +63,8 @@
                         </div>
                     </div>                    
                     <div class="text-center">
-                        <a href="{% url 'editar_reserva' reserva.evecod %}" class="btn btn-warning btn-lg px-5 me-2">Editar</a>
-                        <a href="{% url 'eliminar_reserva' reserva.evecod %}" class="btn btn-danger btn-lg px-5">Eliminar</a>
+                        <a href="{% url 'editar_reserva' reserva.evecod %}" class="btn btn-warning btn-lg px-5 me-2">Editar</a>                      
+                        <a href="{% url 'confirmar_eliminar_reserva' reserva.evecod %}" class="btn btn-danger btn-lg px-5">Eliminar</a>
                         <a href="{% url 'calendario' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
                     </div>
                 </div>

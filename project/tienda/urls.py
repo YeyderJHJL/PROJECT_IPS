@@ -36,7 +36,7 @@ urlpatterns = [
     path('eventos/', views.lista_eventos, name='lista_eventos'),
     path('servicios/detalle/<str:sercod>/', views.detalle_servicio, name='detalle_servicio'),
     path('crear_evento', views.crear_evento, name='crear_evento'),
-    path('reservaServicio/detalle/<int:evecod>/', views.detalle_reservaS, name='detalle_reservaS'),
+    path('reserva/detalle/servicio/<int:evecod>/', views.detalle_reservaS, name='detalle_reservaS'),
     path('reservaServicio/editar/<int:evecod>/', views.editar_reservaS, name='editar_reservaS'),
     path('reservaServicio/eliminar/<int:evecod>/', views.eliminar_reservaS, name='eliminar_reservaS'),
     #personal
@@ -58,9 +58,9 @@ urlpatterns = [
     path('producto/<int:procod>/', views.detalle_producto, name='detalle_producto'),
     path('reserva/<int:procod>/', views.reserva_producto, name='reserva_producto'),
     path('reservas/', views.lista_reservas, name='lista_reservas'),
-    path('reserva/detalle/<int:evecod>/', views.detalle_reserva, name='detalle_reserva'),
+    path('reserva/detalle/producto/<int:evecod>/', views.detalle_reserva, name='detalle_reserva'),
     path('reserva/editar/<int:evecod>/', views.editar_reserva, name='editar_reserva'),
-    path('reserva/eliminar/<int:evecod>/', views.eliminar_reserva, name='eliminar_reserva'),
+    path('reserva/eliminar/<int:evecod>/', views.confirmar_eliminar_reserva, name='confirmar_eliminar_reserva'),
 
     path('calendario/', views.calendario_view, name='calendario'),
     #personal
