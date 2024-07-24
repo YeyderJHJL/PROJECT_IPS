@@ -38,7 +38,7 @@
         <ul class="navbar-nav ml-auto">
             {% if request.cliente %}
             <li class="nav-item">
-                <span class="navbar-text text-light font-weight-bold">Bienvenido, {{ request.cliente.cliusu }}</span>
+                <span class="navbar-text text-light font-weight-bold">Bienvenido, {{ request.cliente.clinom }}</span>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="../static/image/usuario.jpeg" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -46,8 +46,8 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'cliente_detail' %}">Mi Perfil</a>
-                    <a class="dropdown-item" href="{% url 'cliente_orders' %}">Tus Pedidos</a>
-                    <a class="dropdown-item" href="{% url 'cliente_services' %}">Tus Servicios</a>
+                    <a class="dropdown-item" href="">Tus Pedidos</a>
+                    <a class="dropdown-item" href="{% url 'lista_eventos' %}">Tus Servicios</a>
                     <a class="dropdown-item" href="{% url 'calendar' %}">Ver Calendario</a>
                     <a class="dropdown-item" href="{% url 'cliente_update' %}">Ajustes</a>
                     <div class="dropdown-divider"></div>

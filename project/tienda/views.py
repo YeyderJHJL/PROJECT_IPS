@@ -470,24 +470,6 @@ def cliente_delete(request):
 
     return render(request, 'cliente/cliente_delete.html', {'form': form})
 
-@cliente_login_required
-def cliente_orders(request):
-    productos = Venta.objects.filter(cliente=request.cliente)
-    return render(request, 'productos/productos.html', {'producto': productos})
-
-@cliente_login_required
-def cliente_services(request):
-    servicios = Servicio.objects.filter(cliente=request.cliente)
-    return render(request, 'servicios/servicios.html', {'servicios': servicios})
-
-@cliente_login_required
-def cliente_settings(request):
-    cliente = request.cliente
-    if request.method == 'POST':
-        # Aquí puedes agregar la lógica para actualizar los datos del cliente
-        pass
-    return render(request, 'cliente/settings.html', {'cliente': cliente})
-
 from django.urls import reverse
 def solicitar_cambio_password(request):
     if request.method == 'POST':
@@ -913,7 +895,7 @@ def sales_report(request):
     return render(request, 'productos/sales_report.html', context)
 
 # SERVICIO ################################################
-
+#general
 def servicios(request, codigo=None):
     instancia_clase = None
     servicio = Servicio.objects.all()
@@ -933,12 +915,13 @@ def servicios(request, codigo=None):
 
     return render(request, 'servicios/servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
+#general
 def detalle_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
     personal = Personal.objects.filter(tippercod='2')
     return render(request, 'servicios/detalle_servicio.html', {'servicio': servicio, 'personal':personal})
 
-
+#personal
 def gestionar_servicios(request, codigo=None):
     instancia_clase = None
     servicio = Servicio.objects.all()
@@ -957,7 +940,7 @@ def gestionar_servicios(request, codigo=None):
         formulario = CategoriaServicioForm(instance=instancia_clase)
 
     return render(request, 'servicios/gestionarServicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
-
+#perosnal
 def agregar_servicio(request):
     if request.method == 'POST':
         form = ServicioForm(request.POST)
@@ -968,7 +951,7 @@ def agregar_servicio(request):
         form = ServicioForm()
     
     return render(request, 'servicios/agregarServicios.html', {'form': form})
-
+#personal
 def modificar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod) 
     if request.method == 'POST':
@@ -980,7 +963,7 @@ def modificar_servicio(request, sercod):
         form = ServicioForm(instance=servicio)
     
     return render(request, 'servicios/modificarServicios.html', {'form': form, 'servicio': servicio})
-
+#personal
 def eliminar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
     if request.method == 'POST':
@@ -989,7 +972,7 @@ def eliminar_servicio(request, sercod):
         return redirect('gestionar_servicios')
 
     return redirect('gestionar_servicios')
-
+#personal
 def gestionar_CategoriaServicios(request, codigo=None):
     instancia_clase = None
     categorias = CategoariaServicio.objects.all()
@@ -1003,7 +986,7 @@ def gestionar_CategoriaServicios(request, codigo=None):
         formulario = CategoriaServicioForm(instance=instancia_clase)
 
     return render(request, 'servicios/gestionarCategoriaServicio.html', {'formulario': formulario, 'categorias': categorias})
-
+#oersonal
 def agregar_CategoriaServicio(request):
     if request.method == 'POST':
         form = CategoriaServicioForm(request.POST)
@@ -1014,7 +997,7 @@ def agregar_CategoriaServicio(request):
         form = CategoriaServicioForm()
     
     return render(request, 'servicios/agregarCategoriaServicios.html', {'form': form})
-
+#personal
 def modificar_CategoriaServicio(request, catsercod):
     servicio = get_object_or_404(CategoariaServicio, catsercod=catsercod)
     if request.method == 'POST':
@@ -1026,8 +1009,7 @@ def modificar_CategoriaServicio(request, catsercod):
         form = CategoriaServicioForm(instance=servicio)
     
     return render(request, 'servicios/modificarCategoriaServicios.html', {'form': form, 'servicio': servicio})
-
-
+#personal
 def eliminar_CategoriaServicio(request, catsercod):
     categoria = get_object_or_404(CategoariaServicio, catsercod=catsercod)
 
@@ -1046,12 +1028,19 @@ def eliminar_CategoriaServicio(request, catsercod):
     # Redirigir si no es una solicitud POST
     return redirect('gestionar_CategoriaServicios')
 
+def get_authenticated_cliente(request):
+    cliente_id = request.session.get('cliente_id')
+    if cliente_id:
+        try:
+            return Cliente.objects.get(pk=cliente_id)
+        except Cliente.DoesNotExist:
+            return None
+    return None
 
-
-@login_required
+@cliente_login_required
 def crear_evento(request):
     servicio_id = request.GET.get('servicio_id')
-    cliente = Cliente.objects.first()  # Obtener el cliente autenticado o el cliente deseado
+    cliente = get_authenticated_cliente(request)
 
     if request.method == 'POST':
         form = EventoForm(request.POST)
@@ -1120,11 +1109,18 @@ def crear_evento(request):
         'cliente': cliente,
     })
 
+@cliente_login_required
+def lista_eventos(request):
+    cliente = get_authenticated_cliente(request)
+    eventos = Evento.objects.filter(clidni=cliente)
+    return render(request, 'servicios/lista_eventos.html', {'eventos': eventos})
 
+@cliente_login_required
 def detalle_reservaS(request, evecod):
     reserva = get_object_or_404(Evento, evecod=evecod)  
     return render(request, 'servicios/detalle_reservaS.html', {'reserva': reserva})
 
+@cliente_login_required
 def editar_reservaS(request, evecod):
     reserva = get_object_or_404(Evento, evecod=evecod)
     if request.method == 'POST':
