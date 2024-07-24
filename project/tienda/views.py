@@ -16,6 +16,7 @@ from .decorators import cliente_login_required
 from django.db.models import Sum
 from calendar import monthrange
 import datetime
+from datetime import datetime
 # Create your views here.
 
 
@@ -1248,8 +1249,7 @@ def obtener_eventos(request):
     for evento in eventos]
     return JsonResponse(eventos_json, safe=False)
 
-#calendario
-
+# CALENDARIO ################################################
 
 def generate_calendar(year, month):
     start_date = datetime(year, month, 1)
