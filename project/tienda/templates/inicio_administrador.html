@@ -6,9 +6,6 @@
         Bienvenido, <span class="text-muted" style="font-style: italic;">Administrador</span>
     </h1>
     <div class="position-relative d-flex align-items-center">
-        <button class="btn btn-light position-absolute top-50 start-0 translate-middle-y arrow-btn" id="prevBtn">
-            <i class="bi bi-chevron-left fs-4"></i>
-        </button>
 
         <div class="overflow-auto flex-grow-1">
             <div class="d-flex gap-4 p-3">
@@ -82,7 +79,7 @@
             </div>
         </div>
 
-<!-- Agregar esta sección al final del archivo para el script de navegación -->
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.querySelector('.overflow-auto');
@@ -139,4 +136,7 @@
         overflow-x: auto;
     }
 </style>
+
+
+
 {% endblock %}

@@ -88,10 +88,11 @@ urlpatterns = [
 
     path('personal/', views.gestion_personal, name='gestion_personal'),
     path('personal/list/', views.personal_list, name='personal_list'),
+    path('personal/list/<int:codigo>/', views.personal_list, name='personal_list_codigo'),
     path('personal/add/', views.personal_add, name='personal_add'),
-    path('personal/edit/<int:pk>/', views.personal_edit, name='personal_edit'),
-    path('personal/delete/<int:pk>/', views.personal_delete, name='personal_delete'),
-    path('personal/toggle_status/<int:pk>/', views.toggle_personal_status, name='toggle_personal_status'),
+    path('personal/edit/<str:pk>/', views.personal_edit, name='personal_edit'),
+    path('personal/delete/<str:pk>/', views.personal_delete, name='personal_delete'),
+    path('personal/toggle_status/<str:pk>/', views.toggle_personal_status, name='toggle_personal_status'),
     
     path('tipo_personal/', views.tipo_personal_list, name='tipo_personal_list'),
     path('tipo_personal/add/', views.tipo_personal_add, name='tipo_personal_add'),
@@ -101,8 +102,8 @@ urlpatterns = [
     path('cliente/', views.gestion_cliente, name='gestion_cliente'),
     path('cliente/list/', views.cliente_list, name='cliente_list'),
     path('cliente/add/', views.cliente_add, name='cliente_add'),
-    path('cliente/edit/<int:pk>/', views.cliente_edit, name='cliente_edit'),
-    path('cliente/delete/<int:pk>/', views.cliente_delete, name='cliente_delete'),
+    path('cliente/edit/<str:pk>/', views.cliente_edit, name='cliente_edit'),
+    path('cliente/delete/<str:pk>/', views.cliente_delete, name='cliente_delete'),
     
     path('cliente/toggle_status/<int:pk>/', views.toggle_cliente_status, name='toggle_cliente_status'),
 

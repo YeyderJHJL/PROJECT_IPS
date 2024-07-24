@@ -1,7 +1,24 @@
 {% extends "personal/gestion_personal.html" %}
 
 {% block gestion_personal_content %}
-<h2 class="mb-4">Personal</h2>
+    <!-- Categorías -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-12 col-md-8">
+            <div class="btn-group d-flex justify-content" role="group" aria-label="Categorías">
+                <a href="{% url 'personal_list' %}" class="btn btn-secondary me-2">Todos</a>
+                {% for tipo in tipo %}
+                    <a href="{% url 'personal_list_codigo' tipo.tippercod %}" class="btn btn-secondary me-2">{{ tipo.tippernom }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div >
+            <div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">
+                <a href="{% url 'personal_add' %}" class="btn btn-secondary me-2">+ Agregar Personal</a>
+            </div>
+        </div>
+    </div>
+   
+
 <div class="scrollable-table-container">
     <table class="table table-striped">
         <thead>
@@ -15,7 +32,7 @@
                 <th>Correo</th>
                 <th>Fecha de Registro</th>
                 <th>Tipo</th>
-                <th>Estado</th>
+
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -31,18 +48,13 @@
                 <td>{{ personal.percor }}</td>
                 <td>{{ personal.perfecreg }}</td>
                 <td>{{ personal.tippercod.tippernom }}</td>
-                <td>{{ personal.estregcod.estregnom }}</td>
+
                 <td>
-                    <div class="btn-group" role="group">
-                        <a class="btn btn-primary btn-sm" href="{% url 'personal_edit' personal.perdni %}">Modificar</a>
-                        <a class="btn btn-danger btn-sm" href="{% url 'personal_delete' personal.perdni %}">Eliminar</a>
-                        <a class="btn btn-secondary btn-sm" href="{% url 'toggle_personal_status' personal.perdni %}">
-                            {% if personal.estregcod.estregnom == 'Activo' %}
-                                Inactivar
-                            {% else %}
-                                Activar
-                            {% endif %}
-                        </a>
+                    <div class="d-flex justify-content-end">
+                        <a class="btn1 btn-primary btn-sm" href="{% url 'personal_edit' personal.perdni %}" class="btn btn-outline-primary btn-sm me-2"> <i class="bi bi-pencil-square"></i>  Modificar</a>
+                        <a class="btn1 btn-danger btn-sm" href="{% url 'personal_delete' personal.perdni %}" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash">  </i> Eliminar</a> 
+
                     </div>
                 </td>
             </tr>
@@ -51,13 +63,23 @@
     </table>
 </div>
 
-<div class="mb-3">
-    <a class="btn btn-success" href="{% url 'personal_add' %}">Adicionar</a>
-</div>
+<style>
+    .btn-group .btn {
+        border-radius: 25px;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
+    }
 
-<div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
-    <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
-</div>
+    .btn-group .btn:hover {
+        background-color: #495057;
+    }
+
+    .btn-group .btn:focus {
+        outline: none;
+    }
+</style>
 
 {% endblock %}
 

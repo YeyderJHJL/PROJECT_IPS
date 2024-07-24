@@ -1,22 +1,24 @@
-{% extends "base.html" %}
+{% extends "baseAdministrador.html" %}
 
 {% block title %}Gestión de Productos en Inventario{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4 mb-4 text-center">Gestionar Productos en Inventario</h1>
+    <h1 class="text-center mb-4 display-1 fw-bold text-dark">
+        <span class="text-muted" style="font-style: italic;">Productos</span>
+    </h1>
 
     <!-- Categorías -->
     <div class="row justify-content-center mb-4">
         <div class="col-12 col-md-8">
-            <div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">
+            <div class="btn-group d-flex justify-content" role="group" aria-label="Categorías">
                 <a href="{% url 'lista_productos' %}" class="btn btn-secondary me-2">Todos</a>
                 {% for categoria in categorias %}
                     <a href="?categoria={{ categoria.catprocod }}" class="btn btn-secondary me-2">{{ categoria.catpronom }}</a>
                 {% endfor %}
             </div>
         </div>
-        <div class="col-12 mt-3">
+        <div>
             <div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">
                 <a href="{% url 'producto_create' %}" class="btn btn-secondary me-2">+ Agregar producto</a>
             </div>
