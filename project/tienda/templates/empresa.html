@@ -1,89 +1,184 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block title %}Home{% endblock %}
-
 {% block content %}
-<section id="inicio" class="text-center">
-    <img src="{% static 'img/banner.jpg' %}" alt="Imagen Principal" class="img-fluid">
-</section>
-
-<section>
-    <div class="container">
-        <main>
-            <h1>Información de la Empresa</h1>
-            <section id="company-info">
-                <!-- Aquí se mostrará la información de la empresa -->
-            Es una empresa especialiazada en actividades de servicio de sistemas de seguridad.
-            Su principal enfoque está en la supervisión a distancia de sistemas electrónicos de 
-            seguridad, mantenimiento de alarmas contra robos robos e incendios, así como la
-            instalación, reparación y ajuste de dispositivos de cierre mecánicos y electrónicos,
-            cajas caudales y cajas fuertes.
-            </section>
-        </main>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f0f0;
+    }
+    .carousel {
+        position: relative;
+        width: 100%;
+        max-width: 700px; 
+        height: 300px; 
+        overflow: hidden;
+        border: none; 
+        box-shadow: none;
+        border-radius: 8px;
+        margin: auto;
+    }
+    .carousel-inner {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        height: 100%;
+    }
+    .carousel-item {
+        min-width: 100%;
+        box-sizing: border-box;
+        height: 100%;
+        position: relative;
+    }
+    .carousel img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+    }
+    .carousel-control {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5); 
+        color: #ffffff; 
+        font-size: 20px; 
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        z-index: 100;
+    }
+    .carousel-control.left {
+        left: 10px;
+    }
+    .carousel-control.right {
+        right: 10px;
+    }
+    .carousel-indicators {
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+        z-index: 100;
+    }
+    .carousel-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin: 0 2px;
+        background-color: #bbb;
+        cursor: pointer;
+    }
+    .carousel-indicator.active {
+        background-color: #717171;
+    }
+    #company-info {
+        background: #ffffff;
+        padding: 30px;
+        margin-top: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+    #company-info:hover {
+        transform: scale(1.02);
+    }
+    .grid-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
+        justify-content: space-between;
+    }
+    .grid-item {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        flex: 1;
+        min-width: calc(33.333% - 20px); /* Ajusta el ancho para que tres ítems quepan en una fila */
+    }
+    .grid-item:hover {
+        transform: scale(1.05);
+    }
+    .grid-item h3 {
+        margin-top: 0;
+        color: #35424a;
+    }
+    .grid-item p {
+        line-height: 1.8;
+        color: #333;
+    }
+</style>
+<section id="inicio" class="text-center"> <img src="{% static 'img/img.jfif' %}" class="img-fluid" style="width: 1200px; height: 400px;"> </section>
+        <br>
+<section id="company-info" class="container mt-4">
+    <div class="info-box">        
+        <p>Es una empresa especializada en actividades de servicio de sistemas de seguridad. Su principal enfoque está en la supervisión a distancia de sistemas electrónicos de 
+        seguridad, mantenimiento de alarmas contra robos e incendios, así como la instalación, reparación y ajuste de dispositivos de cierre mecánicos y electrónicos, cajas caudales y cajas fuertes.</p>
     </div>
 </section>
 
 <section id="marcas" class="text-center mt-4">
     <h2>Marcas con las que Trabajamos</h2>
-    <div class="logos">
-        <img src="{% static 'img/logo1.jpg' %}" alt="Logo Empresa 1" class="img-thumbnail">
-        <img src="{% static 'img/logo2.jpg' %}" alt="Logo Empresa 2" class="img-thumbnail">
-        <img src="{% static 'img/logo3.jpg' %}" alt="Logo Empresa 3" class="img-thumbnail">
-        <img src="{% static 'img/logo4.jpg' %}" alt="Logo Empresa 4" class="img-thumbnail">
-        <img src="{% static 'img/logo5.jpg' %}" alt="Logo Empresa 5" class="img-thumbnail">
-        <img src="{% static 'img/logo6.jpg' %}" alt="Logo Empresa 6" class="img-thumbnail">
-        <img src="{% static 'img/logo7.jpg' %}" alt="Logo Empresa 7" class="img-thumbnail">
-        <img src="{% static 'img/logo8.jpg' %}" alt="Logo Empresa 8" class="img-thumbnail">
+    <br>
+    <div class="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'img/logo1.png' %}" alt="Logo Empresa 1">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/logo2.png' %}" alt="Logo Empresa 2">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/logo3.png' %}" alt="Logo Empresa 3">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/logo4.png' %}" alt="Logo Empresa 4">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/logo5.png' %}" alt="Logo Empresa 5">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/logo6.png' %}" alt="Logo Empresa 6">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/logo7.png' %}" alt="Logo Empresa 7">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'img/logo8.png' %}" alt="Logo Empresa 8">
+            </div>
+        </div>
+        <button class="carousel-control left">&lt;</button>
+        <button class="carousel-control right">&gt;</button>
+        <div class="carousel-indicators">
+            <span class="carousel-indicator active"></span>
+            <span class="carousel-indicator"></span>
+            <span class="carousel-indicator"></span>
+            <span class="carousel-indicator"></span>
+            <span class="carousel-indicator"></span>
+            <span class="carousel-indicator"></span>
+            <span class="carousel-indicator"></span>
+            <span class="carousel-indicator"></span>
+        </div>
     </div>
 </section>
 
-<section id="historia" class="mt-4">
-    <h2>Nuestra Experiencia</h2>
-    <p>Desarrollamos sistemas de seguridad que operan de manera independiente, así como sistemas integrados en plataformas avanzadas. Esta capacidad nos permite establecer centros de control inteligente que monitorizan en tiempo real todos los sistemas existentes, logrando así mejores resultados. Al integrar la tecnología en nuestras soluciones, ofrecemos respuestas eficaces y eficientes a los problemas cotidianos de seguridad que enfrentan nuestros clientes.</p>
-<section id="personal" class="mt-4">
-    <h2>Nuestro Personal</h2>
-    <p>En SYSEGUR AQP, empleamos ingenieros y técnicos competentes para garantizar la calidad y el rendimiento óptimo de cada uno de nuestros proyectos. Nuestro personal recibe capacitación constante, lo que asegura un manejo adecuado de las normas de seguridad vigentes y los altos estándares técnicos que requieren nuestros equipos.</p>
-    <section id="ppromesa" class="mt-4">
-        <h2>Nuestro Promesa</h2>
-        <p>Nos comprometemos a brindar soluciones de seguridad adaptadas a las necesidades específicas de cada cliente, utilizando tecnología de punta y prácticas de ingeniería robustas. Nuestra dedicación a la excelencia y nuestro enfoque en la satisfacción del cliente nos han permitido construir una reputación sólida en el mercado de la seguridad electrónica.</p>
+<section id="historia" class="container mt-4">
+    <div class="grid-container">
+        <div class="grid-item">
+            <h3 class="mt-4 mb-4 text-center">Nuestra Experiencia</h3>
+            <p>Desarrollamos sistemas de seguridad que operan de manera independiente, así como sistemas integrados en plataformas avanzadas. Esta capacidad nos permite establecer centros de control inteligente que monitorizan en tiempo real todos los sistemas existentes, logrando así mejores resultados. Al integrar la tecnología en nuestras soluciones, ofrecemos respuestas eficaces y eficientes a los problemas cotidianos de seguridad que enfrentan nuestros clientes.</p>
+        </div>
+        <div class="grid-item">
+            <h3 class="mt-4 mb-4 text-center">Nuestro Personal</h3>
+            <p>En SYSEGUR AQP, empleamos ingenieros y técnicos competentes para garantizar la calidad y el rendimiento óptimo de cada uno de nuestros proyectos. Nuestro personal recibe capacitación constante, lo que asegura un manejo adecuado de las normas de seguridad vigentes y los altos estándares técnicos que requieren nuestros equipos.</p>
+        </div>
+        <div class="grid-item">
+            <h3 class="mt-4 mb-4 text-center">Nuestra Promesa</h3>
+            <p>Nos comprometemos a brindar soluciones de seguridad adaptadas a las necesidades específicas de cada cliente, utilizando tecnología de punta y prácticas de ingeniería robustas. Nuestra dedicación a la excelencia y nuestro enfoque en la satisfacción del cliente nos han permitido construir una reputación sólida en el mercado de la seguridad electrónica.</p>
+        </div>
+    </div>
 </section>
 
-<style>
-    #inicio img {
-        width: 100%;
-        height: auto;
-    }
-
-    #marcas .logos {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    #marcas .logos img {
-        margin: 10px;
-        width: 150px;
-        height: auto;
-    }
-
-    #historia, #equipo {
-        padding: 20px;
-    }
-
-    #equipo .team-members {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #equipo .team-member {
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    #equipo .team-member h3 {
-        margin: 10px 0;
-    }
-</style>
+<script src="{% static 'js/carousel.js' %}"></script>
 {% endblock %}
