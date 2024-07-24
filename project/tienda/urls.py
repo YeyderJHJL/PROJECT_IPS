@@ -30,6 +30,7 @@ urlpatterns = [
     #cliente
     path('servicios', views.servicios, name='servicios'),
     path('servicios/<str:codigo>/', views.servicios, name='servicios_codigo'),
+    path('eventos/', views.lista_eventos, name='lista_eventos'),
     path('servicios/detalle/<str:sercod>/', views.detalle_servicio, name='detalle_servicio'),
     path('crear_evento', views.crear_evento, name='crear_evento'),
     path('reservaServicio/detalle/<int:evecod>/', views.detalle_reservaS, name='detalle_reservaS'),
@@ -118,9 +119,6 @@ urlpatterns = [
 
     path('sales_report/', views.sales_report, name='sales_report'),
 
-    path('orders/', views.cliente_orders, name='cliente_orders'),
-    path('services/', views.cliente_services, name='cliente_services'),
-    path('settings/', views.cliente_settings, name='cliente_settings'),
     # path('change_username/', views.change_username, name='change_username'),
     # path('confirm_username/<uidb64>/<token>/', views.confirm_username, name='confirm_username'),
     path('solicitar-cambio-password/', views.solicitar_cambio_password, name='solicitar_cambio_password'),
