@@ -653,7 +653,7 @@ def detalle_producto(request, procod):
         'cantidad_disponible': cantidad_disponible
     })
 
-#@cliente_login_required
+@cliente_login_required
 def reserva_producto(request, procod):
     cliente = Cliente.objects.first()   #esto cmabiar con lo del login
     producto = get_object_or_404(Producto, procod=procod)
@@ -754,7 +754,7 @@ def editar_reserva(request, evecod):
     }
     return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
 
-#@cliente_login_required
+@cliente_login_required
 def eliminar_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)
     cantidad = reserva.cantidad
