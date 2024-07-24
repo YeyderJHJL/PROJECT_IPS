@@ -26,6 +26,9 @@ def index(request):
 def empresa(request):
     return render(request, './empresa.html')
 
+def preguntas_frecuentes(request):
+    return render(request, './preguntas_frecuentes.html')
+
 #  FORMULARIO DE CONTACTO ################################################
 
 # def contact_form(request):

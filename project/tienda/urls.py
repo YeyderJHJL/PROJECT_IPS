@@ -8,6 +8,7 @@ urlpatterns = [
     # General
     path('', views.index, name='index'),
     path('empresa/', views.empresa, name='empresa'),
+    path('preguntas_frecuentes/', views.preguntas_frecuentes, name='preguntas_frecuentes'),
 
     # Gabriela
     # path('contact/', views.contact_form, name='contact_form'),
