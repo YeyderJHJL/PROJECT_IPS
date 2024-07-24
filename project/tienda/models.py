@@ -52,7 +52,7 @@ class Personal(models.Model):
         return f"{self.pernom} {self.perape}"
 
 # CLIENTE ################################################
-from django.contrib.auth.hashers import make_password
+
 class Cliente(models.Model):
     clidni = models.CharField(db_column='CliDni', primary_key=True, max_length=8)
     clinom = models.CharField(db_column='CliNom', max_length=60)

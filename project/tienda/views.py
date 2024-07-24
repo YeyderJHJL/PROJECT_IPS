@@ -23,9 +23,6 @@ from django.db.models import Sum
 def index(request):
     return render(request, 'index.html')
 
-def login(request):
-    return render(request, './login.html') ################################################
-
 def empresa(request):
     return render(request, './empresa.html')
 
@@ -384,14 +381,10 @@ def register_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Registro exitoso')
-            return redirect('cliente_login')  # Cambia 'home' por el nombre de tu vista principal
+            return redirect('cliente_login')
     else:
         form = ClienteRegisterForm()
     return render(request, 'registration/register.html', {'form': form})
-
-@login_required
-def protected_view(request):
-    return render(request, 'protected.html')
 
 def cliente_login(request):
     if request.method == 'POST':
@@ -406,7 +399,7 @@ def cliente_login(request):
                 if check_password(password, cliente.clicon):
                     request.session['cliente_id'] = cliente.clidni
                     messages.success(request, 'Inicio de sesión exitoso.')
-                    return redirect('calendar')  # Cambia 'home' por la URL de redirección deseada
+                    return redirect('productos')
                 else:
                     messages.error(request, 'Contraseña incorrecta')
             except Cliente.DoesNotExist:

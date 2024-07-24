@@ -11,7 +11,6 @@ urlpatterns = [
     # Gabriela
     path('contact/', views.contact_form, name='contact_form'),
     path('empresa/', views.empresa, name='empresa'),
-    path('login/', views.login, name='login'),
     path('contact/success/', views.contact_success, name='contact_success'),
 
     
@@ -109,7 +108,6 @@ urlpatterns = [
     # Jhamil
     #cliente
     path('register/', views.register_view, name='cliente_register'),
-    path('protected/', views.protected_view, name='protected'),
     path('login/', views.cliente_login, name='cliente_login'),
     path('logout/', views.cliente_logout, name='cliente_logout'),
     path('detail/', views.cliente_detail, name='cliente_detail'),
