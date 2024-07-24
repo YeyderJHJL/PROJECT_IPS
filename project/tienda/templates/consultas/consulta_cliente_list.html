@@ -10,6 +10,7 @@
                 <th>Fecha de la Consulta</th>
                 <th>Pregunta</th>
                 <th>Respuesta</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +20,11 @@
                 <td>{{ consulta.confec }}</td>
                 <td>{{ consulta.conpre }}</td>
                 <td>{{ consulta.conres }}</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-danger btn-sm" href="{% url 'consulta_cliente_delete' consulta.concod %}">Eliminar</a>
+                    </div>
+                </td>
             </tr>
             {% empty %}
             <tr>
@@ -29,7 +35,11 @@
     </table>
 </div>
 
-<div class="btn-group mt-3" role="group" aria-label="Cliente Actions">
+<div class="btn-group mt-3 d-block" role="group" aria-label="Cliente Actions">
+    <a class="btn btn-success" href="{% url 'consulta_cliente_add' %}">Adicionar</a>
+</div>
+
+<div class="btn-group mt-3 d-block" role="group" aria-label="Cliente Actions">
     <a class="btn btn-primary btn-lg" href="{% url 'index' %}">Volver al Inicio</a>
 </div>
 

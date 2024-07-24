@@ -15,6 +15,7 @@ urlpatterns = [
 
     path('consulta/cliente/add', views.consulta_cliente_add, name='consulta_cliente_add'),
     path('consulta/cliente/list', views.consulta_cliente_list, name='consulta_cliente_list'),
+    path('consulta/cliente/delete/<int:pk>/', views.consulta_cliente_delete, name='consulta_cliente_delete'),
 
     path('consulta/', views.gestion_consulta, name='gestion_consulta'),
 

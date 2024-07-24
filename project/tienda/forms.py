@@ -26,6 +26,40 @@ class TipoConsultaForm(forms.ModelForm):
             )
             self.fields['tipconcod'].required = False
 
+class ConsultaClienteForm(forms.ModelForm):
+    class Meta:
+        model = Consulta
+        fields = ['conpre', 'tipconcod', 'clidni', 'perdni']
+        widgets = {
+            'conpre': forms.Textarea(attrs={'class': 'form-control'}),
+            'tipconcod': forms.Select(attrs={'class': 'form-control'}),
+            'perdni': forms.Select(attrs={'class': 'form-control', 'required': False}),
+            'clidni': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'conpre': 'Pregunta',
+            'tipconcod': 'Tipo de Consulta',
+            'perdni': 'Personal Encargado',
+            'clidni': 'Cliente',
+        }
+        error_messages = {
+            'conpre': {'required': "La pregunta es obligatoria."},
+            'tipconcod': {'required': "El tipo de consulta es obligatorio."},
+            'clidni': {'required': "El cliente es obligatorio."},
+        }
+
+    def __init__(self, *args, **kwargs):
+        cliente_id = kwargs.pop('cliente_id', None)
+        super().__init__(*args, **kwargs)
+        if not self.instance.pk and cliente_id:
+            try:
+                cliente = Cliente.objects.get(pk=cliente_id)
+                self.fields['clidni'].initial = cliente
+                ultimo_personal = Personal.objects.latest('perfecreg')
+                self.fields['perdni'].initial = ultimo_personal
+            except Cliente.DoesNotExist:
+                pass
+
 class ConsultaForm(forms.ModelForm):
     tipconcod = forms.ModelChoiceField(
         queryset=TipoConsulta.objects.all(),

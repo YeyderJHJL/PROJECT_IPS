@@ -107,22 +107,40 @@ def consulta_cliente_add(request):
         messages.error(request, 'No está autorizado para realizar esta acción.')
         return redirect('login')
     
-    cliente = Cliente.objects.get(pk=cliente_id)
+    try:
+        cliente = Cliente.objects.get(pk=cliente_id)
+    except Cliente.DoesNotExist:
+        messages.error(request, 'Cliente no encontrado.')
+        return redirect('login')
+    
     if request.method == 'POST':
-        form = ConsultaForm(request.POST)
+        form = ConsultaClienteForm(request.POST, cliente_id=cliente_id)
         if form.is_valid():
             consulta = form.save(commit=False)
-            # Asigna el clidni del cliente logueado
             consulta.clidni = cliente
-            # Establece la fecha automáticamente
             consulta.conres = ""
             consulta.confec = datetime.date.today()
             consulta.save()
             return redirect('consulta_cliente_list')
     else:
-        form = ConsultaForm()
+        form = ConsultaClienteForm(cliente_id=cliente_id)
 
-    return render(request, 'consultas/consulta_nueva_form.html', {'form': form, 'cliente': cliente, 'return_url': 'consulta_list', 'title': 'Agregar Nueva Consulta'})
+    return render(request, 'consultas/consulta_nueva_form.html', {
+        'form': form,
+        'cliente': cliente,
+        'return_url': 'consulta_list',
+        'title': 'Agregar Nueva Consulta'
+    })
+
+def consulta_cliente_delete(request, pk):
+    consulta = get_object_or_404(Consulta, pk=pk)
+    if request.method == 'POST':
+        try:
+            consulta.delete()
+            return redirect('consulta_cliente_list')
+        except IntegrityError:
+            return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
+    return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
 
 # Tipo Consulta CRUD
 def tipo_consulta_list(request):
