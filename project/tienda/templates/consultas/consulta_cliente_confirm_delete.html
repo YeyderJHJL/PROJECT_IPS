@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Eliminar Consulta</h2>
+<p>¿Estás seguro de que quieres eliminar la consulta {{ consulta.conpre }}?</p>
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a class="btn btn-secondary" href="{% url 'consulta_cliente_list' %}">Cancelar</a>
+</form>
+{% endblock %}

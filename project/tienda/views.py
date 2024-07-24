@@ -126,6 +126,7 @@ def consulta_cliente_add(request):
             consulta.conres = ""
             consulta.confec = datetime.date.today()
             consulta.save()
+            messages.success(request, 'Consulta registrada exitosamente.')
             return redirect('consulta_cliente_list')
     else:
         form = ConsultaClienteForm(cliente_id=cliente_id)
@@ -144,8 +145,8 @@ def consulta_cliente_delete(request, pk):
             consulta.delete()
             return redirect('consulta_cliente_list')
         except IntegrityError:
-            return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
-    return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
+            return render(request, 'consultas/consulta_cliente_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
+    return render(request, 'consultas/consulta_cliente_confirm_delete.html', {'consulta': consulta})
 
 # Tipo Consulta CRUD
 def tipo_consulta_list(request):
@@ -237,13 +238,13 @@ def login_personal(request):
     return render(request, 'personal/login_personal.html', {'form': form})
 
 def inicio_tecnico(request):
-    return render(request, 'inicio_tecnico.html')
+    return render(request, 'inicio_personal/inicio_tecnico.html')
 
 def inicio_vendedor(request):
-    return render(request, 'inicio_vendedor.html')
+    return render(request, 'inicio_personal/inicio_vendedor.html')
 
 def inicio_administrador(request):
-    return render(request, 'inicio_administrador.html')
+    return render(request, 'inicio_administrador.html') ############## cambiar ubi
 
 # Actualizar Perfil del Personal
 logger = logging.getLogger(__name__)
