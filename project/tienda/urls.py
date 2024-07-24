@@ -61,7 +61,6 @@ urlpatterns = [
     path('reserva/detalle/producto/<int:evecod>/', views.detalle_reserva, name='detalle_reserva'),
     path('reserva/editar/<int:evecod>/', views.editar_reserva, name='editar_reserva'),
     path('reserva/eliminar/<int:evecod>/', views.confirmar_eliminar_reserva, name='confirmar_eliminar_reserva'),
-
     path('calendario/', views.calendario_view, name='calendario'),
     #personal
     path('productoslista', views.lista_productos, name='lista_productos'),

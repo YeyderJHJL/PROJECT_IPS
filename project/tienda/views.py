@@ -1179,10 +1179,10 @@ def crear_evento(request):
         'cliente': cliente,
     })
 
-@cliente_login_required
+@login_required
 def lista_eventos(request):
     cliente = get_authenticated_cliente(request)
-    eventos = Evento.objects.filter(clidni=cliente)
+    eventos = Evento.objects.filter(clidni=cliente).select_related('sercod', 'perdni')
     return render(request, 'servicios/lista_eventos.html', {'eventos': eventos})
 
 @cliente_login_required
