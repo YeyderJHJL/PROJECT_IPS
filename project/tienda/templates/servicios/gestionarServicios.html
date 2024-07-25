@@ -15,7 +15,7 @@
             <div class="btn-group d-flex justify-content" role="group" aria-label="Categorías">
                 <a href="{% url 'gestionar_servicios' %}" class="btn btn-secondary me-2">Todos</a>
                 {% for categoria in categorias %}
-                    <a href="{% url 'servicios_codigo' categoria.catsercod %}" class="btn btn-secondary me-2">{{ categoria.catsernom }}</a>
+                    <a href="{% url 'gestionar_servicios_codigo' categoria.catsercod %}" class="btn btn-secondary me-2">{{ categoria.catsernom }}</a>
                 {% endfor %}
             </div>
         </div>

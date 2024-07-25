@@ -17,13 +17,10 @@ urlpatterns = [
     path('consulta/cliente/add', views.consulta_cliente_add, name='consulta_cliente_add'),
     path('consulta/cliente/list', views.consulta_cliente_list, name='consulta_cliente_list'),
     path('consulta/cliente/delete/<int:pk>/', views.consulta_cliente_delete, name='consulta_cliente_delete'),
-
     path('consulta/', views.gestion_consulta, name='gestion_consulta'),
-
     path('consulta/list/', views.consulta_list, name='consulta_list'),
     path('consulta/edit/<int:pk>/', views.consulta_edit, name='consulta_edit'),
     path('consulta/delete/<int:pk>/', views.consulta_delete, name='consulta_delete'),
-
     path('tipo_consulta/', views.tipo_consulta_list, name='tipo_consulta_list'),
     path('tipo_consulta/add/', views.tipo_consulta_add, name='tipo_consulta_add'),
     path('tipo_consulta/edit/<str:pk>/', views.tipo_consulta_edit, name='tipo_consulta_edit'),
@@ -41,6 +38,7 @@ urlpatterns = [
     path('reservaServicio/eliminar/<int:evecod>/', views.eliminar_reservaS, name='eliminar_reservaS'),
     #personal
     path('gestionar_servicios', views.gestionar_servicios, name='gestionar_servicios'),
+    path('gestionar_servicios/<str:codigo>/', views.gestionar_servicios, name='gestionar_servicios_codigo'),
     path('agregar_servicio/', views.agregar_servicio, name='agregar_servicio'),
     path('modificar_servicio/<str:sercod>/', views.modificar_servicio, name='modificar_servicio'),
     path('eliminar_servicio/<str:sercod>/', views.eliminar_servicio, name='eliminar_servicio'),
@@ -55,8 +53,7 @@ urlpatterns = [
     path('agregar_CategoriaProductos/', views.agregar_CategoriaProductos, name='agregar_CategoriaProductos'),
     path('modificar_CategoriaProductos/<str:catprocod>/', views.modificar_CategoriaProductos, name='modificar_CategoriaProductos'),
     path('eliminar_CategoriaProductos/<str:catprocod>/', views.eliminar_CategoriaProductos, name='eliminar_CategoriaProductos'),
-
-
+    path('calendarioAdministrador/', views.calendario_viewAdministrador, name='calendarioAdministrador'),
 
     # Paola
     #cliente
@@ -81,11 +78,9 @@ urlpatterns = [
     path('estado_registro/add/', views.estado_registro_add, name='estado_registro_add'),
     path('estado_registro/edit/<str:pk>/', views.estado_registro_edit, name='estado_registro_edit'),
     path('estado_registro/delete/<str:pk>/', views.estado_registro_delete, name='estado_registro_delete'),
-    
     path('inicio_tecnico/', views.inicio_tecnico, name='inicio_tecnico'),
     path('inicio_vendedor/', views.inicio_vendedor, name='inicio_vendedor'),
     path('inicio_administrador/', views.inicio_administrador, name='inicio_administrador'),
-
     path('actualizar_perfil_personal/', views.actualizar_perfil_personal, name='actualizar_perfil_personal'),
 
     # Personal
@@ -124,7 +119,6 @@ urlpatterns = [
     path('personal_register/', views.register_personal_view, name='personal_register'),
     path('personal_login/', views.personal_login, name='personal_login'),
     path('personal_logout/', views.personal_logout, name='personal_logout'),
-
     path('sales_report/', views.sales_report, name='sales_report'),
 
     # path('change_username/', views.change_username, name='change_username'),

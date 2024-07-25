@@ -1000,7 +1000,7 @@ def modificar_CategoriaProductos(request, catprocod):
         form = CategoriaProductoForm(request.POST, instance=producto)
         if form.is_valid():
             form.save()
-            return redirect('gestionar_CategoriaProductos')  # Redirigir a la vista de listado de servicios
+            return redirect('gestionar_CategoriaProductos')  
     else:
         form = CategoriaProductoForm(instance=producto)
     
@@ -1358,6 +1358,41 @@ def generate_calendar(year, month):
         calendar.append(week)
     return calendar
 
+
+def calendario_viewAdministrador(request):
+    today = timezone.now()
+    year = int(request.GET.get('year', today.year))
+    month = int(request.GET.get('month', today.month))
+    if 'prev' in request.GET:
+        if month == 1:
+            month = 12
+            year -= 1
+        else:
+            month -= 1
+    elif 'next' in request.GET:
+        if month == 12:
+            month = 1
+            year += 1
+        else:
+            month += 1 
+    eventos_producto = EventoProducto.objects.all()
+    eventos_servicio = Evento.objects.all() 
+    calendar = generate_calendar(year, month)
+    month_names = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ]
+    month_name = month_names[month - 1]
+    return render(request, 'calendarioAdministrador.html', {
+        'eventos_producto': eventos_producto,
+        'eventos_servicio': eventos_servicio,
+        'calendar': calendar,
+        'year': year,
+        'month': month,
+        'month_name': month_name
+    })
+
+
 @cliente_login_required
 def calendario_view(request):
     today = timezone.now()
@@ -1392,3 +1427,4 @@ def calendario_view(request):
         'month': month,
         'month_name': month_name
     })
+
