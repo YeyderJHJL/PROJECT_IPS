@@ -10,25 +10,25 @@
 
     <main>
         <section id="faq">
-            <h2 class="mt-4 mb-4 text-center">Preguntas Frecuentes</h2>            
+            <h2 class="mt-4 mb-4 text-center"><span class="red-text">Preguntas</span> <span class="black-text">Frecuentes</span></h2>            
             <div class="faq-item mb-3 p-3 border rounded shadow-sm">
-                <h3 class="faq-question ">¿Qué tipos de cámaras de seguridad ofrecen?</h3>
+                <h3 class="faq-question">¿Qué tipos de cámaras de seguridad ofrecen? <span class="toggle-symbol">+</span></h3>
                 <p class="faq-answer">Ofrecemos una variedad de cámaras de seguridad, incluyendo cámaras IP, cámaras analógicas, cámaras con visión nocturna y cámaras de alta definición. Cada tipo está diseñado para satisfacer diferentes necesidades de seguridad.</p>
             </div>
             <div class="faq-item mb-3 p-3 border rounded shadow-sm">
-                <h3 class="faq-question ">¿Cómo se instala una cámara de seguridad?</h3>
+                <h3 class="faq-question">¿Cómo se instala una cámara de seguridad? <span class="toggle-symbol">+</span></h3>
                 <p class="faq-answer">La instalación de una cámara de seguridad puede variar según el tipo de cámara y el entorno. En general, se recomienda que la cámara esté ubicada en un lugar que cubra las áreas de interés sin obstrucciones. Nuestros técnicos pueden realizar una instalación profesional para garantizar el funcionamiento óptimo de la cámara.</p>
             </div>
             <div class="faq-item mb-3 p-3 border rounded shadow-sm">
-                <h3 class="faq-question ">¿Cómo se puede acceder a las grabaciones de las cámaras?</h3>
+                <h3 class="faq-question">¿Cómo se puede acceder a las grabaciones de las cámaras? <span class="toggle-symbol">+</span></h3>
                 <p class="faq-answer">Las grabaciones de las cámaras se pueden acceder a través de un sistema de gestión de video (VMS) que se configura con cada cámara. Dependiendo del modelo, puede ser posible acceder a las grabaciones desde un dispositivo móvil, una computadora o un grabador de video en red (NVR).</p>
             </div>
             <div class="faq-item mb-3 p-3 border rounded shadow-sm">
-                <h3 class="faq-question ">¿Qué hacer si una cámara de seguridad no está funcionando correctamente?</h3>
+                <h3 class="faq-question">¿Qué hacer si una cámara de seguridad no está funcionando correctamente? <span class="toggle-symbol">+</span></h3>
                 <p class="faq-answer">Si una cámara de seguridad presenta problemas, primero verifique las conexiones y asegúrese de que la cámara esté correctamente alimentada. Si el problema persiste, contáctenos para que nuestros técnicos puedan diagnosticar y resolver el problema de manera eficiente.</p>
             </div>
             <div class="faq-item mb-3 p-3 border rounded shadow-sm">
-                <h3 class="faq-question ">¿Las cámaras tienen garantía?</h3>
+                <h3 class="faq-question">¿Las cámaras tienen garantía? <span class="toggle-symbol">+</span></h3>
                 <p class="faq-answer">Sí, nuestras cámaras de seguridad vienen con una garantía que cubre defectos de fabricación y problemas técnicos durante un período específico. Consulte con nosotros para obtener detalles sobre la garantía de cada producto.</p>
             </div>
         </section>
@@ -36,6 +36,12 @@
 </div>
 
 <style>
+    .red-text {
+        color: rgb(12, 111, 122);
+    }
+    .black-text {
+        color: black;
+    }
     .faq-item {
         cursor: pointer;
         transition: transform 0.2s, background-color 0.2s;
@@ -46,14 +52,45 @@
     }
     .faq-question {
         margin: 0;
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
     .faq-answer {
         display: none;
         margin-top: 0.5rem;
         font-size: 1.1em; 
     }
-    .faq-item:hover .faq-answer {
+    .faq-item.active .faq-answer {
         display: block;
     }
+    .faq-item.active .faq-question {
+        color: rgb(12, 111, 122);
+    }
+    .toggle-symbol {
+        font-weight: bold;
+        margin-left: 10px;
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const isActive = this.classList.contains('active');
+                faqItems.forEach(i => {
+                    i.classList.remove('active');
+                    i.querySelector('.toggle-symbol').textContent = '+';
+                });
+                if (!isActive) {
+                    this.classList.add('active');
+                    this.querySelector('.toggle-symbol').textContent = '-';
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}
