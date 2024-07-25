@@ -3,6 +3,7 @@ from .models import *
 import datetime
 from django.utils import timezone
 from datetime import date
+from django.contrib.auth.hashers import make_password
 
 #  CONSULTAS ################################################
 class TipoConsultaForm(forms.ModelForm):
