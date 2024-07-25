@@ -15,8 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .decorators import cliente_login_required
 from django.db.models import Sum
 from calendar import monthrange
-import datetime
 from datetime import datetime
+import datetime
 # Create your views here.
 
 
@@ -150,6 +150,9 @@ def consulta_cliente_delete(request, pk):
     return render(request, 'consultas/consulta_cliente_confirm_delete.html', {'consulta': consulta})
 
 # Tipo Consulta CRUD
+def gestion_tipo_consulta(request):
+    return render(request, 'consultas/gestion_tipo_consulta.html')
+
 def tipo_consulta_list(request):
     consultas = TipoConsulta.objects.all()
     return render(request, 'consultas/tipo_consulta_list.html', {'consultas': consultas})
@@ -830,17 +833,20 @@ def lista_productos(request):
     categoria_id = request.GET.get('categoria')    
     if categoria_id:
         productos = productos.filter(catprocod=categoria_id)    
-    # Crear un diccionario de cantidades disponibles por producto
-    cantidad_dict = {}
+
+    # Crear una lista de productos con sus cantidades disponibles
+    productos_con_cantidad = []
     for producto in productos:
         # Obtener la cantidad total disponible para cada producto
         cantidad = Inventario.objects.filter(procod=producto.procod).aggregate(total_cantidad=Sum('invcan'))['total_cantidad'] or 0
-        cantidad_dict[producto.procod] = cantidad
+        productos_con_cantidad.append({
+            'producto': producto,
+            'cantidad_disponible': cantidad
+        })
 
     context = {
         'categorias': categorias,
-        'productos': productos,
-        'cantidad_dict': cantidad_dict,
+        'productos_con_cantidad': productos_con_cantidad,
     }
     return render(request, 'productos/producto_lista.html', context)
 
@@ -858,21 +864,26 @@ def producto_create(request):
                     'producto_form': producto_form,
                     'inventario_form': inventario_form,
                     'error': 'Estado de registro "Activo" no encontrado.'
-                })            
-            producto.save()            
+                })                    
             inventario = inventario_form.save(commit=False)
             inventario.procod = producto
-            inventario.invfecha = timezone.now().date()
+            inventario.invfecha = datetime.date.today() 
+            producto.save()   
             inventario.save()            
+            messages.success(request, 'Producto registrado exitosamente.')
             return redirect('lista_productos')
+
     else:
-        producto_form = ProductoForm()
-        inventario_form = InventarioForm()    
-    context = {
+        producto_form = ProductoForm(initial={
+            'estregcod': EstadoRegistro.objects.get(estregnom='Activo'),
+        })
+        inventario_form = InventarioForm(initial={
+            'invfecing': datetime.date.today(),
+        })
+    return render(request, 'productos/producto_form.html', {
         'producto_form': producto_form,
-        'inventario_form': inventario_form,
-    }
-    return render(request, 'productos/producto_form.html', context)
+        'inventario_form': inventario_form
+    })
 
 def producto_update(request, procod):
     producto = Producto.objects.get(procod=procod)

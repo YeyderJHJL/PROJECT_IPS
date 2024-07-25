@@ -518,6 +518,9 @@ class ProductoForm(forms.ModelForm):
         model = Producto
         fields = ['pronom', 'prodes', 'propreuni', 'proimg', 'proima', 'estregcod', 'catprocod']
         widgets = {
+            'pronom': forms.TextInput(attrs={'class': 'form-control'}),
+            'prodes': forms.TextInput(attrs={'class': 'form-control'}),
+            'propreuni': forms.NumberInput(attrs={'class': 'form-control'}),
             'proimg': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'estregcod': forms.Select(attrs={'class': 'form-control'}),
             'catprocod': forms.Select(attrs={'class': 'form-control'}),
@@ -525,10 +528,10 @@ class ProductoForm(forms.ModelForm):
         }
         labels = {
             'pronom': 'Nombre del Producto',
-            'prodes': 'Descripción del Producto',
+            'prodes': 'Descripción del Producto (Opcional)',
             'propreuni': 'Precio Unitario',
-            'proimg': 'Imagen del Producto',
-            'proima': 'URL de la Imagen',
+            'proimg': 'Imagen del Producto (Opcional)',
+            'proima': 'URL de la Imagen (Opcional)',
             'estregcod': 'Estado del Registro',
             'catprocod': 'Categoría del Producto',
         }

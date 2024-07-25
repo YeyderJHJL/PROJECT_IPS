@@ -8,21 +8,22 @@
         <div class="col-lg-8">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h2>{% if producto_form.instance.pk %}Editar{% else %}Agregar{% endif %} Producto</h2>
+                    <h2 class="card-title text-center mb-4">{% if producto_form.instance.pk %}Editar{% else %}Agregar{% endif %} Producto</h2>
                     
                     <div class="bg-light rounded p-4 mb-4 shadow-sm">
                         <form method="post" enctype="multipart/form-data">
-
                             {% csrf_token %}
                             
-                            <div class="form-group">
+                            <div class="mb-3">
                                 {{ producto_form.as_p }}
-                                <h3>Inventario</h3>
+                                <h3 class="mt-4">Inventario</h3>
                                 {{ inventario_form.as_p }}
                             </div>
                             
-                            <button type="submit" class="btn btn-primary btn-lg px-5 me-2">Guardar</button>
-                            <a href="{% url 'lista_productos' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5 me-2">Guardar</button>
+                                <a href="{% url 'lista_productos' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
+                            </div>
                         </form>
                     </div>
                 </div>
