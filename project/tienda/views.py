@@ -828,7 +828,7 @@ def cambiar_contrasena(request):
     return render(request, 'cliente/cambiar_contrasena.html', {'form': form})
 
 # PRODUCTO ##############################################################################################################33
-@admin_required
+
 def productos(request):
     categorias = CategoariaProducto.objects.all()  
     productos = Producto.objects.all()      
@@ -1353,6 +1353,7 @@ def detalle_servicio(request, sercod):
 ######################################################################################################################################
 
 #personal
+@admin_required
 def gestionar_servicios(request, codigo=None):
     instancia_clase = None
     servicio = Servicio.objects.all()
