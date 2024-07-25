@@ -12,7 +12,7 @@ from .utils import *
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .decorators import cliente_login_required
+from .decorators import *
 from django.db.models import Sum
 from calendar import monthrange
 #from datetime import datetime  
@@ -213,25 +213,75 @@ def estado_registro_delete(request, pk):
 
 # PERSONAL ################################################
 
-# Login Personal
-#personal 
-def login_personal(request):
+#@admin_required
+def register_personal_view(request):
     if request.method == 'POST':
-        form = LoginPersonalForm(request.POST)
+        form = PersonalRegisterForm(request.POST)
+        
         if form.is_valid():
-            personal = form.get_personal()
-            tipo_personal = personal.tippercod.tippernom  # Suponiendo que el campo es tippernom en TipoPersonal
-            if tipo_personal == 'Técnico':
-                return redirect('inicio_tecnico')
-            elif tipo_personal == 'Vendedor':
-                return redirect('inicio_vendedor')
-            elif tipo_personal == 'Administrador':
-                return redirect('inicio_administrador')
-            else:
-                form.add_error(None, 'Tipo de personal no reconocido.')
+            personal = form.save()
+            try:
+                send_mail(
+                    'Registro Exitoso',
+                    f'Sus credenciales son:\nUsuario: {form.cleaned_data["perusu"]}\nContraseña: {form.cleaned_data["password2"]}',
+                    'jhamilturpo2@gamil.com', 
+                    [form.cleaned_data['percor']],
+                    fail_silently=False,
+                )
+                print("12")
+                messages.success(request, 'Registro de personal exitoso y correo enviado.')
+            except Exception as e:
+                messages.error(request, f'Error al enviar el correo: {e}')
+            
+            messages.success(request, 'Registro de personal exitoso y correo enviado.')
+            return redirect('inicio_administrador')
     else:
-        form = LoginPersonalForm()
-    return render(request, 'personal/login_personal.html', {'form': form})
+        form = PersonalRegisterForm()
+    return render(request, 'registration/register_personal.html', {'form': form})
+
+# Login Personal
+def personal_login(request):
+    if request.method == 'POST':
+        form = PersonalLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            try:
+                personal = Personal.objects.get(perusu=username)
+                if check_password(password, personal.percon):
+                    request.session['personal_id'] = personal.perdni
+                    messages.success(request, 'Inicio de sesión exitoso.')
+                    return redirect_to_dashboard(personal.tippercod.tippernom)
+                else:
+                    messages.error(request, 'Contraseña incorrecta')
+            except Personal.DoesNotExist:
+                messages.error(request, 'Usuario no encontrado')
+    else:
+        form = PersonalLoginForm()
+    return render(request, 'registration/personal_login.html', {'form': form})
+
+def redirect_to_dashboard(tipo_personal):
+    if tipo_personal == 'Técnico':
+        return redirect('inicio_tecnico')
+    elif tipo_personal == 'Vendedor':
+        return redirect('inicio_vendedor')
+    elif tipo_personal == 'Administrador':
+        return redirect('inicio_administrador')
+    else:
+        return redirect('personal_login')
+
+@multi_role_required('Administrador', 'Vendedor', 'Técnico')
+def personal_logout(request):
+    personal_id = request.session.get('personal_id')
+    if not personal_id:
+        messages.error(request, 'No está autorizado para realizar esta acción.')
+        return redirect('personal_login') 
+    
+    try:
+        del request.session['personal_id']
+    except KeyError:
+        pass
+    return redirect('personal_login') 
 
 #personal 
 def inicio_tecnico(request):
@@ -477,7 +527,7 @@ def cliente_login(request):
                 if check_password(password, cliente.clicon):
                     request.session['cliente_id'] = cliente.clidni
                     messages.success(request, 'Inicio de sesión exitoso.')
-                    return redirect('index')  # Cambia 'home' por la URL de redirección deseada
+                    return redirect('index')
                 else:
                     messages.error(request, 'Contraseña incorrecta')
             except Cliente.DoesNotExist:

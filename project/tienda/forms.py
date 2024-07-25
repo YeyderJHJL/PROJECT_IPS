@@ -102,23 +102,6 @@ class ConsultaForm(forms.ModelForm):
             self.fields['conpre'].widget.attrs['readonly'] = 'readonly'
         #################### Aqui falta añadir que sea el personal logueado automaticamente    
 
-# #  FORMULARIO DE CONTACTO ################################################
-
-# class ContactForm(forms.Form):
-#     name = forms.CharField(
-#         label='Nombre',
-#         max_length=100,
-#         widget=forms.TextInput(attrs={'class': 'form-control'})
-#     )
-#     email = forms.EmailField(
-#         label='Correo Electrónico',
-#         widget=forms.EmailInput(attrs={'class': 'form-control'})
-#     )
-#     message = forms.CharField(
-#         label='Mensaje',
-#         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4})
-#     )
-
 # ESTADO DE REGISTRO ################################################################
 
 class EstadoRegistroForm(forms.ModelForm):
@@ -144,32 +127,77 @@ class EstadoRegistroForm(forms.ModelForm):
 
 # PERSONAL ################################################################
 
-class LoginPersonalForm(forms.Form):
+class PersonalRegisterForm(forms.ModelForm):
+    password2 = forms.CharField(
+        label='Confirmar Contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = Personal
+        fields = ['perdni', 'pernom', 'perape', 'pertel', 'perdir', 'perusu', 'percon', 'percor', 'perfecreg', 'estregcod', 'tippercod']
+        labels = {
+            'perdni': 'DNI',
+            'pernom': 'Nombre',
+            'perape': 'Apellido',
+            'pertel': 'Teléfono',
+            'perdir': 'Dirección',
+            'perusu': 'Usuario',
+            'percon': 'Contraseña',
+            'percor': 'Correo Electrónico',
+            'perfecreg': 'Fecha de Registro',
+            'estregcod': 'Estado de Registro',
+            'tippercod': 'Tipo de Personal',
+        }
+        widgets = {
+            'percon': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'perfecreg': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'estregcod': forms.HiddenInput(),
+        }
+        error_messages = {
+            'perdni': {
+                'unique': "Este DNI ya está registrado.",
+            },
+            'perusu': {
+                'unique': "Este usuario ya está en uso.",
+            },
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("percon")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+        
+        return cleaned_data
+
+    def save(self, commit=True):
+        personal = super().save(commit=False)
+        personal.percon = make_password(self.cleaned_data['percon'])
+        if commit:
+            personal.save()
+        return personal
+
+    def __init__(self, *args, **kwargs):
+        super(PersonalRegisterForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['estregcod'].initial = 1  # Asumiendo que 1 es 'activo'
+        self.fields['perfecreg'].initial = datetime.date.today()
+
+class PersonalLoginForm(forms.Form):
     username = forms.CharField(
         label='Usuario',
+        max_length=60,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
     password = forms.CharField(
         label='Contraseña',
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        username = cleaned_data.get('username')
-        password = cleaned_data.get('password')
-
-        if username and password:
-            try:
-                personal = Personal.objects.get(perusu=username, percon=password)
-                self.personal = personal
-            except Personal.DoesNotExist:
-                raise forms.ValidationError('Usuario o contraseña incorrectos.')
-        return cleaned_data
-
-    def get_personal(self):
-        return self.personal
-
+    
 class ActualizarPerfilPersonalForm(forms.ModelForm):
     class Meta:
         model = Personal

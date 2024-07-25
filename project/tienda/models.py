@@ -37,7 +37,7 @@ class Personal(models.Model):
     pertel = models.CharField(db_column='PerTel', max_length=9, blank=True, null=True)
     perdir = models.CharField(db_column='PerDir', max_length=150, blank=True, null=True)
     perusu = models.CharField(db_column='PerUsu', unique=True, max_length=60)
-    percon = models.CharField(db_column='PerCon', max_length=60)
+    percon = models.CharField(db_column='PerCon', max_length=500)
     percor = models.EmailField(db_column='PerCor', blank=True, null=True)  # Cambiado a EmailField para correos
     perfecreg = models.DateField(db_column='PerFecReg')
     estregcod = models.ForeignKey(EstadoRegistro, models.PROTECT, db_column='EstRegCod')

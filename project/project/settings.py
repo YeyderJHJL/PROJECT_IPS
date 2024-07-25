@@ -58,6 +58,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'tienda.middleware.ClienteMiddleware',
+    'tienda.middleware.PersonalMiddleware', 
+    'tienda.middleware.AdminRequiredMiddleware', 
+    'tienda.middleware.TecnicoRequiredMiddleware',
+    'tienda.middleware.VendedorRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'

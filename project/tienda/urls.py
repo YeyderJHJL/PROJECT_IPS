@@ -82,7 +82,6 @@ urlpatterns = [
     path('estado_registro/edit/<str:pk>/', views.estado_registro_edit, name='estado_registro_edit'),
     path('estado_registro/delete/<str:pk>/', views.estado_registro_delete, name='estado_registro_delete'),
     
-    path('login_personal/', views.login_personal, name='login_personal'),
     path('inicio_tecnico/', views.inicio_tecnico, name='inicio_tecnico'),
     path('inicio_vendedor/', views.inicio_vendedor, name='inicio_vendedor'),
     path('inicio_administrador/', views.inicio_administrador, name='inicio_administrador'),
@@ -121,6 +120,10 @@ urlpatterns = [
     path('detail/', views.cliente_detail, name='cliente_detail'),
     path('update/', views.cliente_update, name='cliente_update'),
     path('delete/', views.cliente_delete, name='cliente_delete'),
+    # personal
+    path('personal_register/', views.register_personal_view, name='personal_register'),
+    path('personal_login/', views.personal_login, name='personal_login'),
+    path('personal_logout/', views.personal_logout, name='personal_logout'),
 
     path('sales_report/', views.sales_report, name='sales_report'),
 
