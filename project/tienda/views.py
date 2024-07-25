@@ -118,6 +118,7 @@ def consulta_cliente_add(request):
             consulta.conres = ""
             consulta.confec = datetime.date.today()
             consulta.save()
+            messages.success(request, 'Consulta registrada exitosamente.')
             return redirect('consulta_cliente_list')
     else:
         form = ConsultaClienteForm(cliente_id=cliente_id)
@@ -137,8 +138,8 @@ def consulta_cliente_delete(request, pk):
             consulta.delete()
             return redirect('consulta_cliente_list')
         except IntegrityError:
-            return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
-    return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
+            return render(request, 'consultas/consulta_cliente_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
+    return render(request, 'consultas/consulta_cliente_confirm_delete.html', {'consulta': consulta})
 
 # Tipo Consulta CRUD
 #personal 
@@ -233,15 +234,15 @@ def login_personal(request):
 
 #personal 
 def inicio_tecnico(request):
-    return render(request, 'inicio_tecnico.html')
+    return render(request, 'inicio_personal/inicio_tecnico.html')
 
 #personal 
 def inicio_vendedor(request):
-    return render(request, 'inicio_vendedor.html')
+    return render(request, 'inicio_personal/inicio_vendedor.html')
 
 #personal
 def inicio_administrador(request):
-    return render(request, 'inicio_administrador.html')
+    return render(request, 'inicio_administrador.html') ############## cambiar ubi
 
 # Actualizar Perfil del Personal
 #personal 
@@ -1203,7 +1204,6 @@ def eliminar_reservaS(request, evecod):
     return redirect('calendario')
 
 # EVENTO ################################################
-
 
 #CALENDARIO#######################################################################################################3
 def generate_calendar(year, month):
