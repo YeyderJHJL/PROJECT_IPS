@@ -15,7 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .decorators import cliente_login_required
 from django.db.models import Sum
 from calendar import monthrange
-import datetime
+from datetime import datetime  
+
 # Create your views here.
 
 
@@ -680,8 +681,8 @@ def cambiar_contrasena(request):
 
     return render(request, 'cliente/cambiar_contrasena.html', {'form': form})
 
-# PRODUCTO ################################################
-#personal 
+
+# PRODUCTO ##############################################################################################################33
 def productos(request):
     categorias = CategoariaProducto.objects.all()  
     productos = Producto.objects.all()      
@@ -701,10 +702,10 @@ def detalle_producto(request, procod):
         'producto': producto,
         'cantidad_disponible': cantidad_disponible
     })
-
+# GESTIONAR LAS RESERVAS DE PRODUCTO (CLIENTE)
 @cliente_login_required
 def reserva_producto(request, procod):
-    cliente = Cliente.objects.first()   #esto cmabiar con lo del login
+    cliente = get_authenticated_cliente(request)
     producto = get_object_or_404(Producto, procod=procod)
     inventario = Inventario.objects.filter(procod=producto).first()
     cantidad_disponible = inventario.invcan if inventario else 0
@@ -730,13 +731,12 @@ def reserva_producto(request, procod):
                     cliente=cliente,
                     notas=notas
                 )                
-                # Actualizar inventario
                 inventario.invcan -= cantidad
                 inventario.save()
                 messages.success(request, 'Reserva realizada con éxito.')
                 return redirect('calendario')        
     else:
-        form = ReservaForm()    # Establecer el valor máximo de cantidad disponible en el formulario         
+        form = ReservaForm()           
     form.fields['cantidad'].widget.attrs.update({'max': cantidad_disponible})
     context = {
         'cliente': cliente,
@@ -746,9 +746,10 @@ def reserva_producto(request, procod):
     }
     return render(request, 'productos/reservaProducto.html', context)
 
-@cliente_login_required
+@login_required
 def lista_reservas(request):
-    reservas = EventoProducto.objects.all()
+    cliente = get_authenticated_cliente(request)
+    reservas = EventoProducto.objects.filter(cliente=cliente).select_related('procod')
     return render(request, 'productos/lista_reservas.html', {'reservas': reservas})
 
 @cliente_login_required
@@ -769,19 +770,16 @@ def editar_reserva(request, evecod):
             cantidad = form.cleaned_data['cantidad']
             fecha_reserva = form.cleaned_data['fecha_reserva']
             notas = form.cleaned_data['notas']
-            # Validaciones adicionales
             if cantidad > cantidad_disponible:
                 form.add_error('cantidad', 'La cantidad solicitada excede la disponible.')
             if fecha_reserva < timezone.now().date():
-                form.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')            
-            # Actualiza el inventario según la diferencia en la cantidad            
+                form.add_error('fecha_reserva', 'La fecha de recogida no puede ser anterior a la fecha actual.')                     
             if inventario:
                 inventario.invcan += cantidad_anterior - cantidad
                 inventario.save()     
             else:
                 messages.error(request, 'No se encontró el producto en el inventario.')
                 return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})       
-            # Actualizar la reserva
             reserva.cantidad = cantidad
             reserva.evefec = fecha_reserva
             reserva.notas = notas
@@ -804,20 +802,21 @@ def editar_reserva(request, evecod):
     return render(request, 'productos/editar_reserva.html', {'form': form, 'reserva': reserva})
 
 @cliente_login_required
-def eliminar_reserva(request, evecod):
+def confirmar_eliminar_reserva(request, evecod):
     reserva = get_object_or_404(EventoProducto, evecod=evecod)
-    cantidad = reserva.cantidad
-    producto = reserva.procod
-    inventario = Inventario.objects.filter(procod=producto).first()
-    if inventario:
-        # Ajustar el inventario sumando la cantidad de la reserva eliminada
-        inventario.invcan += cantidad
-        inventario.save()
-    reserva.delete()
-    messages.success(request, 'Reserva eliminada con éxito.')
-    return redirect('calendario') 
+    if request.method == 'POST':
+        cantidad = reserva.cantidad
+        producto = reserva.procod
+        inventario = Inventario.objects.filter(procod=producto).first()
+        if inventario:
+            inventario.invcan += cantidad
+            inventario.save()
+        reserva.delete()
+        messages.success(request, 'Reserva eliminada con éxito.')
+        return redirect('calendario')
+    return render(request, 'productos/eliminar_reserva.html', {'reserva': reserva})
 
-#### GESTIONAR LOS PRODUCTOS CON INVENTARIO
+# GESTIONAR LOS PRODUCTOS CON INVENTARIO (TRABAJADOR)
 def lista_productos(request):
     categorias = CategoariaProducto.objects.all()
     productos = Producto.objects.all()
@@ -1140,7 +1139,7 @@ def crear_evento(request):
                 evento.perdni = personal_disponible
                 evento.save()
                 messages.success(request, 'Evento creado y personal asignado con éxito.')
-                return redirect('calendar')
+                return redirect('calendario')
             else:
                 # Mostrar mensaje de error si no hay personal disponible
                 messages.warning(request, 'No hay personal disponible para la fecha seleccionada. Por favor, elija otra fecha.')
@@ -1167,10 +1166,10 @@ def crear_evento(request):
         'cliente': cliente,
     })
 
-@cliente_login_required
+@login_required
 def lista_eventos(request):
     cliente = get_authenticated_cliente(request)
-    eventos = Evento.objects.filter(clidni=cliente)
+    eventos = Evento.objects.filter(clidni=cliente).select_related('sercod', 'perdni')
     return render(request, 'servicios/lista_eventos.html', {'eventos': eventos})
 
 @cliente_login_required
@@ -1199,19 +1198,16 @@ def eliminar_reservaS(request, evecod):
     if request.method == 'POST':
         reserva.delete()
         messages.success(request, 'Reserva eliminada correctamente.')
-        return redirect('index')
+        return redirect('calendario')
     
-    return redirect('index')
+    return redirect('calendario')
 
 # EVENTO ################################################
 
 def calendar_view(request):
     return render(request, 'calendar.html')
-
-
 def calendar2(request):
     return render(request, 'calendar2.html')
-
 @csrf_exempt
 def calendar_events(request):
     events = Evento.objects.all()
@@ -1223,7 +1219,6 @@ def calendar_events(request):
             'description': f"Cliente: {event.clidni}, Personal: {event.perdni}"
         })
     return JsonResponse(event_list, safe=False)
-
 def obtener_eventos(request):
     eventos = Evento.objects.all().select_related('sercod', 'perdni')
     eventos_json = [
@@ -1235,38 +1230,28 @@ def obtener_eventos(request):
     for evento in eventos]
     return JsonResponse(eventos_json, safe=False)
 
-#calendario
-
+#CALENDARIO#######################################################################################################3
 def generate_calendar(year, month):
     start_date = datetime(year, month, 1)
     end_date = datetime(year, month, monthrange(year, month)[1])
     calendar = []
-
-    # Add empty days before the start of the month
     week = [''] * start_date.weekday()
-
-    # Fill in the days of the month
     for day in range(1, monthrange(year, month)[1] + 1):
         week.append(datetime(year, month, day))
-
         if len(week) == 7:
             calendar.append(week)
             week = []
-
-    # Add empty days after the end of the month
     while len(week) < 7:
         week.append('')
-    
     if week:
         calendar.append(week)
-
     return calendar
 
+@cliente_login_required
 def calendario_view(request):
-    today = datetime.now()
+    today = timezone.now()
     year = int(request.GET.get('year', today.year))
     month = int(request.GET.get('month', today.month))
-
     if 'prev' in request.GET:
         if month == 1:
             month = 12
@@ -1279,25 +1264,18 @@ def calendario_view(request):
             year += 1
         else:
             month += 1
-
-    # Obtener eventos de ambas tablas
-    eventos_producto = EventoProducto.objects.all()
-    eventos = Evento.objects.all()
-
-    # Combinar ambos conjuntos de eventos
-    eventos_combinados = list(eventos_producto) + list(eventos)
-
+    cliente = get_authenticated_cliente(request)
+    eventos_producto = EventoProducto.objects.filter(cliente=cliente)
+    eventos_servicio = Evento.objects.filter(clidni=cliente.clidni)  
     calendar = generate_calendar(year, month)
-
     month_names = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
     ]
-
     month_name = month_names[month - 1]
-
     return render(request, 'calendario.html', {
-        'eventos': eventos_combinados,
+        'eventos_producto': eventos_producto,
+        'eventos_servicio': eventos_servicio,
         'calendar': calendar,
         'year': year,
         'month': month,

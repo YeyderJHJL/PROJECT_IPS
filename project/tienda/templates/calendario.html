@@ -40,9 +40,14 @@
                                 {% if day %}
                                     <div class="day-content">
                                         <strong>{{ day.day }}</strong>
-                                        {% for evento in eventos %}
+                                        {% for evento in eventos_servicio %}
                                             {% if evento.evefec == day.date %}
-                                                <a href="{% url 'detalle_reserva' evecod=evento.evecod %}" class="event">Reserva</a>
+                                                <a href="{% url 'detalle_reservaS' evecod=evento.evecod %}" class="event">Reserva Servicio</a>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% for evento in eventos_producto %}
+                                            {% if evento.evefec == day.date %}
+                                                <a href="{% url 'detalle_reserva' evecod=evento.evecod %}" class="event">Reserva Producto</a>
                                             {% endif %}
                                         {% endfor %}
                                     </div>
