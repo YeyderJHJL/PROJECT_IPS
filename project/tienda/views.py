@@ -57,12 +57,10 @@ def preguntas_frecuentes(request):
 
 # Gestión Consulta
 def gestion_consulta(request):
-    return render(request, 'consultas/gestion_consulta.html')
+    consultas = Consulta.objects.all()
+    return render(request, 'consultas/gestion_consulta.html', {'consultas': consultas})
 
 # Consulta CRUD
-def consulta_list(request):
-    consultas = Consulta.objects.all()
-    return render(request, 'consultas/consulta_list.html', {'consultas': consultas})
 
 def consulta_edit(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
@@ -70,17 +68,17 @@ def consulta_edit(request, pk):
         form = ConsultaForm(request.POST, instance=consulta)
         if form.is_valid():
             form.save()
-            return redirect('consulta_list')
+            return redirect('gestion_consulta')
     else:
         form = ConsultaForm(instance=consulta)
-    return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'consulta_list', 'title': 'Modificar Consulta'})
+    return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'gestion_consulta', 'title': 'Modificar Consulta'})
 
 def consulta_delete(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     if request.method == 'POST':
         try:
             consulta.delete()
-            return redirect('consulta_list')
+            return redirect('gestion_consulta')
         except IntegrityError:
             return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
     return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
