@@ -1185,6 +1185,7 @@ def vendedor_confirmar_eliminacion(request, procod):
 ######################################################################################################################################
 
 #personal
+@multi_role_required('Administrador', 'Vendedor')
 def gestionar_CategoriaProductos(request, codigo=None):
     instancia_clase = None
     categorias = CategoariaProducto.objects.all()
@@ -1199,6 +1200,7 @@ def gestionar_CategoriaProductos(request, codigo=None):
 
     return render(request, 'productos/gestionarCategoriaProductos.html', {'formulario': formulario, 'categorias': categorias})
 #oersonal
+@multi_role_required('Administrador', 'Vendedor')
 def agregar_CategoriaProductos(request):
     if request.method == 'POST':
         form = CategoriaProductoForm(request.POST)
@@ -1210,6 +1212,7 @@ def agregar_CategoriaProductos(request):
     
     return render(request, 'productos/agregarCategoriaProductos.html', {'form': form})
 #personal
+@multi_role_required('Administrador', 'Vendedor')
 def modificar_CategoriaProductos(request, catprocod):
     producto = get_object_or_404(CategoariaProducto, catprocod=catprocod)
     if request.method == 'POST':
@@ -1222,6 +1225,7 @@ def modificar_CategoriaProductos(request, catprocod):
     
     return render(request, 'productos/modificarCategoriaProductos.html', {'form': form, 'producto': producto})
 #personal
+@multi_role_required('Administrador', 'Vendedor')
 def eliminar_CategoriaProductos(request, catprocod):
     categoria = get_object_or_404(CategoariaProducto, catprocod=catprocod)
 
@@ -1245,15 +1249,17 @@ def eliminar_CategoriaProductos(request, catprocod):
 ######################################################################################################################################
 
 # registro de ventas
-
+@admin_required
 def venta_list(request):
     ventas = Venta.objects.all()
     return render(request, 'ventas/venta_list.html', {'ventas': ventas})
 #personal 
+@admin_required
 def venta_detail(request, pk):
     venta = get_object_or_404(Venta, pk=pk)
     return render(request, 'ventas/venta_detail.html', {'venta': venta})
 #personal 
+@admin_required
 def venta_edit(request, pk):
     venta = get_object_or_404(Venta, pk=pk)
     if request.method == 'POST':
@@ -1266,6 +1272,7 @@ def venta_edit(request, pk):
         form = VentaForm(instance=venta)
     return render(request, 'ventas/venta_form.html', {'form': form})
 #personal 
+@admin_required
 def venta_delete(request, pk):
     venta = get_object_or_404(Venta, pk=pk)
     if request.method == 'POST':
@@ -1276,7 +1283,7 @@ def venta_delete(request, pk):
 
 # REPORTES PRODUCTOS #################################################################################################################
 ######################################################################################################################################
-
+@admin_required
 def sales_report(request):
     form = SalesReportForm()
     sales = []
@@ -1324,6 +1331,7 @@ def servicios(request, codigo=None):
     return render(request, 'servicios/servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
 #Personal: Vendedor
+@vendedor_required
 def vendedor_servicios(request, codigo=None):
     instancia_clase = None
     servicio = Servicio.objects.all()
@@ -1353,7 +1361,7 @@ def detalle_servicio(request, sercod):
 ######################################################################################################################################
 
 #personal
-@admin_required
+@multi_role_required('Administrador', 'Vendedor')  
 def gestionar_servicios(request, codigo=None):
     instancia_clase = None
     servicio = Servicio.objects.all()
@@ -1373,6 +1381,7 @@ def gestionar_servicios(request, codigo=None):
 
     return render(request, 'servicios/gestionarServicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
+@vendedor_required  
 def vendedor_gestionar_servicios(request, codigo=None):
     instancia_clase = None
     servicio = Servicio.objects.all()
@@ -1393,6 +1402,7 @@ def vendedor_gestionar_servicios(request, codigo=None):
     return render(request, 'servicios/vendedor_gestionar_servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
 #perosnal
+@multi_role_required('Administrador', 'Vendedor')  
 def agregar_servicio(request):
     if request.method == 'POST':
         form = ServicioForm(request.POST)
@@ -1407,6 +1417,7 @@ def agregar_servicio(request):
     return render(request, 'servicios/agregarServicios.html', {'form': form})
 
 #perosnal: vendedor
+@vendedor_required  
 def vendedor_agregar_servicio(request):
     if request.method == 'POST':
         form = ServicioForm(request.POST)
@@ -1421,6 +1432,7 @@ def vendedor_agregar_servicio(request):
     return render(request, 'servicios/vendedor_agregar_servicios.html', {'form': form})
 
 #personal
+@multi_role_required('Administrador', 'Vendedor') 
 def modificar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod) 
     if request.method == 'POST':
@@ -1434,6 +1446,7 @@ def modificar_servicio(request, sercod):
     return render(request, 'servicios/modificarServicios.html', {'form': form, 'servicio': servicio})
 
 #personal: vendedor
+@vendedor_required 
 def vendedor_modificar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod) 
     if request.method == 'POST':
@@ -1447,6 +1460,7 @@ def vendedor_modificar_servicio(request, sercod):
     return render(request, 'servicios/vendedor_modificar_servicios.html', {'form': form, 'servicio': servicio})
 
 #personal
+@multi_role_required('Administrador', 'Vendedor') 
 def eliminar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
     if request.method == 'POST':
@@ -1461,6 +1475,7 @@ def eliminar_servicio(request, sercod):
 ######################################################################################################################################
 
 #personal: vendedor
+@vendedor_required 
 def vendedor_eliminar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
     if request.method == 'POST':
@@ -1470,6 +1485,7 @@ def vendedor_eliminar_servicio(request, sercod):
 
     return redirect('vendedor_gestionar_servicios')
 #personal
+@multi_role_required('Administrador', 'Vendedor', 'Técnico')
 def gestionar_CategoriaServicios(request, codigo=None):
     instancia_clase = None
     categorias = CategoariaServicio.objects.all()
@@ -1484,6 +1500,7 @@ def gestionar_CategoriaServicios(request, codigo=None):
 
     return render(request, 'servicios/gestionarCategoriaServicio.html', {'formulario': formulario, 'categorias': categorias})
 #oersonal
+@multi_role_required('Administrador', 'Vendedor', 'Técnico')
 def agregar_CategoriaServicio(request):
     if request.method == 'POST':
         form = CategoriaServicioForm(request.POST)
@@ -1495,6 +1512,7 @@ def agregar_CategoriaServicio(request):
     
     return render(request, 'servicios/agregarCategoriaServicios.html', {'form': form})
 #personal
+@multi_role_required('Administrador', 'Vendedor', 'Técnico')
 def modificar_CategoriaServicio(request, catsercod):
     servicio = get_object_or_404(CategoariaServicio, catsercod=catsercod)
     if request.method == 'POST':
@@ -1507,6 +1525,7 @@ def modificar_CategoriaServicio(request, catsercod):
     
     return render(request, 'servicios/modificarCategoriaServicios.html', {'form': form, 'servicio': servicio})
 #personal
+@multi_role_required('Administrador', 'Vendedor', 'Técnico')
 def eliminar_CategoriaServicio(request, catsercod):
     categoria = get_object_or_404(CategoariaServicio, catsercod=catsercod)
 
@@ -1597,7 +1616,7 @@ def crear_evento(request):
         'cliente': cliente,
     })
 
-@login_required
+@cliente_login_required
 def lista_eventos(request):
     cliente = get_authenticated_cliente(request)
     eventos = Evento.objects.filter(clidni=cliente).select_related('sercod', 'perdni')
