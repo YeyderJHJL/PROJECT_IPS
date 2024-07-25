@@ -102,24 +102,37 @@
     }
     .grid-item h3 {
         margin-top: 0;
-        color: #35424a;
+        color: #5c91b1;
     }
     .grid-item p {
         line-height: 1.8;
         color: #333;
     }
+    .linea-estilizada {
+            width: 100%;
+            height: 10px; 
+            background: repeating-linear-gradient(
+                45deg, 
+                #a7d2e1, 
+                #a7d2e1 10px, 
+                transparent 20px, 
+                transparent 20px 
+            );
+            margin: 30px 0; 
+        }
 </style>
 <section id="inicio" class="text-center"> <img src="{% static 'img/img.jfif' %}" class="img-fluid" style="width: 1200px; height: 400px;"> </section>
         <br>
+        <hr class="linea-estilizada">
 <section id="company-info" class="container mt-4">
     <div class="info-box">        
         <p>Es una empresa especializada en actividades de servicio de sistemas de seguridad. Su principal enfoque está en la supervisión a distancia de sistemas electrónicos de 
         seguridad, mantenimiento de alarmas contra robos e incendios, así como la instalación, reparación y ajuste de dispositivos de cierre mecánicos y electrónicos, cajas caudales y cajas fuertes.</p>
     </div>
 </section>
-
+        <hr class="linea-estilizada">
 <section id="marcas" class="text-center mt-4">
-    <h2>Marcas con las que Trabajamos</h2>
+    <h3 style="color: #5c91b1;">Marcas con las que Trabajamos</h3>
     <br>
     <div class="carousel">
         <div class="carousel-inner">
@@ -162,18 +175,21 @@
         </div>
     </div>
 </section>
-
+<hr class="linea-estilizada">
 <section id="historia" class="container mt-4">
     <div class="grid-container">
         <div class="grid-item">
+            <img src="{% static 'img/n1.png' %}" alt="experiencia" style="width: 200px; height: 130px; display: block; margin: auto;">
             <h3 class="mt-4 mb-4 text-center">Nuestra Experiencia</h3>
             <p>Desarrollamos sistemas de seguridad que operan de manera independiente, así como sistemas integrados en plataformas avanzadas. Esta capacidad nos permite establecer centros de control inteligente que monitorizan en tiempo real todos los sistemas existentes, logrando así mejores resultados. Al integrar la tecnología en nuestras soluciones, ofrecemos respuestas eficaces y eficientes a los problemas cotidianos de seguridad que enfrentan nuestros clientes.</p>
         </div>
         <div class="grid-item">
+            <img src="{% static 'img/n2.png' %}" alt="experiencia" style="width: 200px; height: 130px; display: block; margin: auto;">
             <h3 class="mt-4 mb-4 text-center">Nuestro Personal</h3>
             <p>En SYSEGUR AQP, empleamos ingenieros y técnicos competentes para garantizar la calidad y el rendimiento óptimo de cada uno de nuestros proyectos. Nuestro personal recibe capacitación constante, lo que asegura un manejo adecuado de las normas de seguridad vigentes y los altos estándares técnicos que requieren nuestros equipos.</p>
         </div>
         <div class="grid-item">
+            <img src="{% static 'img/n3.png' %}" alt="experiencia" style="width: 200px; height: 130px; display: block; margin: auto;">
             <h3 class="mt-4 mb-4 text-center">Nuestra Promesa</h3>
             <p>Nos comprometemos a brindar soluciones de seguridad adaptadas a las necesidades específicas de cada cliente, utilizando tecnología de punta y prácticas de ingeniería robustas. Nuestra dedicación a la excelencia y nuestro enfoque en la satisfacción del cliente nos han permitido construir una reputación sólida en el mercado de la seguridad electrónica.</p>
         </div>

@@ -98,12 +98,25 @@
         }
         .grid-item h3 {
             margin-top: 0;
-            color: #35424a;
+            color: #5c91b1;
         }
         .grid-item p {
             line-height: 1.8;
-            color: #333;
+            color: #000000;
+        }     
+        .linea-estilizada {
+            width: 100%;
+            height: 10px; 
+            background: repeating-linear-gradient(
+                45deg, 
+                #a7d2e1, 
+                #a7d2e1 10px, 
+                transparent 20px, 
+                transparent 20px 
+            );
+            margin: 30px 0; 
         }
+    </style>   
     </style>
     
     <header>
@@ -123,17 +136,21 @@
     </header>
     <div class="container">
         <main>
+            <hr class="linea-estilizada">
             <section id="company-info">
                 <h2 class="mt-4 mb-4 text-center" >Bienvenido a SISTEMAS Y SEGURIDAD A.Q.P.</h2>
                 <p>Empresa dedicada a la supervisión de sistemas electrónicos de seguridad, el mantenimiento de alarmas contra robos e incendios, y la instalación, reparación y ajuste de dispositivos de cierre mecánicos, cajas de caudales y cajas fuertes. Además, ofrece una amplia gama de productos de seguridad, incluyendo cámaras de seguridad, alarmas contra robo, y otros dispositivos, para satisfacer todas las necesidades de sus clientes en materia de seguridad.</p>
                 <p>RUC: 20609231531</p>
             </section>
+            <hr class="linea-estilizada">
             <div class="grid-container">
                 <div class="grid-item">
+                    <img src="{% static 'img/mision.png' %}" alt="Imagen de Misión" style="width: 200px; height: 150px; display: block; margin: auto;">
                     <h3 class="mt-4 mb-4 text-center">Misión</h3>
                     <p>Nuestra misión es ofrecer soluciones integrales de seguridad a través de productos de alta calidad, junto con servicios especializados relacionados a la seguridad de su hogar. Nos comprometemos a garantizar la máxima protección y tranquilidad para nuestros clientes, brindando un servicio profesional y confiable en cada etapa de la implementación de nuestros sistemas de seguridad.</p>
                 </div>
                 <div class="grid-item">
+                    <img src="{% static 'img/vision.png' %}" alt="Imagen de Visión" style="width: 200px; height: 150px; display: block; margin: auto;">
                     <h3 class="mt-4 mb-4 text-center">Visión</h3>
                     <p>Nuestra visión es ser la empresa líder en el sector de seguridad en la región, reconocida por nuestra innovación en productos y excelencia en servicios. Buscamos expandir nuestra presencia en el mercado, ofreciendo soluciones avanzadas y personalizadas que respondan a las necesidades cambiantes de nuestros clientes y contribuyan a su seguridad y bienestar.</p>
                 </div>
