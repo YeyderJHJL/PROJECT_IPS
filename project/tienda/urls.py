@@ -69,14 +69,6 @@ urlpatterns = [
     path('producto/confirmar_eliminacion/<int:procod>/', views.confirmar_eliminacion, name='confirmar_eliminacion'),
     path('producto/eliminar/<int:procod>/', views.producto_delete, name='producto_delete'),
 
-    # Daniel
-    #cliente?
-    path('calendar/', views.calendar_view, name='calendar'),
-    #personal?
-    path('calendar2/', views.calendar2, name='calendar2'),
-    path('calendar/events/', views.calendar_events, name='calendar_events'),
-    path('obtener_eventos/', views.obtener_eventos, name='obtener_eventos'),
-
     # Mishel
     # Estado registro
     path('estado_registro/', views.estado_registro_list, name='estado_registro_list'),
