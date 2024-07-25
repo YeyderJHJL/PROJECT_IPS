@@ -12,12 +12,13 @@
         <a href="{% url 'tipo_personal_add' %}" class="btn btn-secondary me-2">+ Agregar Tipo Personal</a>
     </div>
     <hr>
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th>Código</th>
             <th>Nombre</th>
-            <th>Acciones</th>
+            <th class="d-flex justify-content-end">Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -27,8 +28,8 @@
             <td>{{ tipo.tippernom }}</td>
             <td>
                 <div class="d-flex justify-content-end">
-                    <a class="btn1 btn-primary btn-sm" href="{% url 'tipo_personal_edit' tipo.tippercod %}" class="btn btn-outline-primary btn-sm me-2"> <i class="bi bi-pencil-square"></i> Modificar</a>
-                    <a class="btn1 btn-danger btn-sm" href="{% url 'tipo_personal_delete' tipo.tippercod %}" class="btn btn-outline-danger btn-sm">
+                    <a class="btn btn-primary btn-sm" href="{% url 'tipo_personal_edit' tipo.tippercod %}" class="btn btn-outline-primary btn-sm me-2"> <i class="bi bi-pencil-square"></i> Modificar</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'tipo_personal_delete' tipo.tippercod %}" class="btn btn-outline-danger btn-sm">
                         <i class="bi bi-trash"></i> Eliminar</a>
                 </div>
             </td>
@@ -36,6 +37,7 @@
         {% endfor %}
     </tbody>
 </table>
+
 </div>
 
 <style>
@@ -55,5 +57,6 @@
         outline: none;
     }
     </style>
+
 
 {% endblock %}

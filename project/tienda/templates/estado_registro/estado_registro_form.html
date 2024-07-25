@@ -1,20 +1,36 @@
 {% extends 'baseAdministrador.html' %}
 
 {% block content %}
-  <h2>{{ title }}</h2>
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      {{ form.estregcod.label_tag }}
-      {{ form.estregcod }}
+  <div class="container py-1">
+    <div>
+        <div class="col-lg-19">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2  style="font-family: 'Roboto', sans-serif;">
+                      {{ title }} <span class="text-muted" style="font-style: italic;"> Estado Registro</span>
+                    </h2>
+                    <div class="bg-light rounded p-4 mb-4 shadow-sm">
+                      <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                          {{ form.estregcod.label_tag }}
+                          {{ form.estregcod }}
+                        </div>
+                        <div class="form-group">
+                          {{ form.estregnom.label_tag }}
+                          {{ form.estregnom }}
+                        </div>
+                        <hr>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+                      </form>
+                  </div>
+              </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-      {{ form.estregnom.label_tag }}
-      {{ form.estregnom }}
-    </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
-  </form>
+</div>
+
 {% endblock %}
 
 {% if form.errors %}

@@ -21,7 +21,7 @@
                 <th>Usuario</th>
                 <th>Correo</th>
                 <th>Fecha de Registro</th>
-                <th>Estado</th>
+    
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -36,18 +36,14 @@
                 <td>{{ cliente.cliusu }}</td>
                 <td>{{ cliente.clicor }}</td>
                 <td>{{ cliente.clifecreg }}</td>
-                <td>{{ cliente.estregcod.estregnom }}</td>
+
                 <td>
                     <div class="btn-group" role="group">
-                        <a class="btn1 btn-primary btn-sm" href="{% url 'cliente_edit' cliente.clidni %}">Modificar</a>
-                        <a class="btn1 btn-danger btn-sm" href="{% url 'cliente_delete' cliente.clidni %}">Eliminar</a>
-                        <a class="btn1 btn-secondary btn-sm" href="{% url 'toggle_cliente_status' cliente.clidni %}">
-                            {% if cliente.estregcod.estregnom == 'Activo' %}
-                                Inactivar
-                            {% else %}
-                                Activar
-                            {% endif %}
-                        </a>
+                        <a class="btn1 btn-primary btn-sm" href="{% url 'cliente_edit' cliente.clidni %}" class="btn btn-primary btn-sm me-2">
+                            <i class="bi bi-pencil-square"></i >Modificar</a>
+                        <a class="btn1 btn-danger btn-sm" href="{% url 'cliente_delete' cliente.clidni %}" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Eliminar</a>
+                        
                     </div>
                 </td>
             </tr>
