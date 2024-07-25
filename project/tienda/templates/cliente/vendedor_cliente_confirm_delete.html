@@ -1,14 +1,16 @@
 {% extends 'inicio_personal/base_vendedor.html' %}
 
 {% block content %}
-<h2 class="mb-4">Eliminar Consulta</h2>
-<p>¿Estás seguro de que quieres eliminar la consulta {{ consulta.conpre }} del cliente {{ consulta.clidni }}?</p>
+<h2 class="mb-4">Eliminar Cliente</h2>
+<p>¿Estás seguro de que quieres eliminar al cliente "{{ cliente.clinom }} {{ cliente.cliape }}"?</p>
+
 {% if error %}
 <div class="alert alert-danger">{{ error }}</div>
 {% endif %}
+
 <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Eliminar</button>
-    <a class="btn btn-secondary" href="{% url 'gestion_consulta' %}">Cancelar</a>
+    <a class="btn btn-secondary" href="{% url 'vendedor_cliente_list' %}">Cancelar</a>
 </form>
 {% endblock %}

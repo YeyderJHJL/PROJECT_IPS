@@ -1,4 +1,4 @@
-{% extends 'baseAdministrador.html' %}
+{% extends 'inicio_personal/base_vendedor.html' %}
 
 {% block content %}
 <div class="container my-5">
@@ -34,7 +34,7 @@
                             Gestionar Productos
                         </h5>
                         <p class="card-text mb-4">Maneja los productos y el inventario.</p>
-                        <!-- <a class="btn btn-secondary btn-lg" href="{% url 'actualizar_perfil_personal' %}">Gestionar</a> No puedo ver si el link está bien :( -->
+                        <a class="btn btn-secondary btn-lg" href="{% url 'vendedor_gestionar_productos' %}">Gestionar</a> 
                     </div>
                 </div>
 
@@ -48,7 +48,7 @@
                             Gestionar Servicios
                         </h5>
                         <p class="card-text mb-4">Maneja los servicios disponibles y su información.</p>
-                        <a class="btn btn-secondary btn-lg" href="{% url 'gestionar_servicios' %}">Gestionar</a> <!-- No puedo ver si el link está bien :( -->
+                        <a class="btn btn-secondary btn-lg" href="{% url 'vendedor_gestionar_servicios' %}">Gestionar</a> 
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@
                             Gestionar Clientes
                         </h5>
                         <p class="card-text mb-4">Controla la información de los clientes.</p>
-                        <a class="btn btn-secondary btn-lg" href="{% url 'gestion_cliente' %}">Gestionar</a>
+                        <a class="btn btn-secondary btn-lg" href="{% url 'vendedor_cliente_list' %}">Gestionar</a>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
                             Gestionar Consultas
                         </h5>
                         <p class="card-text mb-4">Gestiona y responde las consultas.</p>
-                        <a class="btn btn-secondary btn-lg" href="{% url 'consulta_list' %}">Gestionar</a>
+                        <a class="btn btn-secondary btn-lg" href="{% url 'gestion_consulta' %}">Gestionar</a>
                     </div>
                 </div>
             </div>

@@ -5,12 +5,13 @@
     <span class="text-muted" style="font-style: italic;"> Gestión Clientes</span>
 </h1>
 
-<div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías" style="font-family: 'Roboto', sans-serif;">
+<div class="btn-group d-flex justify-content-center mb-4" role="group" aria-label="Categorías" style="font-family: 'Roboto', sans-serif;">
     <a href="{% url 'cliente_add' %}" class="btn btn-secondary me-2">+ Agregar Cliente</a>
 </div>
 <hr>
- 
-<table class="table table-striped" style="font-family: 'Roboto', sans-serif;">
+
+<div class="scrollable-table-container">
+    <table class="table table-striped" style="font-family: 'Roboto', sans-serif;">
         <thead>
             <tr>
                 <th>DNI</th>
@@ -38,21 +39,21 @@
                 <td>{{ cliente.clifecreg }}</td>
 
                 <td>
-                    <div class="btn-group" role="group">
-                        <a class="btn1 btn-primary btn-sm" href="{% url 'cliente_edit' cliente.clidni %}" class="btn btn-primary btn-sm me-2">
-                            <i class="bi bi-pencil-square"></i >Modificar</a>
-                        <a class="btn1 btn-danger btn-sm" href="{% url 'cliente_delete' cliente.clidni %}" class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i> Eliminar</a>
-                        
+                    <div class="d-flex justify-content-end">
+                        <a class="btn1 btn-primary btn-sm" href="{% url 'cliente_edit' cliente.clidni %}" class="btn btn-outline-primary btn-sm me-2"> 
+                            <i class="bi bi-pencil-square"></i>  Modificar</a>
+                            <a class="btn1 btn-danger btn-sm" href="{% url 'gestion_cliente_delete' cliente.clidni %}" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash">  </i> Eliminar</a> 
+
                     </div>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
-</table>
+    </table>
+</div>
 
 <style>
-
     .btn-group .btn {
         border-radius: 25px;
         background-color: #6c757d;
@@ -62,11 +63,15 @@
     }
 
     .btn-group .btn:hover {
-        background-color: #535749;
+        background-color: #495057;
     }
 
     .btn-group .btn:focus {
         outline: none;
+    }
+
+    .scrollable-table-container {
+        overflow-x: auto;
     }
 </style>
 
