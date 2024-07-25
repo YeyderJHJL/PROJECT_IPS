@@ -6,6 +6,8 @@
     </button>
     
     <div class="collapse navbar-collapse" id="navbarNav">
+        
+        {% if request.personal %}
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'vendedor_home' %}">Home</a>
@@ -25,7 +27,36 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'inicio_vendedor' %}">Cuenta</a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="../static/image/usuario.jpeg" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="" alt="User" style="width: 30px; height: 30px; border-radius: 50%;">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'cliente_detail' %}">Mi Perfil</a> <!-- falta el link -->
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'personal_logout' %}" onclick="confirmLogout(event)">Logout</a>
+                </div>
+            </li>
         </ul>
+        
+        
+        {% else %}
+            
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Home</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'personal_login' %}">Login</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'personal_login' %}">Registrarse</a> <!-- falta el link -->
+            </li>
+        </ul>
+        
+        {% endif %}
     </div>
 </nav>
 
