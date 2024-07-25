@@ -33,6 +33,7 @@ urlpatterns = [
     #cliente
     path('servicios', views.servicios, name='servicios'),
     path('servicios/<str:codigo>/', views.servicios, name='servicios_codigo'),
+    path('vendedor/servicios/<str:codigo>/', views.vendedor_servicios, name='vendedor_servicios_codigo'),
     path('eventos/', views.lista_eventos, name='lista_eventos'),
     path('servicios/detalle/<str:sercod>/', views.detalle_servicio, name='detalle_servicio'),
     path('crear_evento', views.crear_evento, name='crear_evento'),
@@ -41,9 +42,13 @@ urlpatterns = [
     path('reservaServicio/eliminar/<int:evecod>/', views.eliminar_reservaS, name='eliminar_reservaS'),
     #personal
     path('gestionar_servicios', views.gestionar_servicios, name='gestionar_servicios'),
+    path('vendedor/gestionar_servicios', views.vendedor_gestionar_servicios, name='vendedor_gestionar_servicios'),
     path('agregar_servicio/', views.agregar_servicio, name='agregar_servicio'),
+    path('vendedor/agregar_servicio/', views.vendedor_agregar_servicio, name='vendedor_agregar_servicio'),
     path('modificar_servicio/<str:sercod>/', views.modificar_servicio, name='modificar_servicio'),
+    path('vendedor/modificar_servicio/<str:sercod>/', views.vendedor_modificar_servicio, name='vendedor_modificar_servicio'),
     path('eliminar_servicio/<str:sercod>/', views.eliminar_servicio, name='eliminar_servicio'),
+    path('vendedor/eliminar_servicio/<str:sercod>/', views.vendedor_eliminar_servicio, name='vendedor_eliminar_servicio'),
     path('gestionar_CategoriaServicios', views.gestionar_CategoriaServicios, name='gestionar_CategoriaServicios'),
     path('agregar_CategoriaServicio/', views.agregar_CategoriaServicio, name='agregar_CategoriaServicio'),
     path('modificar_CategoriaServicio/<str:catsercod>/', views.modificar_CategoriaServicio, name='modificar_CategoriaServicio'),
@@ -69,7 +74,12 @@ urlpatterns = [
     path('producto/editar/<int:procod>/', views.producto_update, name='producto_update'),
     path('producto/confirmar_eliminacion/<int:procod>/', views.confirmar_eliminacion, name='confirmar_eliminacion'),
     path('producto/eliminar/<int:procod>/', views.producto_delete, name='producto_delete'),
-
+    path('vendedor/gestionar_productos', views.vendedor_gestionar_productos, name='vendedor_gestionar_productos'),
+    path('vendedor/productoslista', views.vendedor_lista_productos, name='vendedor_lista_productos'),
+    path('vendedor/producto/agregar/', views.vendedor_producto_create, name='vendedor_producto_create'),
+    path('vendedor/producto/editar/<int:procod>/', views.vendedor_producto_update, name='vendedor_producto_update'),
+    path('vendedor/producto/confirmar_eliminacion/<int:procod>/', views.vendedor_confirmar_eliminacion, name='vendedor_confirmar_eliminacion'),
+    path('vendedor/producto/eliminar/<int:procod>/', views.vendedor_producto_delete, name='vendedor_producto_delete'),
     # Daniel
     #cliente?
     path('calendar/', views.calendar_view, name='calendar'),
@@ -113,7 +123,10 @@ urlpatterns = [
     path('cliente/add/', views.cliente_add, name='cliente_add'),
     path('cliente/edit/<str:pk>/', views.cliente_edit, name='cliente_edit'),
     path('cliente/delete/<str:pk>/', views.cliente_delete, name='cliente_delete'),
+    path('gestion/cliente/delete/<str:pk>/', views.gestion_cliente_delete, name='gestion_cliente_delete'),
     
+    path('vendedor/cliente/list/', views.vendedor_cliente_list, name='vendedor_cliente_list'),
+
     path('cliente/toggle_status/<int:pk>/', views.toggle_cliente_status, name='toggle_cliente_status'),
 
     # Jhamil

@@ -584,8 +584,8 @@ class ServicioForm(forms.ModelForm):
             'serreqpre' : 'Prerequisitos',
             'serdur' : 'Duración',
             'sercos' : 'Costo',
-            'serima' : 'Imagen URL',
-            'serimg' : 'Imagen directorio',
+            'serima' : 'Imagen URL (Opcional)',
+            'serimg' : 'Imagen directorio (Opcional)',
             'estado_registro_estregcod' : 'Estado registro',
             'categoaria_servicio_catsercod' : 'Categoria', 
         }
