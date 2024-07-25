@@ -126,6 +126,9 @@ urlpatterns = [
     path('gestion/cliente/delete/<str:pk>/', views.gestion_cliente_delete, name='gestion_cliente_delete'),
     
     path('vendedor/cliente/list/', views.vendedor_cliente_list, name='vendedor_cliente_list'),
+    path('vendedor/cliente/add/', views.vendedor_cliente_add, name='vendedor_cliente_add'),
+    path('vendedor/cliente/edit/<str:pk>/', views.vendedor_cliente_edit, name='vendedor_cliente_edit'),
+    path('vendedor/cliente/delete/<str:pk>/', views.vendedor_cliente_delete, name='vendedor_cliente_delete'),
 
     path('cliente/toggle_status/<int:pk>/', views.toggle_cliente_status, name='toggle_cliente_status'),
 

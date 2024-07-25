@@ -289,10 +289,6 @@ def cliente_list(request):
     clientes = Cliente.objects.all()
     return render(request, 'cliente/cliente_list.html', {'cliente': clientes})
 
-def vendedor_cliente_list(request):
-    clientes = Cliente.objects.all()
-    return render(request, 'cliente/vendedor_cliente_list.html', {'cliente': clientes})
-
 def cliente_add(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST)
@@ -344,13 +340,56 @@ def cliente_delete(request, pk):
 
     return render(request, 'cliente/cliente_confirm_delete.html', {'form': form})
 
+def vendedor_cliente_list(request):
+    clientes = Cliente.objects.all()
+    return render(request, 'cliente/vendedor_cliente_list.html', {'cliente': clientes})
+
+def vendedor_cliente_add(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            cliente = form.save(commit=False)
+            cliente.clifecreg = datetime.date.today()  # Campo de fecha de registro
+            cliente.save()
+            return redirect('vendedor_cliente_list')
+    else:
+        form = ClienteForm(initial={
+            'clifecreg': datetime.date.today(),
+            'estregcod': EstadoRegistro.objects.get(estregnom='Activo'),
+        })
+
+    return render(request, 'cliente/vendedor_cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Adicionar Cliente'})
+
+def vendedor_cliente_edit(request, pk):
+    cliente = get_object_or_404(Cliente, clidni=pk)
+    if request.method == 'POST':
+        form = ClienteForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect('vendedor_cliente_list')
+    else:
+        form = ClienteForm(instance=cliente)
+    return render(request, 'cliente/vendedor_cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Modificar Cliente'})
+
+def vendedor_cliente_delete(request, pk):
+    cliente = get_object_or_404(Cliente, clidni=pk)
+    if request.method == 'POST':
+        try:
+            cliente.delete()
+            messages.success(request, 'Cliente eliminado correctamente.')
+            return redirect('vendedor_cliente_list')
+        except IntegrityError:
+            messages.error(request, "No se puede eliminar el cliente porque tiene dependencias asociadas.")
+            return render(request, 'cliente/vendedor_cliente_confirm_delete.html', {'cliente': cliente})
+    return render(request, 'cliente/vendedor_cliente_confirm_delete.html', {'cliente': cliente})
+
 def toggle_cliente_status(request, pk):
     cliente = get_object_or_404(Cliente, clidni=pk)
     activo_estado = EstadoRegistro.objects.get(estregnom='Activo')
     inactivo_estado = EstadoRegistro.objects.get(estregnom='Inactivo')
     cliente.estregcod = inactivo_estado if cliente.estregcod == activo_estado else activo_estado
     cliente.save()
-    return redirect('cliente_list')
+    return redirect('vendedor_cliente_list')
 
 # Gestion Personal 
 def gestion_personal(request):
