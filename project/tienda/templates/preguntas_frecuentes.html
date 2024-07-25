@@ -31,6 +31,12 @@
                 <h3 class="faq-question">¿Las cámaras tienen garantía? <span class="toggle-symbol">+</span></h3>
                 <p class="faq-answer">Sí, nuestras cámaras de seguridad vienen con una garantía que cubre defectos de fabricación y problemas técnicos durante un período específico. Consulte con nosotros para obtener detalles sobre la garantía de cada producto.</p>
             </div>
+            <div class="text-center mt-4">
+                <form action="{% url 'consulta_cliente_add' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-custom">Realizar Consulta</button>
+                </form>
+            </div>
         </section>
     </main>
 </div>
@@ -72,6 +78,17 @@
         font-weight: bold;
         margin-left: 10px;
     }
+    .btn-custom {
+        background-color: #1f78af; /* Color púrpura */
+        color: white; /* Texto blanco */
+        font-size: 1.2rem; /* Tamaño de fuente mayor */
+        padding: 10px 20px; /* Espaciado interno más grande */
+        border: none; /* Sin borde */
+        border-radius: 5px; /* Bordes redondeados */
+        cursor: pointer; /* Cursor de mano al pasar por encima */
+        transition: background-color 0.3s; /* Transición suave para el color de fondo */
+    }
+
 </style>
 
 <script>
