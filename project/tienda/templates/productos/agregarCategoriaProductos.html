@@ -1,6 +1,6 @@
 {% extends "baseAdministrador.html" %}
 
-{% block title %}Agregar Categoria Servicio{% endblock %}
+{% block title %}Agregar Categoria Productos{% endblock %}
 
 {% block content %}
 <div class="container py-1">
@@ -9,7 +9,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h2  style="font-family: 'Roboto', sans-serif;">
-                       Agregar <span class="text-muted" style="font-style: italic;"> Categoria Servicio</span>
+                       Agregar <span class="text-muted" style="font-style: italic;"> Categoria Producto</span>
                     </h2>
                     <div class="bg-light rounded p-4 mb-4 shadow-sm">
                         <form method="post">
@@ -21,7 +21,7 @@
                             <hr>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary ">Agregar</button>
-                                <a href="{% url 'gestionar_CategoriaServicios' %}" class="btn btn-secondary">Cancelar</a>
+                                <a href="{% url 'gestionar_CategoriaProductos' %}" class="btn btn-secondary ">Cancelar</a>
                             </div>
                         </form>
                     </div>

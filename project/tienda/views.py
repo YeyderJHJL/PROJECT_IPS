@@ -180,8 +180,8 @@ def tipo_consulta_delete(request, pk):
         return redirect('tipo_consulta_list')
     return render(request, 'consultas/tipo_consulta_confirm_delete.html', {'consulta': consulta})
 
-# ESTADO DE REGISTRO ################################################
-
+# ESTADO REGISTRO ####################################################################################################################
+######################################################################################################################################
 # Estado Registro CRUD
 def estado_registro_list(request):
     estados = EstadoRegistro.objects.all()
@@ -195,7 +195,7 @@ def estado_registro_add(request):
             return redirect('estado_registro_list')  # Redirigir a la lista de estados
     else:
         form = EstadoRegistroForm()
-    return render(request, 'estado_registro/estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Agregar Estado de Registro'})
+    return render(request, 'estado_registro/estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Agregar '})
 
 def estado_registro_edit(request, pk):
     estado = get_object_or_404(EstadoRegistro, pk=pk)
@@ -206,7 +206,7 @@ def estado_registro_edit(request, pk):
             return redirect('estado_registro_list')
     else:
         form = EstadoRegistroForm(instance=estado)
-    return render(request, 'estado_registro/estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Modificar Estado de Registro'})
+    return render(request, 'estado_registro/estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Modificar '})
 
 def estado_registro_delete(request, pk):
     estado = get_object_or_404(EstadoRegistro, pk=pk)
@@ -277,7 +277,9 @@ def actualizar_perfil_personal(request):
     return render(request, 'personal/actualizar_perfil_personal_form.html', {'form': form})
 
 
-# Gestión Cliente
+# GESTION CLIENTE ####################################################################################################################
+######################################################################################################################################
+
 def gestion_cliente(request):
     return render(request, 'cliente/gestion_cliente.html')
 
@@ -300,7 +302,7 @@ def cliente_add(request):
             'estregcod': EstadoRegistro.objects.get(estregnom='Activo'),
         })
 
-    return render(request, 'cliente/cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Adicionar Cliente'})
+    return render(request, 'cliente/cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Adicionar '})
 
 def cliente_edit(request, pk):
     cliente = get_object_or_404(Cliente, clidni=pk)
@@ -311,7 +313,7 @@ def cliente_edit(request, pk):
             return redirect('cliente_list')
     else:
         form = ClienteForm(instance=cliente)
-    return render(request, 'cliente/cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Modificar Cliente'})
+    return render(request, 'cliente/cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Modificar '})
 
 def cliente_delete(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
@@ -335,7 +337,9 @@ def toggle_cliente_status(request, pk):
     cliente.save()
     return redirect('cliente_list')
 
-# Gestion Personal 
+# GESTION PERSONAL ###################################################################################################################
+######################################################################################################################################
+
 def gestion_personal(request):
     return render(request, 'personal/gestion_personal.html')
 
@@ -381,7 +385,7 @@ def personal_add(request):
             'percor': ''
         })
 
-    return render(request, 'personal/personal_form.html', {'form': form, 'return_url': 'personal_list', 'title': 'Adicionar Personal'})
+    return render(request, 'personal/personal_form.html', {'form': form, 'return_url': 'personal_list', 'title': 'Adicionar '})
 
 def personal_edit(request, pk):
     personal = get_object_or_404(Personal, pk=pk)
@@ -392,7 +396,7 @@ def personal_edit(request, pk):
             return redirect('personal_list')
     else:
         form = PersonalForm(instance=personal)
-    return render(request, 'personal/personal_form.html', {'form': form, 'return_url': 'personal_list', 'title': 'Modificar Personal'})
+    return render(request, 'personal/personal_form.html', {'form': form, 'return_url': 'personal_list', 'title': 'Modificar '})
 
 def personal_delete(request, pk):
     personal = get_object_or_404(Personal, pk=pk)
@@ -404,7 +408,9 @@ def personal_delete(request, pk):
             return render(request, 'personal/personal_confirm_delete.html', {'personal': personal, 'error': "No se puede eliminar el personal porque tiene dependencias asociadas."})
     return render(request, 'personal/personal_confirm_delete.html', {'personal': personal})
 
-# Tipo Personal CRUD
+# TIPO PERSONAL #######################################################################################################################
+######################################################################################################################################
+#administrador
 def tipo_personal_list(request):
     tipos = TipoPersonal.objects.all()
     return render(request, 'personal/tipo_personal_list.html', {'tipos': tipos})
@@ -417,7 +423,7 @@ def tipo_personal_add(request):
             return redirect('tipo_personal_list')  # Redirige a la lista de tipos de personal
     else:
         form = TipoPersonalForm()
-    return render(request, 'personal/tipo_personal_form.html', {'form': form, 'title': 'Agregar Tipo de Personal', 'return_url': 'tipo_personal_list'})
+    return render(request, 'personal/tipo_personal_form.html', {'form': form, 'title': 'Agregar', 'return_url': 'tipo_personal_list'})
 
 def tipo_personal_edit(request, pk):
     tipo_personal = get_object_or_404(TipoPersonal, pk=pk)
@@ -428,7 +434,7 @@ def tipo_personal_edit(request, pk):
             return redirect('tipo_personal_list')  # Redirige a la lista de tipos de personal
     else:
         form = TipoPersonalForm(instance=tipo_personal)
-    return render(request, 'personal/tipo_personal_form.html', {'form': form, 'title': 'Modificar Tipo de Personal', 'return_url': 'tipo_personal_list'})
+    return render(request, 'personal/tipo_personal_form.html', {'form': form, 'title': 'Modificar', 'return_url': 'tipo_personal_list'})
 
 def tipo_personal_delete(request, pk):
     tipo = get_object_or_404(TipoPersonal, pk=pk)
@@ -684,7 +690,8 @@ def cambiar_contrasena(request):
 
     return render(request, 'cliente/cambiar_contrasena.html', {'form': form})
 
-# PRODUCTO ################################################
+# PRODUCTO ###########################################################################################################################
+######################################################################################################################################
 
 def productos(request):
     categorias = CategoariaProducto.objects.all()  
@@ -705,6 +712,9 @@ def detalle_producto(request, procod):
         'producto': producto,
         'cantidad_disponible': cantidad_disponible
     })
+
+# RESERVA PRODUCTO ###################################################################################################################
+######################################################################################################################################
 
 @cliente_login_required
 def reserva_producto(request, procod):
@@ -821,7 +831,9 @@ def eliminar_reserva(request, evecod):
     messages.success(request, 'Reserva eliminada con éxito.')
     return redirect('calendario') 
 
-#### GESTIONAR LOS PRODUCTOS CON INVENTARIO
+# GESTION PRODUCTOS ##################################################################################################################
+######################################################################################################################################
+
 def lista_productos(request):
     categorias = CategoariaProducto.objects.all()
     productos = Producto.objects.all()
@@ -913,7 +925,73 @@ def producto_delete(request, procod):
 
     return redirect(reverse('confirmar_eliminacion', kwargs={'procod': procod}))
 
-# registro de ventas
+
+
+# GESTION CATEGORIA SERVICIO #########################################################################################################
+######################################################################################################################################
+
+#personal
+def gestionar_CategoriaProductos(request, codigo=None):
+    instancia_clase = None
+    categorias = CategoariaProducto.objects.all()
+
+    if request.method == 'POST':
+        formulario = CategoriaProductoForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('gestionar_CategoriaProductos')
+    else:
+        formulario = CategoriaProductoForm(instance=instancia_clase)
+
+    return render(request, 'productos/gestionarCategoriaProductos.html', {'formulario': formulario, 'categorias': categorias})
+#oersonal
+def agregar_CategoriaProductos(request):
+    if request.method == 'POST':
+        form = CategoriaProductoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionar_CategoriaProductos')  
+    else:
+        form = CategoriaProductoForm()
+    
+    return render(request, 'productos/agregarCategoriaProductos.html', {'form': form})
+#personal
+def modificar_CategoriaProductos(request, catprocod):
+    producto = get_object_or_404(CategoariaProducto, catprocod=catprocod)
+    if request.method == 'POST':
+        form = CategoriaProductoForm(request.POST, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionar_CategoriaProductos')  # Redirigir a la vista de listado de servicios
+    else:
+        form = CategoriaProductoForm(instance=producto)
+    
+    return render(request, 'productos/modificarCategoriaProductos.html', {'form': form, 'producto': producto})
+#personal
+def eliminar_CategoriaProductos(request, catprocod):
+    categoria = get_object_or_404(CategoariaProducto, catprocod=catprocod)
+
+    if request.method == 'POST':
+        # Verificar si hay servicios asociados a la categoría
+        if Producto.objects.filter(catprocod=categoria).exists():
+            # Mostrar mensaje de error si hay servicios asociados
+            messages.error(request, 'No se puede eliminar la categoría porque tiene productos asociados.')
+            return redirect('gestionar_CategoriaProductos')
+        
+        # Si no hay servicios asociados, eliminar la categoría
+        categoria.delete()
+        messages.success(request, 'Categoría de Producto eliminada correctamente.')
+        return redirect('gestionar_CategoriaProductos')
+
+    # Redirigir si no es una solicitud POST
+    return redirect('gestionar_CategoriaProductos')
+
+
+
+
+
+# REGISTRO DE VENTAS #################################################################################################################
+######################################################################################################################################
 
 def venta_list(request):
     ventas = Venta.objects.all()
@@ -943,6 +1021,9 @@ def venta_delete(request, pk):
         return redirect('venta_list')
     return render(request, 'ventas/venta_confirm_delete.html', {'venta': venta})
 
+# REPORTES PRODUCTOS #################################################################################################################
+######################################################################################################################################
+
 def sales_report(request):
     form = SalesReportForm()
     sales = []
@@ -966,7 +1047,9 @@ def sales_report(request):
     }
     return render(request, 'productos/sales_report.html', context)
 
-# SERVICIO ################################################
+# VER SERVICIO #######################################################################################################################
+######################################################################################################################################
+
 #general
 def servicios(request, codigo=None):
     instancia_clase = None
@@ -991,6 +1074,10 @@ def detalle_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
     personal = Personal.objects.filter(tippercod='2')
     return render(request, 'servicios/detalle_servicio.html', {'servicio': servicio, 'personal':personal})
+
+
+# GESTIONAR SERVICIOS ################################################################################################################
+######################################################################################################################################
 
 #personal
 def gestionar_servicios(request, codigo=None):
@@ -1043,6 +1130,11 @@ def eliminar_servicio(request, sercod):
         return redirect('gestionar_servicios')
 
     return redirect('gestionar_servicios')
+
+
+# GESTION CATEGORIA SERVICIO #########################################################################################################
+######################################################################################################################################
+
 #personal
 def gestionar_CategoriaServicios(request, codigo=None):
     instancia_clase = None
@@ -1107,6 +1199,9 @@ def get_authenticated_cliente(request):
         except Cliente.DoesNotExist:
             return None
     return None
+
+# RESERVA SERVICIO ####################################################################################################################
+######################################################################################################################################
 
 @cliente_login_required
 def crear_evento(request):
@@ -1215,7 +1310,9 @@ def eliminar_reservaS(request, evecod):
     
     return redirect('index')
 
-# EVENTO ################################################
+
+#EVENTO ##############################################################################################################################
+######################################################################################################################################
 
 def calendar_view(request):
     return render(request, 'calendar.html')
@@ -1247,8 +1344,8 @@ def obtener_eventos(request):
     for evento in eventos]
     return JsonResponse(eventos_json, safe=False)
 
-#calendario
-
+#CALENDARIO ##########################################################################################################################
+######################################################################################################################################
 
 def generate_calendar(year, month):
     start_date = datetime(year, month, 1)

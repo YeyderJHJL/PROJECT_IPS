@@ -51,6 +51,12 @@ urlpatterns = [
     path('reservaServicio/detalle/<int:evecod>/', views.detalle_reservaS, name='detalle_reservaS'),
     path('reservaServicio/editar/<int:evecod>/', views.editar_reservaS, name='editar_reservaS'),
     path('reservaServicio/eliminar/<int:evecod>/', views.eliminar_reservaS, name='eliminar_reservaS'),
+    path('gestionar_CategoriaProductos', views.gestionar_CategoriaProductos, name='gestionar_CategoriaProductos'),
+    path('agregar_CategoriaProductos/', views.agregar_CategoriaProductos, name='agregar_CategoriaProductos'),
+    path('modificar_CategoriaProductos/<str:catprocod>/', views.modificar_CategoriaProductos, name='modificar_CategoriaProductos'),
+    path('eliminar_CategoriaProductos/<str:catprocod>/', views.eliminar_CategoriaProductos, name='eliminar_CategoriaProductos'),
+
+
 
     # Paola
     #cliente

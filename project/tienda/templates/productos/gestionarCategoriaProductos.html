@@ -1,6 +1,6 @@
 {% extends "baseAdministrador.html" %}
 
-{% block title %}Servicios{% endblock %}
+{% block title %}Productos{% endblock %}
 
 {% block content %}
 <div class="container" style="font-family: 'Roboto', sans-serif;">
@@ -23,14 +23,13 @@
     {% endif %}
 
     <h1 class="text mb-4 display-1 fw-bold text-dark">
-        <span class="text-muted" style="font-style: italic;">Categoría Servicios</span>
+        <span class="text-muted" style="font-style: italic;">Categoría Productos</span>
     </h1>
     <div class="btn-group d-flex justify-content-center mb-4" role="group" aria-label="Categorías">
-        <a href="{% url 'agregar_CategoriaServicio' %}" class="btn btn-secondary me-2">+ Agregar Categoría</a>
+        <a href="{% url 'agregar_CategoriaProductos' %}" class="btn btn-secondary me-2">+ Agregar Categoría</a>
     </div>
     <hr>
 
-    <!-- Servicios -->
     <table class="table table-striped">
         <thead>
             <tr>
@@ -42,15 +41,15 @@
         <tbody>
             {% for categoria in categorias %}
             <tr>
-                <td>{{ categoria.catsercod }}</td>
-                <td>{{ categoria.catsernom }}</td>
+                <td>{{ categoria.catprocod }}</td>
+                <td>{{ categoria.catpronom }}</td>
               
                 <td>
                     <div class="d-flex justify-content-end">
-                        <a href="{% url 'modificar_CategoriaServicio' catsercod=categoria.catsercod %}" class="btn btn-primary btn-sm me-2">
+                        <a href="{% url 'modificar_CategoriaProductos' catprocod=categoria.catprocod %}" class="btn btn-primary btn-sm me-2">
                             <i class="bi bi-pencil-square"></i> Modificar
                         </a>
-                        <form action="{% url 'eliminar_CategoriaServicio' catsercod=categoria.catsercod %}" method="post" onsubmit="return confirmDelete();">
+                        <form action="{% url 'eliminar_CategoriaProductos' catprocod=categoria.catprocod %}" method="post" onsubmit="return confirmDelete();">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm">
                                 <i class="bi bi-trash"></i> Eliminar
@@ -62,7 +61,12 @@
             {% endfor %}
         </tbody>
     </table>
+
+
+
+
 </div>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <style>
     .btn-group .btn {
@@ -71,6 +75,7 @@
         color: #fff;
         border: none;
         transition: all 0.3s ease;
+        font-family: 'Roboto', sans-serif;
     }
 
     .btn-group .btn:hover {
@@ -80,7 +85,69 @@
     .btn-group .btn:focus {
         outline: none;
     }
-    </style>
+
+    .list-group-item {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        transition: box-shadow 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .list-group-item:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .list-group-item h5 {
+        margin-bottom: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .list-group-item p {
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    .list-group-item .btn {
+        margin-right: 0.5rem;
+    }
+
+    .alert {
+        font-size: 1rem;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .alert i {
+        font-size: 1.5rem;
+        margin-right: 10px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .btn-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>

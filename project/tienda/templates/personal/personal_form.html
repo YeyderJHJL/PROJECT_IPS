@@ -1,7 +1,16 @@
 {% extends "baseAdministrador.html" %}
 
 {% block content %}
-<h2>{{ title }}</h2>
+<div class="container py-1">
+    <div>
+        <div class="col-lg-19">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2  style="font-family: 'Roboto', sans-serif;">
+                        {{ title }} <span class="text-muted" style="font-style: italic;"> Personal</span>
+                    </h2>
+                    <div class="bg-light rounded p-4 mb-4 shadow-sm">
+
 
 <form method="post" action="{% url 'personal_add' %}">
     {% csrf_token %}
@@ -52,8 +61,15 @@
         {{ form.perfecreg }}
         {{ form.perfecreg.errors }}
     </div>
-
+    <br>
+<hr>
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
 </form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 {% endblock %}

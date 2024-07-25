@@ -16,7 +16,7 @@
         <tr>
             <th>Código</th>
             <th>Nombre</th>
-            <th>Acciones</th>
+            <th class="d-flex justify-content-end">Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -25,10 +25,15 @@
             <td>{{ estado.estregcod }}</td>
             <td>{{ estado.estregnom }}</td>
             <td>
-                <div class="btn1-group" role="group" style="font-family: 'Roboto', sans-serif;">
-                    <a class="btn1 btn-primary btn-sm" href="{% url 'estado_registro_edit' estado.estregcod %}">Modificar</a>
-                    <a class="btn1 btn-danger btn-sm" href="{% url 'estado_registro_delete' estado.estregcod %}">Eliminar</a>
+
+
+                <div class="d-flex justify-content-end">
+                    <a class="btn1 btn-primary btn-sm" href="{% url 'estado_registro_edit' estado.estregcod %}" class="btn btn-outline-primary btn-sm me-2"> <i class="bi bi-pencil-square"></i> Modificar</a>
+                    <a class="btn1 btn-danger btn-sm" href="{% url 'estado_registro_delete' estado.estregcod %}" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i> Eliminar</a>
                 </div>
+
+
             </td>
         </tr>
         {% endfor %}
