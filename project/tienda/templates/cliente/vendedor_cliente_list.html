@@ -1,9 +1,9 @@
 {% extends 'inicio_personal/base_vendedor.html' %}
 
 {% block content %}
-<h1 class="text mb-4 display-1 fw-bold text-dark" style="font-family: 'Roboto', sans-serif;">
-    <span class="text-muted" style="font-style: italic;"> Gestión Clientes</span>
-</h1>
+<h2 class="mb-4 display-4 fw-bold text-dark">
+    <span class="text-muted" style="font-style: italic;">Gestión de Clientes</span>
+</h2>
 
 <div class="btn-group d-flex justify-content-center mb-4" role="group" aria-label="Categorías" style="font-family: 'Roboto', sans-serif;">
     <a href="{% url 'vendedor_cliente_add' %}" class="btn btn-secondary me-2">+ Agregar Cliente</a>
@@ -44,13 +44,17 @@
                             <i class="bi bi-pencil-square"></i>  Modificar</a>
                             <a class="btn1 btn-danger btn-sm" href="{% url 'vendedor_cliente_delete' cliente.clidni %}" class="btn btn-outline-danger btn-sm">
                                 <i class="bi bi-trash">  </i> Eliminar</a> 
-
                     </div>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    
+    <div class="btn-group mt-3 d-flex justify-content-center" role="group" aria-label="Administrador Actions">
+        <a class="btn btn-primary btn-lg" href="{% url 'inicio_vendedor' %}">Volver al Inicio</a>
+    </div>
+
 </div>
 
 <style>

@@ -31,6 +31,9 @@ def empresa(request):
 def preguntas_frecuentes(request):
     return render(request, './preguntas_frecuentes.html')
 
+def vendedor_home(request):
+    return render(request, 'inicio_personal/vendedor_home.html')
+
 #  FORMULARIO DE CONTACTO ################################################
 
 # def contact_form(request):
@@ -989,7 +992,7 @@ def producto_delete(request, procod):
 
     return redirect(reverse('confirmar_eliminacion', kwargs={'procod': procod}))
 
-def vendedor_lista_productos(request):
+def vendedor_gestionar_productos(request):
     categorias = CategoariaProducto.objects.all()
     productos = Producto.objects.all()
     categoria_id = request.GET.get('categoria')    
@@ -1010,7 +1013,7 @@ def vendedor_lista_productos(request):
         'categorias': categorias,
         'productos_con_cantidad': productos_con_cantidad,
     }
-    return render(request, 'productos/vendedor_lista_productos.html', context)
+    return render(request, 'productos/vendedor_gestionar_productos.html', context)
 
 def vendedor_producto_create(request):
     if request.method == 'POST':
@@ -1033,7 +1036,7 @@ def vendedor_producto_create(request):
             producto.save()   
             inventario.save()            
             messages.success(request, 'Producto registrado exitosamente.')
-            return redirect('vendedor_lista_productos')
+            return redirect('vendedor_gestionar_productos')
 
     else:
         producto_form = ProductoForm(initial={
@@ -1056,7 +1059,7 @@ def vendedor_producto_update(request, procod):
         if producto_form.is_valid() and inventario_form.is_valid():
             producto_form.save()
             inventario_form.save()
-            return redirect(reverse('vendedor_lista_productos'))
+            return redirect(reverse('vendedor_gestionar_productos'))
     else:
         producto_form = ProductoForm(instance=producto)
         inventario_form = InventarioForm(instance=inventario)
@@ -1079,12 +1082,12 @@ def vendedor_producto_delete(request, procod):
     inventario = get_object_or_404(Inventario, procod=producto)
     if EventoProducto.objects.filter(procod=producto).exists():
         messages.error(request, 'No se puede eliminar el producto porque tiene reservas asociadas.')
-        return redirect(reverse('confirmar_eliminacion', kwargs={'procod': procod}))
+        return redirect(reverse('vendedor_confirmar_eliminacion', kwargs={'procod': procod}))
     if request.method == 'POST':
         inventario.delete()
         producto.delete()
         messages.success(request, 'Producto eliminado con éxito.')
-        return redirect(reverse('vendedor_lista_productos'))
+        return redirect(reverse('vendedor_gestionar_productos'))
 
     return redirect(reverse('vendedor_confirmar_eliminacion', kwargs={'procod': procod}))
 

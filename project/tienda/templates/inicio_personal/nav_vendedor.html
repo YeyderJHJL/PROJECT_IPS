@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Home</a>
+                <a class="nav-link" href="{% url 'vendedor_home' %}">Home</a>
             </li>
             
             <li class="nav-item dropdown">
@@ -16,14 +16,14 @@
                     Gestionar
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownGestionar">
-                    <a class="dropdown-item" href="{% url 'vendedor_lista_productos' %}">Productos</a>
+                    <a class="dropdown-item" href="{% url 'vendedor_gestionar_productos' %}">Productos</a>
                     <a class="dropdown-item" href="{% url 'vendedor_gestionar_servicios' %}">Servicios</a>
                     <a class="dropdown-item" href="{% url 'vendedor_cliente_list' %}">Clientes</a>
                     <a class="dropdown-item" href="{% url 'gestion_consulta' %}">Consultas</a>
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'actualizar_perfil_personal' %}">Cuenta</a>
+                <a class="nav-link" href="{% url 'inicio_vendedor' %}">Cuenta</a>
             </li>
         </ul>
     </div>

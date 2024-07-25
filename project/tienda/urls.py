@@ -10,6 +10,7 @@ urlpatterns = [
     path('empresa/', views.empresa, name='empresa'),
     path('preguntas_frecuentes/', views.preguntas_frecuentes, name='preguntas_frecuentes'),
 
+    path('vendedor_home/', views.vendedor_home, name='vendedor_home'),
     # Gabriela
     # path('contact/', views.contact_form, name='contact_form'),
     # path('contact/success/', views.contact_success, name='contact_success'),
@@ -75,7 +76,7 @@ urlpatterns = [
     path('producto/confirmar_eliminacion/<int:procod>/', views.confirmar_eliminacion, name='confirmar_eliminacion'),
     path('producto/eliminar/<int:procod>/', views.producto_delete, name='producto_delete'),
     path('vendedor/gestionar_productos', views.vendedor_gestionar_productos, name='vendedor_gestionar_productos'),
-    path('vendedor/productoslista', views.vendedor_lista_productos, name='vendedor_lista_productos'),
+    # path('vendedor/productoslista', views.vendedor_lista_productos, name='vendedor_lista_productos'),
     path('vendedor/producto/agregar/', views.vendedor_producto_create, name='vendedor_producto_create'),
     path('vendedor/producto/editar/<int:procod>/', views.vendedor_producto_update, name='vendedor_producto_update'),
     path('vendedor/producto/confirmar_eliminacion/<int:procod>/', views.vendedor_confirmar_eliminacion, name='vendedor_confirmar_eliminacion'),

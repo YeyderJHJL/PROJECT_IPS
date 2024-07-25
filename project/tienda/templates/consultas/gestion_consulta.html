@@ -33,13 +33,11 @@
                     <td>{{ consulta.perdni.pernom }} {{ consulta.perdni.perape }}</td>
                     <td>{{ consulta.tipconcod.tipconnom }}</td>
                     <td>
-                        <div class="btn-group" role="group">
-                            <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'consulta_edit' consulta.concod %}">
-                                <i class="bi bi-pencil-square"></i> Responder
-                            </a>
-                            <a class="btn btn-outline-danger btn-sm" href="{% url 'consulta_delete' consulta.concod %}">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </a>
+                        <div class="d-flex justify-content-end">
+                            <a class="btn1 btn-primary btn-sm" href="{% url 'consulta_edit' consulta.concod %}" class="btn btn-outline-primary btn-sm me-2"> 
+                                <i class="bi bi-pencil-square"></i>  Modificar</a>
+                                <a class="btn1 btn-danger btn-sm" href="{% url 'consulta_delete' consulta.concod %}" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash">  </i> Eliminar</a> 
                         </div>
                     </td>
                 </tr>
@@ -58,93 +56,26 @@
 
 </div>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <style>
-    .table {
-        width: 100%;
-        border-radius: 12px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        font-family: 'Roboto', sans-serif;
+    .btn-group .btn {
+        border-radius: 25px;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
     }
 
-    .table thead th {
-        background-color: #f8f9fa;
-        font-weight: bold;
-        text-align: left;
-        vertical-align: middle;
+    .btn-group .btn:hover {
+        background-color: #495057;
     }
 
-    .table tbody td {
-        vertical-align: middle;
-        white-space: nowrap;
+    .btn-group .btn:focus {
+        outline: none;
     }
 
     .scrollable-table-container {
         overflow-x: auto;
-        overflow-y: auto;
-        width: 100%; /* Asegura que el contenedor ocupe el ancho completo disponible */
-    }
-
-    .btn-group .btn {
-        border-radius: 25px;
-        transition: all 0.3s ease;
-        font-family: 'Roboto', sans-serif;
-    }
-
-    .btn-group .btn-outline-primary {
-        color: #007bff;
-        border-color: #007bff;
-    }
-
-    .btn-group .btn-outline-primary:hover {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .btn-group .btn-outline-danger {
-        color: #dc3545;
-        border-color: #dc3545;
-    }
-
-    .btn-group .btn-outline-danger:hover {
-        background-color: #dc3545;
-        color: #fff;
-    }
-
-    .alert {
-        font-size: 1rem;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 15px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .alert i {
-        font-size: 1.5rem;
-        margin-right: 10px;
-    }
-
-    .alert-success {
-        background-color: #d4edda;
-        color: #155724;
-    }
-
-    .alert-danger {
-        background-color: #f8d7da;
-        color: #721c24;
-    }
-
-    .btn-close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
     }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 
 {% endblock %}
