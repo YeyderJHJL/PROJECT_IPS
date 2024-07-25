@@ -13,7 +13,7 @@ def cliente_login_required(view_func):
 def admin_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
-        if request.personal and request.personal.tippercod.tippernom == 'Administrador':
+        if request.user.is_authenticated and hasattr(request, 'personal') and request.personal and request.personal.tippercod.tippernom == 'Administrador':
             return view_func(request, *args, **kwargs)
         else:
             return redirect('personal_login')
@@ -22,7 +22,7 @@ def admin_required(view_func):
 def vendedor_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
-        if request.personal and request.personal.tippercod.tippernom == 'Vendedor':
+        if hasattr(request, 'personal') and request.personal and request.personal.tippercod.tippernom == 'Vendedor':
             return view_func(request, *args, **kwargs)
         else:
             return redirect('personal_login')
@@ -31,7 +31,7 @@ def vendedor_required(view_func):
 def tecnico_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
-        if request.personal and request.personal.tippercod.tippernom == 'Técnico':
+        if hasattr(request, 'personal') and request.personal and request.personal.tippercod.tippernom == 'Técnico':
             return view_func(request, *args, **kwargs)
         else:
             return redirect('personal_login') 
@@ -41,7 +41,7 @@ def multi_role_required(*roles):
     def decorator(view_func):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
-            if request.personal and request.personal.tippercod.tippernom in roles:
+            if hasattr(request, 'personal') and request.personal and request.personal.tippercod.tippernom in roles:
                 return view_func(request, *args, **kwargs)
             else:
                 return redirect('personal_login') 

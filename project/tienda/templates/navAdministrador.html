@@ -9,7 +9,7 @@
         {% if request.personal %}
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Home</a>  <!-- falta el link -->
+                <a class="nav-link" href="{% url 'indexAdministrador' %}">Home</a>  <!-- falta el link -->
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCategoria" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,28 +38,22 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownVer">
                     <a class="dropdown-item" href="{% url 'lista_productos' %}">Productos</a>
                     <a class="dropdown-item" href="{% url 'gestionar_servicios' %}">Servicios</a>
-                    <a class="dropdown-item" href="{% url 'calendario' %}">Calendario</a>
+                    <a class="dropdown-item" href="{% url 'calendarioAdministrador' %}">Calendario</a>
                 </div>
             </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'sales_report' %}">Reportes</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'actualizar_perfil_personal' %}">Cuenta</a>  <!-- falta el link -->
-                </li>
 
-            <li class="nav-item">
-                <span class="navbar-text text-light font-weight-bold">Bienvenido, {{ request.personal.pernom }}</span>
-            </li>
+            
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="../static/image/usuario.jpeg" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="" alt="User" style="width: 30px; height: 30px; border-radius: 50%;">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Cuenta
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'cliente_detail' %}">Mi Perfil</a>
-                    <a class="dropdown-item" href="{% url 'lista_reservas' %}">Tus Pedidos</a>
-                    <a class="dropdown-item" href="{% url 'lista_eventos' %}">Tus Servicios</a>
-                    <a class="dropdown-item" href="{% url 'calendario' %}">Ver Calendario</a>
+                    <a class="dropdown-item" href="{% url 'perfil' %}">Mi Perfil</a>
+
+                    
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'personal_logout' %}" onclick="confirmLogout(event)">Logout</a>
                 </div>

@@ -2,19 +2,26 @@
 
 {% block gestion_personal_content %}
     <!-- Categorías -->
+
     <div class="row justify-content-center mb-4">
         <div class="col-12 col-md-8">
             <div class="btn-group d-flex justify-content" role="group" aria-label="Categorías">
                 <a href="{% url 'personal_list' %}" class="btn btn-secondary me-2">Todos</a>
                 {% for tipo in tipo %}
-                    <a href="{% url 'personal_list_codigo' tipo.tippercod %}" class="btn btn-secondary me-2">{{ tipo.tippernom }}</a>
+                    <a href="{% url 'personal_list_codigo' tipo.tippercod %}"  class="btn btn-secondary me-2">{{ tipo.tippernom }}</a>
                 {% endfor %}
             </div>
         </div>
         <div >
+            <div class="btn-group d-flex justify-content-center" role="group" aria-label="Categorías">
+                <a  href="{% url 'personal_add' %}" class="btn btn-secondary me-2">+ Agregar Personal</a>
+            </div>
         </div>
     </div>
-   
+
+
+
+
 
 <div class="scrollable-table-container">
     <table class="table table-striped">

@@ -1,0 +1,75 @@
+{% extends "baseAdministrador.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h1 class="text mb-4 display-1 fw-bold text-dark text-center" style="font-family: 'Roboto', sans-serif;">
+        Perfil <span class="text-muted" style="font-style: italic;">Administrador</span>
+    </h1>
+    <div class="row justify-content-center">
+        <!-- Columna del Icono -->
+        <div class="col-md-4 text-center">
+            <!-- Icono en escala de grises -->
+            <i class="bi bi-person-circle" style="font-size: 150px; color: #6c757d; filter: grayscale(100%);"></i>
+        </div>
+        <!-- Columna de Datos -->
+        <div class="col-md-8">
+            <form method="post" action="{% url 'personal_add' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.perdni.label_tag }}
+                    {{ form.perdni }}
+                    {{ form.perdni.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.pernom.label_tag }}
+                    {{ form.pernom }}
+                    {{ form.pernom.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.perape.label_tag }}
+                    {{ form.perape }}
+                    {{ form.perape.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.perusu.label_tag }}
+                    {{ form.perusu }}
+                    {{ form.perusu.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.percon.label_tag }}
+                    {{ form.percon }}
+                    {{ form.percon.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.estregcod.label_tag }}
+                    {{ form.estregcod }}
+                    {{ form.estregcod.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.tippercod.label_tag }}
+                    {{ form.tippercod }}
+                    {{ form.tippercod.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.perfecreg.label_tag }}
+                    {{ form.perfecreg }}
+                    {{ form.perfecreg.errors }}
+                </div>
+                <br>
+            <hr>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="{% url return_url %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

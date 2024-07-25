@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     # General
     path('', views.index, name='index'),
+     path('indexAdministrador', views.indexAdministrador, name='indexAdministrador'),
     path('empresa/', views.empresa, name='empresa'),
     path('preguntas_frecuentes/', views.preguntas_frecuentes, name='preguntas_frecuentes'),
 
@@ -43,6 +44,7 @@ urlpatterns = [
     path('reservaServicio/eliminar/<int:evecod>/', views.eliminar_reservaS, name='eliminar_reservaS'),
     #personal
     path('gestionar_servicios', views.gestionar_servicios, name='gestionar_servicios'),
+    path('gestionar_servicios/<str:codigo>/', views.gestionar_servicios, name='gestionar_servicios_codigo'),
     path('vendedor/gestionar_servicios', views.vendedor_gestionar_servicios, name='vendedor_gestionar_servicios'),
     path('agregar_servicio/', views.agregar_servicio, name='agregar_servicio'),
     path('vendedor/agregar_servicio/', views.vendedor_agregar_servicio, name='vendedor_agregar_servicio'),
@@ -61,8 +63,8 @@ urlpatterns = [
     path('agregar_CategoriaProductos/', views.agregar_CategoriaProductos, name='agregar_CategoriaProductos'),
     path('modificar_CategoriaProductos/<str:catprocod>/', views.modificar_CategoriaProductos, name='modificar_CategoriaProductos'),
     path('eliminar_CategoriaProductos/<str:catprocod>/', views.eliminar_CategoriaProductos, name='eliminar_CategoriaProductos'),
-
-
+    path('calendarioAdministrador/', views.calendario_viewAdministrador, name='calendarioAdministrador'),
+    path('perfil/', views.perfil, name='perfil'),
 
     # Paola
     #cliente

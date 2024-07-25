@@ -1,90 +1,105 @@
 {% extends 'baseAdministrador.html' %}
 
 {% block content %}
-<div class="container my-5">
-    <h1 class="text mb-4 display-1 fw-bold text-dark" style="font-family: 'Roboto', sans-serif;">
+<div class="container my-1">
+    <h1 class="text mb-4 display-1 fw-bold text-dark" style="font-family: 'Roboto', sans-serif; text-align: left;">
         Bienvenido, <span class="text-muted" style="font-style: italic;">Administrador</span>
     </h1>
-    <div class="position-relative d-flex align-items-center">
+    <div class="position-relative">
 
-        <div class="overflow-auto flex-grow-1">
+        <button id="prevBtn" class="arrow-btn position-absolute start-0 top-50 translate-middle-y">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <button id="nextBtn" class="arrow-btn position-absolute end-0 top-50 translate-middle-y">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+
+        <div class="overflow-auto">
             <div class="d-flex gap-4 p-3">
-                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; margin-right: 1rem;">
+                <!-- Tarjeta de Estados de Registro -->
+                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; background-color: #E6F2FF;">
                     <div class="card-body text-center d-flex flex-column align-items-center">
                         <div class="mb-3">
-                            <i class="bi bi-person-circle fs-5" style="color: #6c757d; font-size: 3rem;"></i>
+                            <i class="bi bi-file-text fs-5" style="color: #4A90E2; font-size: 3rem;"></i>
                         </div>
-                        <h5 class="card-title mb-3 fs-4 fw-bold">
-                            Actualizar Perfil
-                        </h5>
-                        <p class="card-text mb-4">Modifica tu perfil y detalles personales.</p>
-                        <a class="btn btn-secondary btn-lg" href="{% url 'actualizar_perfil_personal' %}">Actualizar</a>
-                    </div>
-                </div>
-                
-                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; margin-right: 1rem;">
-                    <div class="card-body text-center d-flex flex-column align-items-center">
-                        <div class="mb-3">
-                            <i class="bi bi-file-text fs-5" style="color: #6c757d; font-size: 3rem;"></i>
-                        </div>
-                        <h5 class="card-title mb-3 fs-4 fw-bold">
-                            Estados de Registro
-                        </h5>
+                        <h5 class="card-title mb-3 fs-4 fw-bold">Estados de Registro</h5>
                         <p class="card-text mb-4">Administra los estados de registro de los servicios.</p>
-                        <a class="btn btn-secondary btn-lg" href="{% url 'estado_registro_list' %}">Gestionar</a>
+                        <a class="btn btn-outline-info btn-lg" href="{% url 'estado_registro_list' %}">Gestionar</a>
                     </div>
                 </div>
 
                 <!-- Tarjeta de Gestionar Personal -->
-                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; margin-right: 1rem;">
+                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; background-color: #F0F8FF;">
                     <div class="card-body text-center d-flex flex-column align-items-center">
                         <div class="mb-3">
-                            <i class="bi bi-person-workspace fs-5" style="color: #6c757d; font-size: 3rem;"></i>
+                            <i class="bi bi-person-workspace fs-5" style="color: #4A90E2; font-size: 3rem;"></i>
                         </div>
-                        <h5 class="card-title mb-3 fs-4 fw-bold">
-                            Gestionar Personal
-                        </h5>
+                        <h5 class="card-title mb-3 fs-4 fw-bold">Gestionar Personal</h5>
                         <p class="card-text mb-4">Maneja al personal y sus asignaciones.</p>
-                        <a class="btn btn-secondary btn-lg" href="{% url 'personal_list' %}">Gestionar</a>
+                        <a class="btn btn-outline-info btn-lg" href="{% url 'personal_list' %}">Gestionar</a>
                     </div>
                 </div>
 
                 <!-- Tarjeta de Gestionar Clientes -->
-                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; margin-right: 1rem;">
+                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; background-color: #EAF6FF;">
                     <div class="card-body text-center d-flex flex-column align-items-center">
                         <div class="mb-3">
-                            <i class="bi bi-person-badge fs-5" style="color: #6c757d; font-size: 3rem;"></i>
+                            <i class="bi bi-person-badge fs-5" style="color: #4A90E2; font-size: 3rem;"></i>
                         </div>
-                        <h5 class="card-title mb-3 fs-4 fw-bold">
-                            Gestionar Clientes
-                        </h5>
+                        <h5 class="card-title mb-3 fs-4 fw-bold">Gestionar Clientes</h5>
                         <p class="card-text mb-4">Controla la información de los clientes.</p>
-                        <a class="btn btn-secondary btn-lg" href="{% url 'cliente_list' %}">Gestionar</a>
+                        <a class="btn btn-outline-info btn-lg" href="{% url 'cliente_list' %}">Gestionar</a>
                     </div>
                 </div>
 
                 <!-- Tarjeta de Gestionar Categoría Servicios -->
-                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; margin-right: 1rem;">
+                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; background-color: #D6EAF8;">
                     <div class="card-body text-center d-flex flex-column align-items-center">
                         <div class="mb-3">
-                            <i class="bi bi-tags fs-5" style="color: #6c757d; font-size: 3rem;"></i>
+                            <i class="bi bi-tags fs-5" style="color: #4A90E2; font-size: 3rem;"></i>
                         </div>
-                        <h5 class="card-title mb-3 fs-4 fw-bold">
-                            Gestionar Categoría Servicios
-                        </h5>
+                        <h5 class="card-title mb-3 fs-4 fw-bold">Gestionar Categoría Servicios</h5>
                         <p class="card-text mb-4">Controla las categorías de servicios.</p>
-                        <a class="btn btn-secondary btn-lg" href="{% url 'gestionar_CategoriaServicios' %}">Gestionar</a>
+                        <a class="btn btn-outline-info btn-lg" href="{% url 'gestionar_CategoriaServicios' %}">Gestionar</a>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; background-color: #D6EAF8;">
+                    <div class="card-body text-center d-flex flex-column align-items-center">
+                        <div class="mb-3">
+                            <i class="bi bi-tags fs-5" style="color: #4A90E2; font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title mb-3 fs-4 fw-bold">Gestionar Servicios</h5>
+                        <p class="card-text mb-4">Controla los tipos de servicios.</p>
+                        <a class="btn btn-outline-info btn-lg" href="{% url 'gestionar_servicios' %}">Gestionar</a>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-lg rounded-4 p-4 card-hover" style="flex: 0 0 auto; width: 300px; background-color: #D6EAF8;">
+                    <div class="card-body text-center d-flex flex-column align-items-center">
+                        <div class="mb-3">
+                            <i class="bi bi-calendar fs-5" style="color: #4A90E2; font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title mb-3 fs-4 fw-bold">Ver Calendario</h5>
+                        <p class="card-text mb-4">Controla las reservas de productos y servicios.</p>
+                        <a class="btn btn-outline-info btn-lg" href="{% url 'calendarioAdministrador' %}">Ver</a>
                     </div>
                 </div>
             </div>
         </div>
-
+    </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.querySelector('.overflow-auto');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+
+        // Movimiento automático hacia la derecha cada 3 segundos
+        setInterval(() => {
+            container.scrollBy({ left: 300, behavior: 'smooth' });
+        }, 3000);
 
         prevBtn.addEventListener('click', () => {
             container.scrollBy({ left: -300, behavior: 'smooth' });
@@ -102,30 +117,34 @@
         height: 60px;
         border-radius: 50%;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        background-color: #f8f9fa;
+        background-color: #E8F6FF;
         border: none;
         z-index: 1000;
         transition: background-color 0.3s, box-shadow 0.3s;
     }
 
     .arrow-btn:hover {
-        background-color: #e9ecef;
+        background-color: #D0EBFF;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
     .arrow-btn i {
         font-size: 2rem; /* Iconos más grandes */
-        color: #6c757d;
+        color: #4A90E2;
     }
 
     /* Estilos para las tarjetas */
     .card-hover {
         transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        background: linear-gradient(to bottom right, #ffffff 0%, #e6f2ff 100%);
+        border: 1px solid #d0eaff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .card-hover:hover {
         transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     }
 
     .position-relative {
@@ -134,9 +153,20 @@
 
     .overflow-auto {
         overflow-x: auto;
+        padding-bottom: 20px; /* Espacio para los botones de navegación */
+        scroll-behavior: smooth; /* Suaviza el desplazamiento */
+    }
+
+    .btn-outline-info {
+        color: #1E90FF;
+        border-color: #1E90FF;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #1E90FF;
+        color: #fff;
     }
 </style>
-
-
 
 {% endblock %}

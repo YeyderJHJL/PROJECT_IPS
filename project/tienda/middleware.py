@@ -34,7 +34,6 @@ class PersonalMiddleware:
         response = self.get_response(request)
         return response
 
-
 class AdminRequiredMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -64,3 +63,4 @@ class TecnicoRequiredMiddleware:
             return redirect(reverse('personal_login')) 
         response = self.get_response(request)
         return response
+

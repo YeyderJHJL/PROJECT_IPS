@@ -10,7 +10,7 @@ from .forms import *
 import logging
 from .utils import *
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import *
 from django.db.models import Sum
@@ -24,6 +24,9 @@ import datetime
 
 def index(request):
     return render(request, 'index.html')
+
+def indexAdministrador(request):
+    return render(request, 'indexAdministrador.html')
 
 def empresa(request):
     return render(request, './empresa.html')
@@ -232,7 +235,6 @@ def estado_registro_delete(request, pk):
     return render(request, 'estado_registro/estado_registro_confirm_delete.html', {'estado': estado})
 
 # PERSONAL ################################################
-
 def register_personal_view(request):
     if request.method == 'POST':
         form = PersonalRegisterForm(request.POST)
@@ -1707,3 +1709,51 @@ def calendario_view(request):
         'month': month,
         'month_name': month_name
     })
+
+@multi_role_required('Administrador', 'Vendedor')  
+def calendario_viewAdministrador(request):
+    today = timezone.now()
+    year = int(request.GET.get('year', today.year))
+    month = int(request.GET.get('month', today.month))
+    if 'prev' in request.GET:
+        if month == 1:
+            month = 12
+            year -= 1
+        else:
+            month -= 1
+    elif 'next' in request.GET:
+        if month == 12:
+            month = 1
+            year += 1
+        else:
+            month += 1 
+    eventos_producto = EventoProducto.objects.all()
+    eventos_servicio = Evento.objects.all() 
+    calendar = generate_calendar(year, month)
+    month_names = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ]
+    month_name = month_names[month - 1]
+    return render(request, 'calendarioAdministrador.html', {
+        'eventos_producto': eventos_producto,
+        'eventos_servicio': eventos_servicio,
+        'calendar': calendar,
+        'year': year,
+        'month': month,
+        'month_name': month_name
+    })
+
+
+@multi_role_required('Administrador')
+def perfil(request):
+    tipo_personal = TipoPersonal.objects.get(tippernom="Administrador")
+    personal = get_object_or_404(Personal, tippercod=tipo_personal)
+    if request.method == 'POST':
+        form = PersonalForm(request.POST, instance=personal)
+        if form.is_valid():
+            form.save()
+            return redirect('indexAdministrador')
+    else:
+        form = PersonalForm(instance=personal)
+    return render(request, 'perfilPersonal.html', {'form': form, 'return_url': 'perfil', 'title': 'Modificar '})

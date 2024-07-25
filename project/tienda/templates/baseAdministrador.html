@@ -14,8 +14,35 @@
   
     <script src="{% static 'js/scripts.js' %}"></script>
     <style>
-        body, .container, .btn-group .btn, .list-group-item, .modal-content, .modal-body, .modal-title {
+        body {
             font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom right, #f0f0f0, #e0e0e0);
+            /* O usa una imagen en escala de grises en lugar del gradiente */
+            /* background: url('{% static 'images/gray-background.jpg' %}') no-repeat center center fixed; */
+            background-size: cover;
+            color: #333;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-group .btn, .list-group-item, .modal-content, .modal-body, .modal-title {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Ajustes adicionales para los botones */
+        .btn-outline-info {
+            color: #333;
+            border-color: #333;
+        }
+
+        .btn-outline-info:hover {
+            background-color: #333;
+            color: #fff;
         }
     </style>
 </head>
@@ -23,7 +50,7 @@
     {% include "navAdministrador.html" %}
 
     <div class="container mt-4">
-        {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
     </div>
 
     {% include 'footer.html' %}

@@ -7,15 +7,12 @@
     <h1 class="text-center mb-4 display-1 fw-bold text-dark" style="font-family: 'Roboto', sans-serif;">
         <span class="text-muted" style="font-style: italic;">Servicios</span>
     </h1>
-    
-
-    <!-- Categorías -->
     <div class="row justify-content-center mb-4">
         <div class="col-12 col-md-8">
             <div class="btn-group d-flex justify-content" role="group" aria-label="Categorías">
                 <a href="{% url 'gestionar_servicios' %}" class="btn btn-secondary me-2">Todos</a>
                 {% for categoria in categorias %}
-                    <a href="{% url 'servicios_codigo' categoria.catsercod %}" class="btn btn-secondary me-2">{{ categoria.catsernom }}</a>
+                    <a href="{% url 'gestionar_servicios_codigo' categoria.catsercod %}" class="btn btn-secondary me-2">{{ categoria.catsernom }}</a>
                 {% endfor %}
             </div>
         </div>
