@@ -15,9 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .decorators import *
 from django.db.models import Sum
 from calendar import monthrange
-#from datetime import datetime  
-import datetime 
-
+from datetime import datetime
+import datetime
 # Create your views here.
 
 
@@ -32,6 +31,9 @@ def empresa(request):
 def preguntas_frecuentes(request):
     return render(request, './preguntas_frecuentes.html')
 
+def vendedor_home(request):
+    return render(request, 'inicio_personal/vendedor_home.html')
+
 #autenticación de login
 def get_authenticated_cliente(request):
     cliente_id = request.session.get('cliente_id')
@@ -41,36 +43,42 @@ def get_authenticated_cliente(request):
         except Cliente.DoesNotExist:
             return None
     return None
+
 #  CONSULTAS ################################################
 
 # Gestión Consulta
-# personal
+@vendedor_required
 def gestion_consulta(request):
-    return render(request, 'consultas/gestion_consulta.html')
+    consultas = Consulta.objects.all()
+    return render(request, 'consultas/gestion_consulta.html', {'consultas': consultas})
 
 # Consulta CRUD
 # personal
+@vendedor_required
 def consulta_list(request):
     consultas = Consulta.objects.all()
     return render(request, 'consultas/consulta_list.html', {'consultas': consultas})
+
 # personal
+@vendedor_required
 def consulta_edit(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     if request.method == 'POST':
         form = ConsultaForm(request.POST, instance=consulta)
         if form.is_valid():
             form.save()
-            return redirect('consulta_list')
+            return redirect('gestion_consulta')
     else:
         form = ConsultaForm(instance=consulta)
-    return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'consulta_list', 'title': 'Modificar Consulta'})
-# personal
+    return render(request, 'consultas/consulta_form.html', {'form': form, 'return_url': 'gestion_consulta', 'title': 'Modificar Consulta'})
+
+@vendedor_required
 def consulta_delete(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
     if request.method == 'POST':
         try:
             consulta.delete()
-            return redirect('consulta_list')
+            return redirect('gestion_consulta')
         except IntegrityError:
             return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta, 'error': "No se puede eliminar la consulta porque tiene dependencias asociadas."})
     return render(request, 'consultas/consulta_confirm_delete.html', {'consulta': consulta})
@@ -143,11 +151,17 @@ def consulta_cliente_delete(request, pk):
     return render(request, 'consultas/consulta_cliente_confirm_delete.html', {'consulta': consulta})
 
 # Tipo Consulta CRUD
-#personal 
+
+@admin_required
+def gestion_tipo_consulta(request):
+    return render(request, 'consultas/gestion_tipo_consulta.html')
+
+@admin_required
 def tipo_consulta_list(request):
     consultas = TipoConsulta.objects.all()
     return render(request, 'consultas/tipo_consulta_list.html', {'consultas': consultas})
-#personal 
+
+@admin_required
 def tipo_consulta_add(request):
     if request.method == 'POST':
         form = TipoConsultaForm(request.POST)
@@ -157,7 +171,8 @@ def tipo_consulta_add(request):
     else:
         form = TipoConsultaForm()
     return render(request, 'consultas/tipo_consulta_form.html', {'form': form, 'return_url': 'tipo_consulta_list', 'title': 'Agregar Tipo de Consulta'})
-#personal 
+
+@admin_required
 def tipo_consulta_edit(request, pk):
     consulta = get_object_or_404(TipoConsulta, pk=pk)
     if request.method == 'POST':
@@ -168,7 +183,8 @@ def tipo_consulta_edit(request, pk):
     else:
         form = TipoConsultaForm(instance=consulta)
     return render(request, 'consultas/tipo_consulta_form.html', {'form': form, 'return_url': 'tipo_consulta_list', 'title': 'Modificar Tipo de Consulta'})
-#personal 
+
+@admin_required
 def tipo_consulta_delete(request, pk):
     consulta = get_object_or_404(TipoConsulta, pk=pk)
     if request.method == 'POST':
@@ -177,12 +193,14 @@ def tipo_consulta_delete(request, pk):
     return render(request, 'consultas/tipo_consulta_confirm_delete.html', {'consulta': consulta})
 
 # ESTADO DE REGISTRO ################################################
-#personal 
 # Estado Registro CRUD
+
+@admin_required
 def estado_registro_list(request):
     estados = EstadoRegistro.objects.all()
     return render(request, 'estado_registro/estado_registro_list.html', {'estados': estados})
 
+@admin_required
 def estado_registro_add(request):
     if request.method == 'POST':
         form = EstadoRegistroForm(request.POST)
@@ -193,6 +211,7 @@ def estado_registro_add(request):
         form = EstadoRegistroForm()
     return render(request, 'estado_registro/estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Agregar '})
 
+@admin_required
 def estado_registro_edit(request, pk):
     estado = get_object_or_404(EstadoRegistro, pk=pk)
     if request.method == 'POST':
@@ -204,6 +223,7 @@ def estado_registro_edit(request, pk):
         form = EstadoRegistroForm(instance=estado)
     return render(request, 'estado_registro/estado_registro_form.html', {'form': form, 'return_url': 'estado_registro_list', 'title': 'Modificar '})
 
+@admin_required
 def estado_registro_delete(request, pk):
     estado = get_object_or_404(EstadoRegistro, pk=pk)
     if request.method == 'POST':
@@ -213,7 +233,6 @@ def estado_registro_delete(request, pk):
 
 # PERSONAL ################################################
 
-#@admin_required
 def register_personal_view(request):
     if request.method == 'POST':
         form = PersonalRegisterForm(request.POST)
@@ -287,11 +306,11 @@ def personal_logout(request):
 def inicio_tecnico(request):
     return render(request, 'inicio_personal/inicio_tecnico.html')
 
-#personal 
+@vendedor_required
 def inicio_vendedor(request):
     return render(request, 'inicio_personal/inicio_vendedor.html')
 
-#personal
+@admin_required
 def inicio_administrador(request):
     return render(request, 'inicio_administrador.html') ############## cambiar ubi
 
@@ -325,17 +344,19 @@ def actualizar_perfil_personal(request):
     return render(request, 'personal/actualizar_perfil_personal_form.html', {'form': form})
 
 # Gestión Cliente
-#personal 
+
+@admin_required
 def gestion_cliente(request):
     return render(request, 'cliente/gestion_cliente.html')
 
 # Cliente CRUD
-#personal 
+
+@admin_required
 def cliente_list(request):
     clientes = Cliente.objects.all()
     return render(request, 'cliente/cliente_list.html', {'cliente': clientes})
 
-#personal 
+@admin_required
 def cliente_add(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST)
@@ -352,7 +373,7 @@ def cliente_add(request):
 
     return render(request, 'cliente/cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Adicionar '})
 
-#personal 
+@admin_required
 def cliente_edit(request, pk):
     cliente = get_object_or_404(Cliente, clidni=pk)
     if request.method == 'POST':
@@ -364,7 +385,18 @@ def cliente_edit(request, pk):
         form = ClienteForm(instance=cliente)
     return render(request, 'cliente/cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Modificar '})
 
-#personal 
+@admin_required
+def gestion_cliente_delete(request, pk):
+    cliente = get_object_or_404(Cliente, clidni=pk)
+    if request.method == 'POST':
+        try:
+            cliente.delete()
+            return redirect('cliente_list')
+        except IntegrityError:
+            return render(request, 'cliente/cliente_confirm_delete.html', {'cliente': cliente, 'error': "No se puede eliminar el cliente porque tiene dependencias asociadas."})
+    return render(request, 'cliente/cliente_confirm_delete.html', {'cliente': cliente})
+
+@cliente_login_required
 def cliente_delete(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
     
@@ -379,22 +411,70 @@ def cliente_delete(request, pk):
 
     return render(request, 'cliente/cliente_confirm_delete.html', {'form': form})
 
-#personal 
+@vendedor_required
+def vendedor_cliente_list(request):
+    clientes = Cliente.objects.all()
+    return render(request, 'cliente/vendedor_cliente_list.html', {'cliente': clientes})
+
+@vendedor_required
+def vendedor_cliente_add(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            cliente = form.save(commit=False)
+            cliente.clifecreg = datetime.date.today()  # Campo de fecha de registro
+            cliente.save()
+            return redirect('vendedor_cliente_list')
+    else:
+        form = ClienteForm(initial={
+            'clifecreg': datetime.date.today(),
+            'estregcod': EstadoRegistro.objects.get(estregnom='Activo'),
+        })
+
+    return render(request, 'cliente/vendedor_cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Adicionar Cliente'})
+
+@vendedor_required
+def vendedor_cliente_edit(request, pk):
+    cliente = get_object_or_404(Cliente, clidni=pk)
+    if request.method == 'POST':
+        form = ClienteForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect('vendedor_cliente_list')
+    else:
+        form = ClienteForm(instance=cliente)
+    return render(request, 'cliente/vendedor_cliente_form.html', {'form': form, 'return_url': 'cliente_list', 'title': 'Modificar Cliente'})
+
+@vendedor_required
+def vendedor_cliente_delete(request, pk):
+    cliente = get_object_or_404(Cliente, clidni=pk)
+    if request.method == 'POST':
+        try:
+            cliente.delete()
+            messages.success(request, 'Cliente eliminado correctamente.')
+            return redirect('vendedor_cliente_list')
+        except IntegrityError:
+            messages.error(request, "No se puede eliminar el cliente porque tiene dependencias asociadas.")
+            return render(request, 'cliente/vendedor_cliente_confirm_delete.html', {'cliente': cliente})
+    return render(request, 'cliente/vendedor_cliente_confirm_delete.html', {'cliente': cliente})
+
 def toggle_cliente_status(request, pk):
     cliente = get_object_or_404(Cliente, clidni=pk)
     activo_estado = EstadoRegistro.objects.get(estregnom='Activo')
     inactivo_estado = EstadoRegistro.objects.get(estregnom='Inactivo')
     cliente.estregcod = inactivo_estado if cliente.estregcod == activo_estado else activo_estado
     cliente.save()
-    return redirect('cliente_list')
+    return redirect('vendedor_cliente_list')
 
 # GESTION PERSONAL ###################################################################################################################
 ######################################################################################################################################
 
+@admin_required
 def gestion_personal(request):
     return render(request, 'personal/gestion_personal.html')
 
 # Personal CRUD
+@admin_required
 def personal_list(request, codigo=None):
     instancia_clase = None
     personal = Personal.objects.all()
@@ -414,6 +494,7 @@ def personal_list(request, codigo=None):
 
     return render(request, 'personal/personal_list.html', {'formulario': formulario, 'personal': personal, 'tipo':tipo})
 
+@admin_required
 def personal_add(request):
     if request.method == 'POST':
         form = PersonalForm(request.POST)
@@ -437,6 +518,7 @@ def personal_add(request):
 
     return render(request, 'personal/personal_form.html', {'form': form, 'return_url': 'personal_list', 'title': 'Adicionar '})
 
+@admin_required
 def personal_edit(request, pk):
     personal = get_object_or_404(Personal, pk=pk)
     if request.method == 'POST':
@@ -448,6 +530,7 @@ def personal_edit(request, pk):
         form = PersonalForm(instance=personal)
     return render(request, 'personal/personal_form.html', {'form': form, 'return_url': 'personal_list', 'title': 'Modificar '})
 
+@admin_required
 def personal_delete(request, pk):
     personal = get_object_or_404(Personal, pk=pk)
     if request.method == 'POST':
@@ -460,11 +543,13 @@ def personal_delete(request, pk):
 
 # TIPO PERSONAL #######################################################################################################################
 ######################################################################################################################################
-#administrador
+
+@admin_required
 def tipo_personal_list(request):
     tipos = TipoPersonal.objects.all()
     return render(request, 'personal/tipo_personal_list.html', {'tipos': tipos})
 
+@admin_required
 def tipo_personal_add(request):
     if request.method == 'POST':
         form = TipoPersonalForm(request.POST)
@@ -475,6 +560,7 @@ def tipo_personal_add(request):
         form = TipoPersonalForm()
     return render(request, 'personal/tipo_personal_form.html', {'form': form, 'title': 'Agregar', 'return_url': 'tipo_personal_list'})
 
+@admin_required
 def tipo_personal_edit(request, pk):
     tipo_personal = get_object_or_404(TipoPersonal, pk=pk)
     if request.method == 'POST':
@@ -486,6 +572,7 @@ def tipo_personal_edit(request, pk):
         form = TipoPersonalForm(instance=tipo_personal)
     return render(request, 'personal/tipo_personal_form.html', {'form': form, 'title': 'Modificar', 'return_url': 'tipo_personal_list'})
 
+@admin_required
 def tipo_personal_delete(request, pk):
     tipo = get_object_or_404(TipoPersonal, pk=pk)
     if request.method == 'POST':
@@ -684,6 +771,7 @@ def send_confirmation_email(request, cliente, new_value, field):
         fail_silently=False,
     )
 
+@cliente_login_required
 def actualizar_cliente(request):
     cliente = get_object_or_404(Cliente, cliusu=request.user.username)
     if request.method == 'POST':
@@ -697,6 +785,7 @@ def actualizar_cliente(request):
     
     return render(request, 'cliente/actualizar_cliente.html', {'form': form})
 
+@cliente_login_required
 def cambiar_usuario(request):
     cliente = get_object_or_404(Cliente, cliusu=request.user.username)
     if request.method == 'POST':
@@ -718,6 +807,7 @@ def cambiar_usuario(request):
 
     return render(request, 'cliente/cambiar_usuario.html', {'form': form})
 
+@cliente_login_required
 def cambiar_contrasena(request):
     cliente = get_object_or_404(Cliente, cliusu=request.user.username)
     if request.method == 'POST':
@@ -738,6 +828,7 @@ def cambiar_contrasena(request):
     return render(request, 'cliente/cambiar_contrasena.html', {'form': form})
 
 # PRODUCTO ##############################################################################################################33
+@admin_required
 def productos(request):
     categorias = CategoariaProducto.objects.all()  
     productos = Producto.objects.all()      
@@ -749,7 +840,20 @@ def productos(request):
         'producto': productos,
     }
     return render(request, 'productos/productos.html', context)
+
 #general
+def vendedor_gestionar_productos(request):
+    categorias = CategoariaProducto.objects.all()  
+    productos = Producto.objects.all()      
+    categoria_id = request.GET.get('categoria')  
+    if categoria_id:
+        productos = productos.filter(catprocod=categoria_id)      
+    context = {
+        'categorias': categorias,
+        'producto': productos,
+    }
+    return render(request, 'productos/vendedor_gestionar_productos.html', context)
+
 def detalle_producto(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
     cantidad_disponible = producto.inventario_set.aggregate(total_cantidad=models.Sum('invcan'))['total_cantidad'] or 0
@@ -757,6 +861,7 @@ def detalle_producto(request, procod):
         'producto': producto,
         'cantidad_disponible': cantidad_disponible
     })
+
 # GESTIONAR LAS RESERVAS DE PRODUCTO (CLIENTE)
 @cliente_login_required
 def reserva_producto(request, procod):
@@ -872,26 +977,31 @@ def confirmar_eliminar_reserva(request, evecod):
     return render(request, 'productos/eliminar_reserva.html', {'reserva': reserva})
 
 # GESTIONAR LOS PRODUCTOS CON INVENTARIO (TRABAJADOR)
+@admin_required
 def lista_productos(request):
     categorias = CategoariaProducto.objects.all()
     productos = Producto.objects.all()
     categoria_id = request.GET.get('categoria')    
     if categoria_id:
         productos = productos.filter(catprocod=categoria_id)    
-    # Crear un diccionario de cantidades disponibles por producto
-    cantidad_dict = {}
+
+    # Crear una lista de productos con sus cantidades disponibles
+    productos_con_cantidad = []
     for producto in productos:
         # Obtener la cantidad total disponible para cada producto
         cantidad = Inventario.objects.filter(procod=producto.procod).aggregate(total_cantidad=Sum('invcan'))['total_cantidad'] or 0
-        cantidad_dict[producto.procod] = cantidad
+        productos_con_cantidad.append({
+            'producto': producto,
+            'cantidad_disponible': cantidad
+        })
 
     context = {
         'categorias': categorias,
-        'productos': productos,
-        'cantidad_dict': cantidad_dict,
+        'productos_con_cantidad': productos_con_cantidad,
     }
     return render(request, 'productos/producto_lista.html', context)
-#personal 
+
+@admin_required
 def producto_create(request):
     if request.method == 'POST':
         producto_form = ProductoForm(request.POST, request.FILES)
@@ -906,22 +1016,28 @@ def producto_create(request):
                     'producto_form': producto_form,
                     'inventario_form': inventario_form,
                     'error': 'Estado de registro "Activo" no encontrado.'
-                })            
-            producto.save()            
+                })                    
             inventario = inventario_form.save(commit=False)
             inventario.procod = producto
-            inventario.invfecha = timezone.now().date()
+            inventario.invfecha = datetime.date.today() 
+            producto.save()   
             inventario.save()            
+            messages.success(request, 'Producto registrado exitosamente.')
             return redirect('lista_productos')
+
     else:
-        producto_form = ProductoForm()
-        inventario_form = InventarioForm()    
-    context = {
+        producto_form = ProductoForm(initial={
+            'estregcod': EstadoRegistro.objects.get(estregnom='Activo'),
+        })
+        inventario_form = InventarioForm(initial={
+            'invfecing': datetime.date.today(),
+        })
+    return render(request, 'productos/producto_form.html', {
         'producto_form': producto_form,
-        'inventario_form': inventario_form,
-    }
-    return render(request, 'productos/producto_form.html', context)
-#personal 
+        'inventario_form': inventario_form
+    })
+
+@admin_required
 def producto_update(request, procod):
     producto = Producto.objects.get(procod=procod)
     inventario = Inventario.objects.get(procod=producto)
@@ -939,7 +1055,7 @@ def producto_update(request, procod):
         'producto_form': producto_form,
         'inventario_form': inventario_form,
     })
-#personal 
+
 def confirmar_eliminacion(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
     inventario = get_object_or_404(Inventario, procod=producto)
@@ -948,7 +1064,7 @@ def confirmar_eliminacion(request, procod):
         'producto': producto,
         'inventario': inventario,
     })
-#personal 
+
 def producto_delete(request, procod):
     producto = get_object_or_404(Producto, procod=procod)
     inventario = get_object_or_404(Inventario, procod=producto)
@@ -963,7 +1079,107 @@ def producto_delete(request, procod):
 
     return redirect(reverse('confirmar_eliminacion', kwargs={'procod': procod}))
 
+@vendedor_required
+def vendedor_gestionar_productos(request):
+    categorias = CategoariaProducto.objects.all()
+    productos = Producto.objects.all()
+    categoria_id = request.GET.get('categoria')    
+    if categoria_id:
+        productos = productos.filter(catprocod=categoria_id)    
 
+    # Crear una lista de productos con sus cantidades disponibles
+    productos_con_cantidad = []
+    for producto in productos:
+        # Obtener la cantidad total disponible para cada producto
+        cantidad = Inventario.objects.filter(procod=producto.procod).aggregate(total_cantidad=Sum('invcan'))['total_cantidad'] or 0
+        productos_con_cantidad.append({
+            'producto': producto,
+            'cantidad_disponible': cantidad
+        })
+
+    context = {
+        'categorias': categorias,
+        'productos_con_cantidad': productos_con_cantidad,
+    }
+    return render(request, 'productos/vendedor_gestionar_productos.html', context)
+
+@vendedor_required
+def vendedor_producto_create(request):
+    if request.method == 'POST':
+        producto_form = ProductoForm(request.POST, request.FILES)
+        inventario_form = InventarioForm(request.POST)
+        if producto_form.is_valid() and inventario_form.is_valid():
+            producto = producto_form.save(commit=False)       
+            try:
+                activo_estado = EstadoRegistro.objects.get(estregnom='Activo')
+                producto.estregcod = activo_estado
+            except EstadoRegistro.DoesNotExist:
+                return render(request, 'productos/vendedor_producto_form.html', {
+                    'producto_form': producto_form,
+                    'inventario_form': inventario_form,
+                    'error': 'Estado de registro "Activo" no encontrado.'
+                })                    
+            inventario = inventario_form.save(commit=False)
+            inventario.procod = producto
+            inventario.invfecha = datetime.date.today() 
+            producto.save()   
+            inventario.save()            
+            messages.success(request, 'Producto registrado exitosamente.')
+            return redirect('vendedor_gestionar_productos')
+
+    else:
+        producto_form = ProductoForm(initial={
+            'estregcod': EstadoRegistro.objects.get(estregnom='Activo'),
+        })
+        inventario_form = InventarioForm(initial={
+            'invfecing': datetime.date.today(),
+        })
+    return render(request, 'productos/vendedor_producto_form.html', {
+        'producto_form': producto_form,
+        'inventario_form': inventario_form
+    })
+
+@vendedor_required
+def vendedor_producto_update(request, procod):
+    producto = Producto.objects.get(procod=procod)
+    inventario = Inventario.objects.get(procod=producto)
+    if request.method == 'POST':
+        producto_form = ProductoForm(request.POST, request.FILES, instance=producto)
+        inventario_form = InventarioForm(request.POST, instance=inventario)
+        if producto_form.is_valid() and inventario_form.is_valid():
+            producto_form.save()
+            inventario_form.save()
+            return redirect(reverse('vendedor_gestionar_productos'))
+    else:
+        producto_form = ProductoForm(instance=producto)
+        inventario_form = InventarioForm(instance=inventario)
+    return render(request, 'productos/vendedor_producto_form.html', {
+        'producto_form': producto_form,
+        'inventario_form': inventario_form,
+    })
+
+def vendedor_producto_delete(request, procod):
+    producto = get_object_or_404(Producto, procod=procod)
+    inventario = get_object_or_404(Inventario, procod=producto)
+    if EventoProducto.objects.filter(procod=producto).exists():
+        messages.error(request, 'No se puede eliminar el producto porque tiene reservas asociadas.')
+        return redirect(reverse('vendedor_confirmar_eliminacion', kwargs={'procod': procod}))
+    if request.method == 'POST':
+        inventario.delete()
+        producto.delete()
+        messages.success(request, 'Producto eliminado con éxito.')
+        return redirect(reverse('vendedor_gestionar_productos'))
+
+    return redirect(reverse('vendedor_confirmar_eliminacion', kwargs={'procod': procod}))
+
+def vendedor_confirmar_eliminacion(request, procod):
+    producto = get_object_or_404(Producto, procod=procod)
+    inventario = get_object_or_404(Inventario, procod=producto)
+    # Renderizar el template de confirmación
+    return render(request, 'productos/vendedor_producto_eliminar.html', {
+        'producto': producto,
+        'inventario': inventario,
+    })
 
 # GESTION CATEGORIA SERVICIO #########################################################################################################
 ######################################################################################################################################
@@ -1025,11 +1241,10 @@ def eliminar_CategoriaProductos(request, catprocod):
     return redirect('gestionar_CategoriaProductos')
 
 
-
-
-
 # REGISTRO DE VENTAS #################################################################################################################
 ######################################################################################################################################
+
+# registro de ventas
 
 def venta_list(request):
     ventas = Venta.objects.all()
@@ -1108,6 +1323,26 @@ def servicios(request, codigo=None):
 
     return render(request, 'servicios/servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
 
+#Personal: Vendedor
+def vendedor_servicios(request, codigo=None):
+    instancia_clase = None
+    servicio = Servicio.objects.all()
+    categorias = CategoariaServicio.objects.all()
+
+    if codigo:
+        instancia_clase = get_object_or_404(CategoariaServicio, catsercod=codigo)
+        servicio = Servicio.objects.filter(categoaria_servicio_catsercod=codigo)
+
+    if request.method == 'POST':
+        formulario = CategoriaServicioForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('vendedor_servicios')
+    else:
+        formulario = CategoriaServicioForm(instance=instancia_clase)
+
+    return render(request, 'servicios/vendedor_servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+
 def detalle_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
     personal = Personal.objects.filter(tippercod='2')
@@ -1136,6 +1371,26 @@ def gestionar_servicios(request, codigo=None):
         formulario = CategoriaServicioForm(instance=instancia_clase)
 
     return render(request, 'servicios/gestionarServicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+
+def vendedor_gestionar_servicios(request, codigo=None):
+    instancia_clase = None
+    servicio = Servicio.objects.all()
+    categorias = CategoariaServicio.objects.all()
+
+    if codigo:
+        instancia_clase = get_object_or_404(CategoariaServicio, catsercod=codigo)
+        servicio = Servicio.objects.filter(categoaria_servicio_catsercod=codigo)
+
+    if request.method == 'POST':
+        formulario = CategoriaServicioForm(request.POST, instance=instancia_clase)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('gestionar_servicios')
+    else:
+        formulario = CategoriaServicioForm(instance=instancia_clase)
+
+    return render(request, 'servicios/vendedor_gestionar_servicios.html', {'formulario': formulario, 'servicio': servicio, 'categorias': categorias})
+
 #perosnal
 def agregar_servicio(request):
     if request.method == 'POST':
@@ -1144,9 +1399,26 @@ def agregar_servicio(request):
             form.save()
             return redirect('gestionar_servicios')  
     else:
-        form = ServicioForm()
+        form = ServicioForm(initial={
+            'estado_registro_estregcod': EstadoRegistro.objects.get(estregnom='Activo'),
+        })
     
     return render(request, 'servicios/agregarServicios.html', {'form': form})
+
+#perosnal: vendedor
+def vendedor_agregar_servicio(request):
+    if request.method == 'POST':
+        form = ServicioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('vendedor_gestionar_servicios')  
+    else:
+        form = ServicioForm(initial={
+            'estado_registro_estregcod': EstadoRegistro.objects.get(estregnom='Activo'),
+        })
+    
+    return render(request, 'servicios/vendedor_agregar_servicios.html', {'form': form})
+
 #personal
 def modificar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod) 
@@ -1159,6 +1431,20 @@ def modificar_servicio(request, sercod):
         form = ServicioForm(instance=servicio)
     
     return render(request, 'servicios/modificarServicios.html', {'form': form, 'servicio': servicio})
+
+#personal: vendedor
+def vendedor_modificar_servicio(request, sercod):
+    servicio = get_object_or_404(Servicio, sercod=sercod) 
+    if request.method == 'POST':
+        form = ServicioForm(request.POST, instance=servicio)
+        if form.is_valid():
+            form.save()
+            return redirect('vendedor_gestionar_servicios')  # Redirigir a la vista de listado de servicios
+    else:
+        form = ServicioForm(instance=servicio)
+    
+    return render(request, 'servicios/vendedor_modificar_servicios.html', {'form': form, 'servicio': servicio})
+
 #personal
 def eliminar_servicio(request, sercod):
     servicio = get_object_or_404(Servicio, sercod=sercod)
@@ -1173,6 +1459,15 @@ def eliminar_servicio(request, sercod):
 # GESTION CATEGORIA SERVICIO #########################################################################################################
 ######################################################################################################################################
 
+#personal: vendedor
+def vendedor_eliminar_servicio(request, sercod):
+    servicio = get_object_or_404(Servicio, sercod=sercod)
+    if request.method == 'POST':
+        servicio.delete()
+        messages.success(request, 'Servicio eliminado correctamente.')
+        return redirect('vendedor_gestionar_servicios')
+
+    return redirect('vendedor_gestionar_servicios')
 #personal
 def gestionar_CategoriaServicios(request, codigo=None):
     instancia_clase = None

@@ -1,16 +1,81 @@
-{% extends "base.html" %}
+{% extends 'inicio_personal/base_vendedor.html' %}
 
 {% block content %}
-<h2 class="mb-4">Gestión de Consultas</h2>
-<nav class="navigation mb-4">
-    <a class="btn btn-secondary {% if request.path == '/project/tienda/consulta/list/' %}active{% endif %}" href="{% url 'consulta_list' %}">Lista de Consultas</a>
-    <a class="btn btn-secondary {% if request.path == '/project/tienda/tipo_consulta/' %}active{% endif %}" href="{% url 'tipo_consulta_list' %}">Tipos de Consulta</a>
-</nav>
-<div class="centered-box">
-    {% block gestion_consulta_content %}
-    <div class="btn-group mt-3" role="group" aria-label="Administrador Actions">
-        <a class="btn btn-primary btn-lg" href="{% url 'inicio_administrador' %}">Volver al Inicio</a>
+
+<div class="container" style="font-family: 'Roboto', sans-serif;">
+
+    <h2 class="mb-4 display-4 fw-bold text-dark">
+        <span class="text-muted" style="font-style: italic;">Gestión de Consultas</span>
+    </h2>
+
+    <div class="scrollable-table-container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">Código</th>
+                    <th style="width: 20%;">Pregunta</th>
+                    <th style="width: 20%;">Respuesta</th>
+                    <th style="width: 15%;">Fecha de la Consulta</th>
+                    <th style="width: 15%;">Cliente</th>
+                    <th style="width: 15%;">Personal Encargado</th>
+                    <th style="width: 15%;">Tipo de Consulta</th>
+                    <th style="width: 10%;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                <tr>
+                    <td>{{ consulta.concod }}</td>
+                    <td>{{ consulta.conpre }}</td>
+                    <td>{{ consulta.conres }}</td>
+                    <td>{{ consulta.confec }}</td>
+                    <td>{{ consulta.clidni.clinom }} {{ consulta.clidni.cliap }}</td>
+                    <td>{{ consulta.perdni.pernom }} {{ consulta.perdni.perape }}</td>
+                    <td>{{ consulta.tipconcod.tipconnom }}</td>
+                    <td>
+                        <div class="d-flex justify-content-end">
+                            <a class="btn1 btn-primary btn-sm" href="{% url 'consulta_edit' consulta.concod %}" class="btn btn-outline-primary btn-sm me-2"> 
+                                <i class="bi bi-pencil-square"></i>  Modificar</a>
+                                <a class="btn1 btn-danger btn-sm" href="{% url 'consulta_delete' consulta.concod %}" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash">  </i> Eliminar</a> 
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">No hay consultas para mostrar.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    {% endblock %}
+
+    <div class="btn-group mt-3 d-flex justify-content-center" role="group" aria-label="Administrador Actions">
+        <a class="btn btn-primary btn-lg" href="{% url 'inicio_vendedor' %}">Volver al Inicio</a>
+    </div>
+
 </div>
+
+<style>
+    .btn-group .btn {
+        border-radius: 25px;
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-group .btn:hover {
+        background-color: #495057;
+    }
+
+    .btn-group .btn:focus {
+        outline: none;
+    }
+
+    .scrollable-table-container {
+        overflow-x: auto;
+    }
+</style>
+
 {% endblock %}

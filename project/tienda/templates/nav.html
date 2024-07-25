@@ -32,7 +32,7 @@
                 </li>
             </ul>
 
-            <<li class="nav-item">
+            <li class="nav-item">
                 <span class="navbar-text text-light font-weight-bold">Bienvenido, {{ request.cliente.clinom }}</span>
             </li>
             <li class="nav-item dropdown">
@@ -70,11 +70,15 @@
                     <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'cliente_login' %}">Login</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{% url 'cliente_register' %}">Registrarse</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cliente_login' %}">Login Cliente</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'personal_login' %}">Login Personal</a>
+                </li>
+
             </ul>
             {% endif %}
         </ul>
