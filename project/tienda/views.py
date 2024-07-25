@@ -15,7 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .decorators import cliente_login_required
 from django.db.models import Sum
 from calendar import monthrange
-from datetime import datetime  
+#from datetime import datetime  
+import datetime 
 
 # Create your views here.
 
@@ -1292,12 +1293,12 @@ def eliminar_reservaS(request, evecod):
 
 #CALENDARIO#######################################################################################################3
 def generate_calendar(year, month):
-    start_date = datetime(year, month, 1)
-    end_date = datetime(year, month, monthrange(year, month)[1])
+    start_date = datetime.datetime(year, month, 1)
+    end_date = datetime.datetime(year, month, monthrange(year, month)[1])
     calendar = []
     week = [''] * start_date.weekday()
     for day in range(1, monthrange(year, month)[1] + 1):
-        week.append(datetime(year, month, day))
+        week.append(datetime.datetime(year, month, day))
         if len(week) == 7:
             calendar.append(week)
             week = []
