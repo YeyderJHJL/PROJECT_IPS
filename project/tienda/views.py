@@ -288,6 +288,7 @@ def cliente_list(request):
     clientes = Cliente.objects.all()
     return render(request, 'cliente/cliente_list.html', {'cliente': clientes})
 
+##this
 def cliente_add(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST)
