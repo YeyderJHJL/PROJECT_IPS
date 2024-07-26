@@ -4,9 +4,12 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4 mb-4 text-center">Reporte de Ventas</h1>
-
-    <!-- Formulario de Fechas -->
+ 
+    <h1 class="text-center mb-0 display-1 fw-bold text-dark">
+        <span class="text-muted" style="font-style: italic;">Reporte de Ventas</span>
+    </h1>
+ 
+    <hr>
     <form method="post" class="mb-4">
         {% csrf_token %}
         <div class="form-row">

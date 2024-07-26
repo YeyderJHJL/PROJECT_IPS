@@ -3,22 +3,24 @@
 {% block title %}Modificar Servicio{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
+<div class="container py-1">
+    <div>
+        <div class="col-lg-19">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Modificar Servicio</h2>
-                    
+                    <h2  style="font-family: 'Roboto', sans-serif;">
+                       Modificar <span class="text-muted" style="font-style: italic;">Servicio</span>
+                    </h2>
                     <div class="bg-light rounded p-4 mb-4 shadow-sm">
                         <form method="post">
                             {% csrf_token %}
                             <div class="mb-3">
                                 {{ form.as_p }}
                             </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary btn-lg px-5 me-2">Guardar Cambios</button>
-                                <a href="{% url 'gestionar_servicios' %}" class="btn btn-secondary btn-lg px-5">Cancelar</a>
+                            <hr>
+                            <div class="text">
+                                <button type="submit" class="btn btn-primary ">Guardar Cambios</button>
+                                <a href="{% url 'gestionar_servicios' %}" class="btn btn-secondary ">Cancelar</a>
                             </div>
                         </form>
                     </div>
